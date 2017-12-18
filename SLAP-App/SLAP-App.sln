@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLAP-App", "SLAP-App\SLAP-App.csproj", "{DADA8798-B5A4-40F3-9AB0-D762FEEEDAAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLAP-Data", "SLAP-Data\SLAP-Data.csproj", "{67A67592-F94B-4E7E-8D08-5C1125DF5D6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DADA8798-B5A4-40F3-9AB0-D762FEEEDAAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADA8798-B5A4-40F3-9AB0-D762FEEEDAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADA8798-B5A4-40F3-9AB0-D762FEEEDAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADA8798-B5A4-40F3-9AB0-D762FEEEDAAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67A67592-F94B-4E7E-8D08-5C1125DF5D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67A67592-F94B-4E7E-8D08-5C1125DF5D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67A67592-F94B-4E7E-8D08-5C1125DF5D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67A67592-F94B-4E7E-8D08-5C1125DF5D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
