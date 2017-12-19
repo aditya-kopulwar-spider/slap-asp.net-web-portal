@@ -52,7 +52,7 @@
     <Compile Include="AppraisalProcess.cs">
       <DependentUpon>SlapModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DatabaseHelper.cs" />
     <Compile Include="PCAssociate.cs">
       <DependentUpon>SlapModel.tt</DependentUpon>
     </Compile>

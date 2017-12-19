@@ -1,0 +1,31 @@
+﻿@using SLAP_App.Models
+@model List<ADUser>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List of Users</h2>
+
+<table>
+    @foreach (ADUser user in Model)
+    {
+        <tr>
+            <td width="150">
+                @user.Name
+                @Html.HiddenFor(model => user.Id)
+            </td>
+            <td>
+                @if (user.IsPC)
+                {
+                    @Html.ActionLink("Remove PC", "RemovePC", "Admin", new { Id = user.Id }, null)
+                }
+                else
+                {
+                    @Html.ActionLink("Make a PC", "MakePC", "Admin", new { Id = user.Id}, null)
+                }
+            </td>
+        </tr>
+    }
+
+</table>
