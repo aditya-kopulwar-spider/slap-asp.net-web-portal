@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SlapDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AppraisalProcess">
+          <Key>
+            <PropertyRef Name="AppraisalProcessId" />
+          </Key>
+          <Property Name="AppraisalProcessId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AppraisalProcessYear" Type="smallint" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="PeerListFinalizationByDate" Type="date" />
+          <Property Name="SendPeerFeedbackRequestByDate" Type="date" />
+          <Property Name="SendPeerFeedbackByDate" Type="date" />
+          <Property Name="SelfAppraisalSubmissionByDate" Type="date" />
+          <Property Name="AppraisalMeetingByDate" Type="date" />
+          <Property Name="GoalSettingByDate" Type="date" />
+        </EntityType>
+        <EntityType Name="PCAssociates">
+          <Key>
+            <PropertyRef Name="PCAssociatesId" />
+          </Key>
+          <Property Name="PCAssociatesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PCUserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AssociateUserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AppraisalProcessId" Type="int" Nullable="false" />
+          <Property Name="SelfAppraisalStatus" Type="bit" />
+          <Property Name="AppraisalDate" Type="date" />
+          <Property Name="LastNotificationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Peers">
+          <Key>
+            <PropertyRef Name="PeerAssociateId" />
+          </Key>
+          <Property Name="PeerAssociateId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AssociateUserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PeerUserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="AppraisalProcessId" Type="int" Nullable="false" />
+          <Property Name="FeedbackStatus" Type="bit" Nullable="false" />
+          <Property Name="LastNotificationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'slap_db.dbo.UserRole' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="RoleId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__PCAssocia__Appra__5DCAEF64">
+          <End Role="AppraisalProcess" Type="Self.AppraisalProcess" Multiplicity="1" />
+          <End Role="PCAssociates" Type="Self.PCAssociates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppraisalProcess">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Principal>
+            <Dependent Role="PCAssociates">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Peers__Appraisal__59FA5E80">
+          <End Role="AppraisalProcess" Type="Self.AppraisalProcess" Multiplicity="1" />
+          <End Role="Peers" Type="Self.Peers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppraisalProcess">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Principal>
+            <Dependent Role="Peers">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRole__RoleId__52593CB8">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SlapDbModelStoreContainer">
+          <EntitySet Name="AppraisalProcess" EntityType="Self.AppraisalProcess" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PCAssociates" EntityType="Self.PCAssociates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Peers" EntityType="Self.Peers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRole" EntityType="Self.UserRole" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [UserRole].[RoleId] AS [RoleId], 
+    [UserRole].[UserId] AS [UserId]
+    FROM [dbo].[UserRole] AS [UserRole]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__PCAssocia__Appra__5DCAEF64" Association="Self.FK__PCAssocia__Appra__5DCAEF64">
+            <End Role="AppraisalProcess" EntitySet="AppraisalProcess" />
+            <End Role="PCAssociates" EntitySet="PCAssociates" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Peers__Appraisal__59FA5E80" Association="Self.FK__Peers__Appraisal__59FA5E80">
+            <End Role="AppraisalProcess" EntitySet="AppraisalProcess" />
+            <End Role="Peers" EntitySet="Peers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRole__RoleId__52593CB8" Association="Self.FK__UserRole__RoleId__52593CB8">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserRole" EntitySet="UserRole" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SlapDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AppraisalProcess">
+          <Key>
+            <PropertyRef Name="AppraisalProcessId" />
+          </Key>
+          <Property Name="AppraisalProcessId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AppraisalProcessYear" Type="Int16" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="PeerListFinalizationByDate" Type="DateTime" Precision="0" />
+          <Property Name="SendPeerFeedbackRequestByDate" Type="DateTime" Precision="0" />
+          <Property Name="SendPeerFeedbackByDate" Type="DateTime" Precision="0" />
+          <Property Name="SelfAppraisalSubmissionByDate" Type="DateTime" Precision="0" />
+          <Property Name="AppraisalMeetingByDate" Type="DateTime" Precision="0" />
+          <Property Name="GoalSettingByDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="PCAssociates" Relationship="Self.FK__PCAssocia__Appra__5DCAEF64" FromRole="AppraisalProcess" ToRole="PCAssociates" />
+          <NavigationProperty Name="Peers" Relationship="Self.FK__Peers__Appraisal__59FA5E80" FromRole="AppraisalProcess" ToRole="Peers" />
+        </EntityType>
+        <EntityType Name="PCAssociate">
+          <Key>
+            <PropertyRef Name="PCAssociatesId" />
+          </Key>
+          <Property Name="PCAssociatesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PCUserId" Type="Guid" Nullable="false" />
+          <Property Name="AssociateUserId" Type="Guid" Nullable="false" />
+          <Property Name="AppraisalProcessId" Type="Int32" Nullable="false" />
+          <Property Name="SelfAppraisalStatus" Type="Boolean" />
+          <Property Name="AppraisalDate" Type="DateTime" Precision="0" />
+          <Property Name="LastNotificationDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AppraisalProcess" Relationship="Self.FK__PCAssocia__Appra__5DCAEF64" FromRole="PCAssociates" ToRole="AppraisalProcess" />
+        </EntityType>
+        <EntityType Name="Peer">
+          <Key>
+            <PropertyRef Name="PeerAssociateId" />
+          </Key>
+          <Property Name="PeerAssociateId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AssociateUserId" Type="Guid" Nullable="false" />
+          <Property Name="PeerUserId" Type="Guid" Nullable="false" />
+          <Property Name="AppraisalProcessId" Type="Int32" Nullable="false" />
+          <Property Name="FeedbackStatus" Type="Boolean" Nullable="false" />
+          <Property Name="LastNotificationDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AppraisalProcess" Relationship="Self.FK__Peers__Appraisal__59FA5E80" FromRole="Peers" ToRole="AppraisalProcess" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UserRoles" Relationship="Self.FK__UserRole__RoleId__52593CB8" FromRole="Roles" ToRole="UserRole" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__UserRole__RoleId__52593CB8" FromRole="UserRole" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK__PCAssocia__Appra__5DCAEF64">
+          <End Role="AppraisalProcess" Type="Self.AppraisalProcess" Multiplicity="1" />
+          <End Role="PCAssociates" Type="Self.PCAssociate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppraisalProcess">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Principal>
+            <Dependent Role="PCAssociates">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Peers__Appraisal__59FA5E80">
+          <End Role="AppraisalProcess" Type="Self.AppraisalProcess" Multiplicity="1" />
+          <End Role="Peers" Type="Self.Peer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AppraisalProcess">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Principal>
+            <Dependent Role="Peers">
+              <PropertyRef Name="AppraisalProcessId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRole__RoleId__52593CB8">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="UserRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="slap_dbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AppraisalProcesses" EntityType="Self.AppraisalProcess" />
+          <EntitySet Name="PCAssociates" EntityType="Self.PCAssociate" />
+          <EntitySet Name="Peers" EntityType="Self.Peer" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <AssociationSet Name="FK__PCAssocia__Appra__5DCAEF64" Association="Self.FK__PCAssocia__Appra__5DCAEF64">
+            <End Role="AppraisalProcess" EntitySet="AppraisalProcesses" />
+            <End Role="PCAssociates" EntitySet="PCAssociates" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Peers__Appraisal__59FA5E80" Association="Self.FK__Peers__Appraisal__59FA5E80">
+            <End Role="AppraisalProcess" EntitySet="AppraisalProcesses" />
+            <End Role="Peers" EntitySet="Peers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRole__RoleId__52593CB8" Association="Self.FK__UserRole__RoleId__52593CB8">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserRole" EntitySet="UserRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SlapDbModelStoreContainer" CdmEntityContainer="slap_dbEntities">
+          <EntitySetMapping Name="AppraisalProcesses">
+            <EntityTypeMapping TypeName="SlapDbModel.AppraisalProcess">
+              <MappingFragment StoreEntitySet="AppraisalProcess">
+                <ScalarProperty Name="AppraisalProcessId" ColumnName="AppraisalProcessId" />
+                <ScalarProperty Name="AppraisalProcessYear" ColumnName="AppraisalProcessYear" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PeerListFinalizationByDate" ColumnName="PeerListFinalizationByDate" />
+                <ScalarProperty Name="SendPeerFeedbackRequestByDate" ColumnName="SendPeerFeedbackRequestByDate" />
+                <ScalarProperty Name="SendPeerFeedbackByDate" ColumnName="SendPeerFeedbackByDate" />
+                <ScalarProperty Name="SelfAppraisalSubmissionByDate" ColumnName="SelfAppraisalSubmissionByDate" />
+                <ScalarProperty Name="AppraisalMeetingByDate" ColumnName="AppraisalMeetingByDate" />
+                <ScalarProperty Name="GoalSettingByDate" ColumnName="GoalSettingByDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PCAssociates">
+            <EntityTypeMapping TypeName="SlapDbModel.PCAssociate">
+              <MappingFragment StoreEntitySet="PCAssociates">
+                <ScalarProperty Name="PCAssociatesId" ColumnName="PCAssociatesId" />
+                <ScalarProperty Name="PCUserId" ColumnName="PCUserId" />
+                <ScalarProperty Name="AssociateUserId" ColumnName="AssociateUserId" />
+                <ScalarProperty Name="AppraisalProcessId" ColumnName="AppraisalProcessId" />
+                <ScalarProperty Name="SelfAppraisalStatus" ColumnName="SelfAppraisalStatus" />
+                <ScalarProperty Name="AppraisalDate" ColumnName="AppraisalDate" />
+                <ScalarProperty Name="LastNotificationDate" ColumnName="LastNotificationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Peers">
+            <EntityTypeMapping TypeName="SlapDbModel.Peer">
+              <MappingFragment StoreEntitySet="Peers">
+                <ScalarProperty Name="PeerAssociateId" ColumnName="PeerAssociateId" />
+                <ScalarProperty Name="AssociateUserId" ColumnName="AssociateUserId" />
+                <ScalarProperty Name="PeerUserId" ColumnName="PeerUserId" />
+                <ScalarProperty Name="AppraisalProcessId" ColumnName="AppraisalProcessId" />
+                <ScalarProperty Name="FeedbackStatus" ColumnName="FeedbackStatus" />
+                <ScalarProperty Name="LastNotificationDate" ColumnName="LastNotificationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="SlapDbModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="SlapDbModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
