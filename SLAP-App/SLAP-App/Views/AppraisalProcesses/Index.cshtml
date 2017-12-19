@@ -1,0 +1,75 @@
+﻿@model IEnumerable<SLAP_Data.AppraisalProcess>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AppraisalProcessYear)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PeerListFinalizationByDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SendPeerFeedbackRequestByDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SendPeerFeedbackByDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SelfAppraisalSubmissionByDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AppraisalMeetingByDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GoalSettingByDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AppraisalProcessYear)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PeerListFinalizationByDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SendPeerFeedbackRequestByDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SendPeerFeedbackByDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SelfAppraisalSubmissionByDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AppraisalMeetingByDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GoalSettingByDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.AppraisalProcessId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AppraisalProcessId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AppraisalProcessId })
+        </td>
+    </tr>
+}
+
+</table>
