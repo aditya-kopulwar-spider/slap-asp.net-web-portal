@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SLAP_App.Models.PCAssociateUserViewModel>
+
+@{
+    ViewBag.Title = "AssignAssociates";
+}
+
+@Html.ActionLink("Assign Associates", "Index", "Admin",null, null)
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AssociateDisplayName)
+        </th>
+       @* <th>
+            @Html.DisplayNameFor(model => model.PCUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssociateUserId)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssociateDisplayName)
+        </td>
+       @* <td>
+            @Html.DisplayFor(modelItem => item.PCUserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssociateUserId)
+        </td>*@
+        <td>
+            @if (item.PCUserId == Guid.Empty)
+            {
+                @Html.ActionLink("Make Associate", "MakeAssociate", "Admin", new {associateId = item.AssociateUserId, pcId = @ViewBag.PCId}, null)
+            }
+            else
+            {
+                @Html.ActionLink("Remove Associate", "RemoveAssociate", "Admin", new {associateId = item.AssociateUserId, pcId = item.PCUserId}, null)
+            }
+
+        </td>
+    </tr>
+}
+
+</table>

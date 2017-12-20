@@ -205,6 +205,9 @@
     <Compile Include="Models\ADUser.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\AppraisalSeasonModel.cs" />
+    <Compile Include="Models\PCAssociateUserViewModel.cs" />
+    <Compile Include="Models\Peer.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -257,6 +260,7 @@
     <Content Include="Views\AppraisalProcesses\Edit.cshtml" />
     <Content Include="Views\AppraisalProcesses\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\AssignAssociates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

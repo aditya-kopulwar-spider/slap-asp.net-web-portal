@@ -67,6 +67,30 @@ namespace SLAP_Data
 
             return true;
         }
-        
+
+        public List<PCAssociate> GetAllPcAssociates()
+        {
+            return  db.PCAssociates.ToList();
+        }
+
+        public bool AddAsociate(PCAssociate pcAssociate)
+        {
+            //todo appraisal season selection from ui(multiple seasons are active) or in code(if one is active only)
+            var appraisalProcesses = db.AppraisalProcesses.First(p=>p.IsActive==true);
+            pcAssociate.AppraisalProcessId = appraisalProcesses.AppraisalProcessId;
+            pcAssociate.SelfAppraisalStatus = false;
+            db.PCAssociates.Add(pcAssociate);
+            db.SaveChanges();
+            return true;
+        }
+
+        public bool RemoveAssociate(Guid associateId, Guid pcId)
+        {
+            PCAssociate pcAssociate =
+                db.PCAssociates.FirstOrDefault(p => p.PCUserId == pcId && p.AssociateUserId == associateId);
+            if (pcAssociate != null) db.PCAssociates.Remove(pcAssociate);
+            db.SaveChanges();
+            return true;
+        }
     }
 }

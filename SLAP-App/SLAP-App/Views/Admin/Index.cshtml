@@ -1,5 +1,5 @@
 ﻿@using SLAP_App.Models
-@model List<ADUser>
+@model List<Value>
 
 @{
     ViewBag.Title = "Index";
@@ -8,21 +8,27 @@
 <h2>List of Users</h2>
 
 <table>
-    @foreach (ADUser user in Model)
+    @foreach (Value user in Model)
     {
         <tr>
             <td width="150">
-                @user.Name
-                @Html.HiddenFor(model => user.Id)
+                @user.givenName
+                @Html.HiddenFor(model => user.id)
             </td>
             <td>
                 @if (user.IsPC)
                 {
-                    @Html.ActionLink("Remove PC", "RemovePC", "Admin", new { Id = user.Id }, null)
+                    @Html.ActionLink("Remove PC", "RemovePC", "Admin", new { Id = user.id }, null)
                 }
                 else
                 {
-                    @Html.ActionLink("Make a PC", "MakePC", "Admin", new { Id = user.Id}, null)
+                    @Html.ActionLink("Make a PC", "MakePC", "Admin", new { Id = user.id}, null)
+                }
+            </td>
+            <td>
+                @if (user.IsPC)
+                {
+                    @Html.ActionLink("Assign Associates", "AssignAssociates", "Admin", new { pcID = user.id }, null)
                 }
             </td>
         </tr>
