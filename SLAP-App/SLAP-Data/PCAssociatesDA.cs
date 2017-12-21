@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,6 +37,13 @@ namespace SLAP_Data
             PCAssociate pcAssociate =
                 _dbEntities.PCAssociates.FirstOrDefault(p => p.PCUserId == pcId && p.AssociateUserId == associateId);
             if (pcAssociate != null) _dbEntities.PCAssociates.Remove(pcAssociate);
+            _dbEntities.SaveChanges();
+            return true;
+        }
+
+        public bool RemoveAllAssociatesForGivenPC(Guid pcID)
+        {
+            _dbEntities.PCAssociates.RemoveRange(_dbEntities.PCAssociates.Where(p => p.PCUserId == pcID).ToList());
             _dbEntities.SaveChanges();
             return true;
         }

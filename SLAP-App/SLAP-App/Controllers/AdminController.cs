@@ -74,9 +74,8 @@ namespace SLAP_App.Controllers
         }
         public ActionResult RemoveAssociate(Guid associateId, Guid pcId)
         {
-
             _pcAssociatesDa.RemoveAssociate(associateId, pcId);
-            return RedirectToAction("Index");
+            return RedirectToAction("AssignAssociates", new { pcID = pcId });
         }
         
         // Retrive AD Users

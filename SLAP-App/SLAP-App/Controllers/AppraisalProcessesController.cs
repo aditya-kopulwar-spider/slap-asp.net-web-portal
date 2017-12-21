@@ -6,6 +6,7 @@ using AutoMapper;
 using SLAP_App.Models;
 using SLAP_Data;
 using AutoMapper;
+using SLAP_App.Mapper;
 
 namespace SLAP_App.Controllers
 {
@@ -15,7 +16,7 @@ namespace SLAP_App.Controllers
 
         public AppraisalProcessesController()
         {
-            _appraisalProcessDa = new AppraisalProcessDA(); ;
+            _appraisalProcessDa = new AppraisalProcessDA();
         }
 
         // GET: AppraisalProcesses
@@ -64,19 +65,19 @@ namespace SLAP_App.Controllers
         }
 
         // GET: AppraisalProcesses/Edit/5
-//        public ActionResult Edit(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-//            }
-//            AppraisalProcess appraisalProcess = db.AppraisalProcesses.Find(id);
-//            if (appraisalProcess == null)
-//            {
-//                return HttpNotFound();
-//            }
-//            return View(appraisalProcess);
-//        }
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AppraisalProcess appraisalProcess = _appraisalProcessDa.GetAppraisalProcess(id);
+            if (appraisalProcess == null)
+            {
+                return HttpNotFound();
+            }
+            return View(AutoMapper.Mapper.Map<AppraisalProcess,AppraisalProcessViewModel>(appraisalProcess));
+        }
 
         // POST: AppraisalProcesses/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -85,6 +86,7 @@ namespace SLAP_App.Controllers
 //        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "AppraisalProcessId,AppraisalProcessYear,IsActive,PeerListFinalizationByDate,SendPeerFeedbackRequestByDate,SendPeerFeedbackByDate,SelfAppraisalSubmissionByDate,AppraisalMeetingByDate,GoalSettingByDate")] AppraisalProcessViewModel appraisalProcessViewModel)
         {
+            
             if (ModelState.IsValid)
             {
                 _appraisalProcessDa.EditAppraisalProcess(AutoMapper.Mapper.Map<AppraisalProcessViewModel, AppraisalProcess>(appraisalProcessViewModel));
@@ -93,21 +95,20 @@ namespace SLAP_App.Controllers
             return View(appraisalProcessViewModel);
         }
 
-       /* // GET: AppraisalProcesses/Delete/5
+        // GET: AppraisalProcesses/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AppraisalProcess appraisalProcess = db.AppraisalProcesses.Find(id);
+            AppraisalProcess appraisalProcess = _appraisalProcessDa.GetAppraisalProcess(id);
             if (appraisalProcess == null)
             {
                 return HttpNotFound();
             }
-            return View(appraisalProcess);
+            return View(AutoMapper.Mapper.Map<AppraisalProcess, AppraisalProcessViewModel>(appraisalProcess));
         }
-*/
         // POST: AppraisalProcesses/Delete/5
         [HttpPost, ActionName("Delete")]
 //        [ValidateAntiForgeryToken]

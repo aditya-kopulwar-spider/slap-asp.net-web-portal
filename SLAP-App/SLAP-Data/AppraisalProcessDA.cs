@@ -42,5 +42,10 @@ namespace SLAP_Data
             return true;
         }
 
+        public AppraisalProcess GetAppraisalProcess(int? id)
+        {
+            return _dbEntities.AppraisalProcesses.Find(id);
+        }
+
     }
 }

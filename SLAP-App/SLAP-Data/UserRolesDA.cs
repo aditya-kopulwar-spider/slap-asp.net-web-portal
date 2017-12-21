@@ -49,22 +49,19 @@ namespace SLAP_Data
 
             _dbEntities.UserRoles.Add(newPC);
             _dbEntities.SaveChanges();
-
             GetAllUserRoles(true);
-
             return true;
         }
 
         public bool RemoveUserFromPCRole(Guid userId)
         {
             int pcRoleId = _roles.First(x => x.RoleName == PC).RoleId;
-
             UserRole pcUser = _dbEntities.UserRoles.Find(pcRoleId, userId);
             _dbEntities.UserRoles.Remove(pcUser);
             _dbEntities.SaveChanges();
-
+            //removing entries from pcAssociate table having given userId as PC
+            new PCAssociatesDA().RemoveAllAssociatesForGivenPC(userId);
             GetAllUserRoles(true);
-
             return true;
         }
     }
