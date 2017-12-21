@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace SLAP_App.Models
 {
-    public class Value
+    public class User
     {
         public System.Guid id { get; set; }
         public List<object> businessPhones { get; set; }
@@ -24,6 +26,7 @@ namespace SLAP_App.Models
     public class RootObject
     {
         public string context { get; set; }
-        public List<Value> value { get; set; }
+        [JsonProperty("Value")]
+        public List<User> Users { get; set; }
     }
 }

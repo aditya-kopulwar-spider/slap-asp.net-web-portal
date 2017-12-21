@@ -1,5 +1,5 @@
 ﻿@using SLAP_App.Models
-@model List<Value>
+@model List<User>
 
 @{
     ViewBag.Title = "Index";
@@ -8,7 +8,7 @@
 <h2>List of Users</h2>
 
 <table>
-    @foreach (Value user in Model)
+    @foreach (var user in Model)
     {
         <tr style="height: 25px">
             <td width="150">

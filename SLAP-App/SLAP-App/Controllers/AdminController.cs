@@ -16,30 +16,31 @@ namespace SLAP_App.Controllers
 {
     public class AdminController : Controller
     {
-        private DatabaseHelper dbHelper = new DatabaseHelper();
+        private UserRolesDA _userRolesDa=new UserRolesDA();
+       private PCAssociatesDA _pcAssociatesDa=new PCAssociatesDA();
 
         // GET: Admin
         public async Task<ActionResult> Index()
         {
-            List<Value> userList = await GetUsersAsync();
-            userList.ForEach(p => p.IsPC = dbHelper.IsUserPC(p.id));
+            List<User> userList = await GetUsersAsync();
+            userList.ForEach(p => p.IsPC = _userRolesDa.IsUserPC(p.id));
             return View(userList);
         }
 
-        public async Task<List<Value>> GetUsersAsync()
+        public async Task<List<User>> GetUsersAsync()
         {
             return  await GetAllAdUsers();
         }
 
         public ActionResult MakePC(System.Guid Id)
         {
-            dbHelper.MakeUserPC(Id);
+            _userRolesDa.MakeUserPC(Id);
             return RedirectToAction("Index");
         }
 
         public ActionResult RemovePC(System.Guid Id)
         {
-            dbHelper.RemoveUserFromPCRole(Id);
+            _userRolesDa.RemoveUserFromPCRole(Id);
             return RedirectToAction("Index");
         }
 
@@ -48,7 +49,7 @@ namespace SLAP_App.Controllers
             var _userList = await GetAllAdUsers();
             ViewBag.PCId = pcID;
             //todo PCAssociate table may contain multiple entries for associate for multiple appraisal seasons
-            var allPcAssociates = dbHelper.GetAllPcAssociates().ToDictionary(k => k.AssociateUserId);
+            var allPcAssociates = _pcAssociatesDa.GetAllPcAssociates().ToDictionary(k => k.AssociateUserId);
             List<PCAssociateUserViewModel> pcAssociateUsers = new List<PCAssociateUserViewModel>();
             _userList.ForEach(p => pcAssociateUsers.Add(new PCAssociateUserViewModel()
             {
@@ -68,13 +69,13 @@ namespace SLAP_App.Controllers
                 AssociateUserId = associateId
             };
 
-            dbHelper.AddAsociate(pcAssociate);
+            _pcAssociatesDa.AddAsociate(pcAssociate);
             return RedirectToAction("AssignAssociates", new{pcID=pcId});
         }
         public ActionResult RemoveAssociate(Guid associateId, Guid pcId)
         {
 
-            dbHelper.RemoveAssociate(associateId, pcId);
+            _pcAssociatesDa.RemoveAssociate(associateId, pcId);
             return RedirectToAction("Index");
         }
         
@@ -102,7 +103,7 @@ namespace SLAP_App.Controllers
             return authResult.AccessToken;
         }
 
-        private static async Task<List<Value>> GetAllAdUsers()
+        private static async Task<List<User>> GetAllAdUsers()
         {
             var token = await AppAuthenticationAsync();
             //var token = await HttpAppAuthenticationAsync();
@@ -113,7 +114,7 @@ namespace SLAP_App.Controllers
 
                 var allUsers = await client.GetStringAsync("https://graph.microsoft.com/v1.0/users/");
                 var result = JsonConvert.DeserializeObject<RootObject>(allUsers);
-                return result.value;
+                return result.Users;
             }
         }
 
