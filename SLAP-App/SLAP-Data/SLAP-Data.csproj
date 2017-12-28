@@ -61,6 +61,7 @@
     <Compile Include="Peer.cs">
       <DependentUpon>SlapModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PeersDA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>SlapModel.tt</DependentUpon>

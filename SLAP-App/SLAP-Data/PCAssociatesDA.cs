@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net.Configuration;
 using System.Text;
@@ -46,6 +47,22 @@ namespace SLAP_Data
             _dbEntities.PCAssociates.RemoveRange(_dbEntities.PCAssociates.Where(p => p.PCUserId == pcID).ToList());
             _dbEntities.SaveChanges();
             return true;
+        }
+
+        public List<PCAssociate> GetAllAssociateForGivenPC(Guid PcID)
+        {
+            return _dbEntities.PCAssociates.Where(pcAssociate => pcAssociate.PCUserId == PcID).ToList(); ;
+        }
+
+        public PCAssociate GetPCAssociate(int? pcAssociateId)
+        {
+            return _dbEntities.PCAssociates.Find(pcAssociateId);
+        }
+        public PCAssociate EditPCAssociate(PCAssociate pcAssociate)
+        {
+            _dbEntities.Entry(pcAssociate).State = EntityState.Modified;
+            _dbEntities.SaveChanges();
+            return pcAssociate;
         }
     }
 }

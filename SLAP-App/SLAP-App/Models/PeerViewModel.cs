@@ -5,13 +5,14 @@ using System.Web;
 
 namespace SLAP_App.Models
 {
-    public class Peer
+    public class PeerViewModel
     {
         public int PeerAssociateId { get; set; }
         public System.Guid AssociateUserId { get; set; }
         public System.Guid PeerUserId { get; set; }
+        public string PeerName { get; set; }
         public int AppraisalProcessId { get; set; }
         public bool FeedbackStatus { get; set; }
-        public System.DateTime LastNotificationDate { get; set; }
+        public Nullable<System.DateTime> LastNotificationDate { get; set; }
     }
 }

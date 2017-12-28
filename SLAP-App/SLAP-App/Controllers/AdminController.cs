@@ -11,26 +11,26 @@ using System.Configuration;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SLAP_App.Services;
 
 namespace SLAP_App.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private UserRolesDA _userRolesDa=new UserRolesDA();
        private PCAssociatesDA _pcAssociatesDa=new PCAssociatesDA();
+        ActiveDirectory _activeDirectory=new ActiveDirectory();
 
         // GET: Admin
         public async Task<ActionResult> Index()
         {
-            List<User> userList = await GetUsersAsync();
+            List<User> userList = await _activeDirectory.GetAllAdUsers();
             userList.ForEach(p => p.IsPC = _userRolesDa.IsUserPC(p.id));
             return View(userList);
         }
 
-        public async Task<List<User>> GetUsersAsync()
-        {
-            return  await GetAllAdUsers();
-        }
+      
 
         public ActionResult MakePC(System.Guid Id)
         {
@@ -46,7 +46,7 @@ namespace SLAP_App.Controllers
 
         public async Task<ActionResult> AssignAssociates(System.Guid pcID)
         {
-            var _userList = await GetAllAdUsers();
+            var _userList = await _activeDirectory.GetAllAdUsers();
             ViewBag.PCId = pcID;
             //todo PCAssociate table may contain multiple entries for associate for multiple appraisal seasons
             var allPcAssociates = _pcAssociatesDa.GetAllPcAssociates().ToDictionary(k => k.AssociateUserId);
@@ -80,42 +80,8 @@ namespace SLAP_App.Controllers
         
         // Retrive AD Users
 
-        private static async Task<string> AppAuthenticationAsync()
-        {
-
-            string clientID = ConfigurationManager.AppSettings["ida:ClientId"];
-            string tenant = ConfigurationManager.AppSettings["ida:TenantId"];
-            string secret = ConfigurationManager.AppSettings["ida:ClientSecret"];
-            var resource = "https://graph.microsoft.com/";
-
-//            var tenant = "ajaychavan1312outlook.onmicrosoft.com";
-//            var clientID = "03d41270-0bc5-4806-af8f-8a89c54206dc";
-//            var resource = "https://graph.microsoft.com/";
-//            var secret = "dm7sfMC3cIRkax0y9xUNE6F9M7SRe8At5x/iQIsZiPE=";
-
-            //  Ceremony
-            var authority = $"https://login.microsoftonline.com/{tenant}";
-            var authContext = new AuthenticationContext(authority);
-            var credentials = new ClientCredential(clientID, secret);
-            var authResult = await authContext.AcquireTokenAsync(resource, credentials);
-
-            return authResult.AccessToken;
-        }
-
-        private static async Task<List<User>> GetAllAdUsers()
-        {
-            var token = await AppAuthenticationAsync();
-            //var token = await HttpAppAuthenticationAsync();
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                var allUsers = await client.GetStringAsync("https://graph.microsoft.com/v1.0/users/");
-                var result = JsonConvert.DeserializeObject<RootObject>(allUsers);
-                return result.Users;
-            }
-        }
+       
+       
 
 
     }

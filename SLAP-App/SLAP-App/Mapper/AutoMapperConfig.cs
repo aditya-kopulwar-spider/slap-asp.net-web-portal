@@ -10,7 +10,11 @@ namespace SLAP_App.Mapper
         {
             AutoMapper.Mapper.Initialize(config =>
             {
-                config.CreateMap<AppraisalProcessViewModel, AppraisalProcess>();
+                AppraisalProcessMapper.Initialize(config);
+                PCAssociateUserViewModelMapper.Initialize(config);
+                PeerMapper.Initialize(config);
+//                config.CreateMap<AppraisalProcessViewModel, AppraisalProcess>();
+//                config.CreateMap<PCAssociateUserViewModel, PCAssociate>().ForMember(p=>p.);
             });
         }
     }

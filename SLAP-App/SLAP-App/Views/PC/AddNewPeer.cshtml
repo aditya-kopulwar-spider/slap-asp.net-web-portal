@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SLAP_App.Models.PeerAssociateViewModel>
+
+<br/>
+<h3>Add Peers for Associate: @ViewBag.AssociateName</h3>
+<p>
+    @Html.ActionLink("Return To Associates", "Associate",new {associateId=@ViewBag.AssociateId})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PeerDisplayName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PeerId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssociateUserId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PeerDisplayName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PeerId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssociateUserId)
+        </td>
+        <td>
+            @if (!item.IsPeer)
+            {
+                @Html.ActionLink("Make Peer", "MakePeer", "PC", new {associateId = item.AssociateUserId, peerId = item.PeerId}, null)
+            }
+            else
+            {
+                @Html.ActionLink("Remove Peer", "RemovePeer", "PC", new {associateId = item.AssociateUserId, peerId = item.PeerId}, null)
+            }
+
+        </td>
+    </tr>
+}
+
+</table>

@@ -5,11 +5,11 @@ using System.Web.Mvc;
 using AutoMapper;
 using SLAP_App.Models;
 using SLAP_Data;
-using AutoMapper;
 using SLAP_App.Mapper;
 
 namespace SLAP_App.Controllers
 {
+    [Authorize]
     public class AppraisalProcessesController : Controller
     {
         private AppraisalProcessDA _appraisalProcessDa;

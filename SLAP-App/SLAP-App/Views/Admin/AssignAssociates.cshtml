@@ -37,7 +37,7 @@
             }
             else
             {
-                @Html.ActionLink("Remove Associate", "RemoveAssociate", "Admin", new {associateId = item.AssociateUserId, pcId = item.PCUserId}, null)
+                @Html.ActionLink("Remove Associate", "RemoveAssociate", "Admin", new {associateId = item.AssociateUserId, pcId = @ViewBag.PCId}, null)
             }
 
         </td>

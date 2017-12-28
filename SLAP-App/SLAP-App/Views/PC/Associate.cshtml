@@ -1,0 +1,130 @@
+﻿@model IEnumerable<SLAP_App.Models.PeerViewModel>
+
+<br />
+<h3>Peer Feedback Status for Associate: @ViewBag.AssociateName</h3>
+<p>
+    @Html.ActionLink("Add Peer", "AddNewPeer", new { associateId = @ViewBag.AssociateId })
+</p>
+<h4>Requesting feedback from</h4>
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.PeerAssociateId)
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.AssociateUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PeerUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model=>model.PeerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AppraisalProcessId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FeedbackStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastNotificationDate)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Where(p => p.AssociateUserId == @ViewBag.AssociateId)) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PeerAssociateId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssociateUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PeerUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem=>item.PeerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AppraisalProcessId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FeedbackStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastNotificationDate)
+            </td>
+            @*  <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
+        </tr>
+    }
+
+</table>
+<h4>Giving feedback to</h4>
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.PeerAssociateId)
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.AssociateUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PeerUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model=>model.PeerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AppraisalProcessId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FeedbackStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastNotificationDate)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Where(p=>p.AssociateUserId!=@ViewBag.AssociateId)) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PeerAssociateId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssociateUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PeerUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem=>item.PeerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AppraisalProcessId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FeedbackStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastNotificationDate)
+            </td>
+            @*  <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
+        </tr>
+    }
+
+</table>
+
