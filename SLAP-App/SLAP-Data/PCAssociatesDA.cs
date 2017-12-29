@@ -27,7 +27,7 @@ namespace SLAP_Data
             //todo appraisal season selection from ui(multiple seasons are active) or in code(if one is active only)
             var appraisalProcesses = _dbEntities.AppraisalProcesses.First(p => p.IsActive == true);
             pcAssociate.AppraisalProcessId = appraisalProcesses.AppraisalProcessId;
-            pcAssociate.SelfAppraisalStatus = false;
+//            pcAssociate.SelfAppraisalStatus = false;
             _dbEntities.PCAssociates.Add(pcAssociate);
             _dbEntities.SaveChanges();
             return true;

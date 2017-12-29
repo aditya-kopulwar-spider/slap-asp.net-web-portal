@@ -18,9 +18,9 @@ namespace SLAP_Data
         public System.Guid PCUserId { get; set; }
         public System.Guid AssociateUserId { get; set; }
         public int AppraisalProcessId { get; set; }
-        public Nullable<bool> SelfAppraisalStatus { get; set; }
         public Nullable<System.DateTime> AppraisalDate { get; set; }
         public Nullable<System.DateTime> LastNotificationDate { get; set; }
+        public string SelfAppraisalDocumentUrl { get; set; }
     
         public virtual AppraisalProcess AppraisalProcess { get; set; }
     }

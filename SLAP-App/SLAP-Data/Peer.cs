@@ -18,8 +18,9 @@ namespace SLAP_Data
         public System.Guid AssociateUserId { get; set; }
         public System.Guid PeerUserId { get; set; }
         public int AppraisalProcessId { get; set; }
-        public bool FeedbackStatus { get; set; }
         public Nullable<System.DateTime> LastNotificationDate { get; set; }
+        public bool ShareFeedbackWithAssociate { get; set; }
+        public string FeedbackDocumentUrl { get; set; }
     
         public virtual AppraisalProcess AppraisalProcess { get; set; }
     }

@@ -32,7 +32,7 @@ namespace SLAP_Data
         {
             var appraisalProcesses = _dbEntities.AppraisalProcesses.First(p => p.IsActive == true);
             peer.AppraisalProcessId = appraisalProcesses.AppraisalProcessId;
-            peer.FeedbackStatus = false;
+//            peer.FeedbackStatus = false;
             _dbEntities.Peers.Add(peer);
             _dbEntities.SaveChanges();
             return true;

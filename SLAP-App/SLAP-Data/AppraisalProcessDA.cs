@@ -47,5 +47,9 @@ namespace SLAP_Data
             return _dbEntities.AppraisalProcesses.Find(id);
         }
 
+        public AppraisalProcess GetActiveAppraisalProces()
+        {
+            return _dbEntities.AppraisalProcesses.FirstOrDefault(p => p.IsActive == true);
+        }
     }
 }

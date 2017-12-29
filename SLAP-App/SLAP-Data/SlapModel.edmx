@@ -27,9 +27,9 @@
           <Property Name="PCUserId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AssociateUserId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AppraisalProcessId" Type="int" Nullable="false" />
-          <Property Name="SelfAppraisalStatus" Type="bit" />
           <Property Name="AppraisalDate" Type="date" />
           <Property Name="LastNotificationDate" Type="datetime" />
+          <Property Name="SelfAppraisalDocumentUrl" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="Peers">
           <Key>
@@ -39,8 +39,9 @@
           <Property Name="AssociateUserId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="PeerUserId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AppraisalProcessId" Type="int" Nullable="false" />
-          <Property Name="FeedbackStatus" Type="bit" Nullable="false" />
+          <Property Name="ShareFeedbackWithAssociate" Type="bit" Nullable="false" />
           <Property Name="LastNotificationDate" Type="datetime" />
+          <Property Name="FeedbackDocumentUrl" Type="varchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -140,10 +141,10 @@
           <Property Name="PCUserId" Type="Guid" Nullable="false" />
           <Property Name="AssociateUserId" Type="Guid" Nullable="false" />
           <Property Name="AppraisalProcessId" Type="Int32" Nullable="false" />
-          <Property Name="SelfAppraisalStatus" Type="Boolean" />
           <Property Name="AppraisalDate" Type="DateTime" Precision="0" />
           <Property Name="LastNotificationDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="AppraisalProcess" Relationship="Self.FK__PCAssocia__Appra__5DCAEF64" FromRole="PCAssociates" ToRole="AppraisalProcess" />
+          <Property Name="SelfAppraisalDocumentUrl" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Peer">
           <Key>
@@ -153,9 +154,10 @@
           <Property Name="AssociateUserId" Type="Guid" Nullable="false" />
           <Property Name="PeerUserId" Type="Guid" Nullable="false" />
           <Property Name="AppraisalProcessId" Type="Int32" Nullable="false" />
-          <Property Name="FeedbackStatus" Type="Boolean" Nullable="false" />
           <Property Name="LastNotificationDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="AppraisalProcess" Relationship="Self.FK__Peers__Appraisal__59FA5E80" FromRole="Peers" ToRole="AppraisalProcess" />
+          <Property Name="ShareFeedbackWithAssociate" Type="Boolean" Nullable="false" />
+          <Property Name="FeedbackDocumentUrl" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -253,11 +255,11 @@
           <EntitySetMapping Name="PCAssociates">
             <EntityTypeMapping TypeName="SlapDbModel.PCAssociate">
               <MappingFragment StoreEntitySet="PCAssociates">
+                <ScalarProperty Name="SelfAppraisalDocumentUrl" ColumnName="SelfAppraisalDocumentUrl" />
                 <ScalarProperty Name="PCAssociatesId" ColumnName="PCAssociatesId" />
                 <ScalarProperty Name="PCUserId" ColumnName="PCUserId" />
                 <ScalarProperty Name="AssociateUserId" ColumnName="AssociateUserId" />
                 <ScalarProperty Name="AppraisalProcessId" ColumnName="AppraisalProcessId" />
-                <ScalarProperty Name="SelfAppraisalStatus" ColumnName="SelfAppraisalStatus" />
                 <ScalarProperty Name="AppraisalDate" ColumnName="AppraisalDate" />
                 <ScalarProperty Name="LastNotificationDate" ColumnName="LastNotificationDate" />
               </MappingFragment>
@@ -266,11 +268,12 @@
           <EntitySetMapping Name="Peers">
             <EntityTypeMapping TypeName="SlapDbModel.Peer">
               <MappingFragment StoreEntitySet="Peers">
+                <ScalarProperty Name="FeedbackDocumentUrl" ColumnName="FeedbackDocumentUrl" />
+                <ScalarProperty Name="ShareFeedbackWithAssociate" ColumnName="ShareFeedbackWithAssociate" />
                 <ScalarProperty Name="PeerAssociateId" ColumnName="PeerAssociateId" />
                 <ScalarProperty Name="AssociateUserId" ColumnName="AssociateUserId" />
                 <ScalarProperty Name="PeerUserId" ColumnName="PeerUserId" />
                 <ScalarProperty Name="AppraisalProcessId" ColumnName="AppraisalProcessId" />
-                <ScalarProperty Name="FeedbackStatus" ColumnName="FeedbackStatus" />
                 <ScalarProperty Name="LastNotificationDate" ColumnName="LastNotificationDate" />
               </MappingFragment>
             </EntityTypeMapping>
