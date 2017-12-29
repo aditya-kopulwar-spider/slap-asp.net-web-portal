@@ -20,6 +20,7 @@ namespace SLAP_App.Controllers
     {
         private UserRolesDA _userRolesDa=new UserRolesDA();
        private PCAssociatesDA _pcAssociatesDa=new PCAssociatesDA();
+        private NotificationService _notificationService=new NotificationService();
         ActiveDirectory _activeDirectory=new ActiveDirectory();
 
         // GET: Admin
@@ -70,6 +71,9 @@ namespace SLAP_App.Controllers
             };
 
             _pcAssociatesDa.AddAsociate(pcAssociate);
+
+            _notificationService.SendMessageToAssociateOnPcAssignment(new User{displayName = "Associate Name", mail = "kshah@spiderlogic.com"}, new User { displayName = "PC Name", mail = "kshah@spiderlogic.com" });
+
             return RedirectToAction("AssignAssociates", new{pcID=pcId});
         }
         public ActionResult RemoveAssociate(Guid associateId, Guid pcId)
