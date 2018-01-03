@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Configuration;
+using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,10 +19,10 @@ namespace SLAP_App.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        private UserRolesDA _userRolesDa=new UserRolesDA();
-       private PCAssociatesDA _pcAssociatesDa=new PCAssociatesDA();
-        private NotificationService _notificationService=new NotificationService();
-        ActiveDirectory _activeDirectory=new ActiveDirectory();
+        private UserRolesDA _userRolesDa = new UserRolesDA();
+        private PCAssociatesDA _pcAssociatesDa = new PCAssociatesDA();
+        private NotificationService _notificationService = new NotificationService();
+        ActiveDirectory _activeDirectory = new ActiveDirectory();
 
         // GET: Admin
         public async Task<ActionResult> Index()
@@ -31,7 +32,7 @@ namespace SLAP_App.Controllers
             return View(userList);
         }
 
-      
+
 
         public ActionResult MakePC(System.Guid Id)
         {
@@ -45,7 +46,7 @@ namespace SLAP_App.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> AssignAssociates(System.Guid pcID)
+       /* public async Task<ActionResult> AssignAssociates(System.Guid pcID)
         {
             var _userList = await _activeDirectory.GetAllAdUsers();
             ViewBag.PCId = pcID;
@@ -58,7 +59,8 @@ namespace SLAP_App.Controllers
                 AssociateUserId = p.id,
                 AssociateDisplayName = p.displayName
             }));
-            var pcAssociateUserViewModels = pcAssociateUsers.Where(p => (p.PCUserId == pcID || p.PCUserId == Guid.Empty) &&(p.AssociateUserId!=pcID)).ToList();
+            var pcAssociateUserViewModels = pcAssociateUsers
+                .Where(p => (p.PCUserId == pcID || p.PCUserId == Guid.Empty) && (p.AssociateUserId != pcID)).ToList();
             return View(pcAssociateUserViewModels);
         }
 
@@ -72,20 +74,77 @@ namespace SLAP_App.Controllers
 
             _pcAssociatesDa.AddAsociate(pcAssociate);
 
-            _notificationService.SendMessageToAssociateOnPcAssignment(new User{displayName = "Associate Name", mail = "kshah@spiderlogic.com"}, new User { displayName = "PC Name", mail = "kshah@spiderlogic.com" });
+            _notificationService.SendMessageToAssociateOnPcAssignment(
+                new User {displayName = "Associate Name", mail = "kshah@spiderlogic.com"},
+                new User {displayName = "PC Name", mail = "kshah@spiderlogic.com"});
 
-            return RedirectToAction("AssignAssociates", new{pcID=pcId});
+            return RedirectToAction("AssignAssociates", new {pcID = pcId});
         }
+
         public ActionResult RemoveAssociate(Guid associateId, Guid pcId)
         {
             _pcAssociatesDa.RemoveAssociate(associateId, pcId);
-            return RedirectToAction("AssignAssociates", new { pcID = pcId });
-        }
-        
-        // Retrive AD Users
+            return RedirectToAction("AssignAssociates", new {pcID = pcId});
+        }*/
 
-       
-       
+        #region newAssociatesScreen
+
+        public async Task<ActionResult> AssignAssociates(Guid? pcId)
+        {
+            var _userList = await _activeDirectory.GetAllAdUsers();
+            ViewBag.PCId = pcId;
+            ViewBag.pcName = _userList.First(p => p.id == pcId).displayName;
+            var allPcAssociates = _pcAssociatesDa.GetAllCurrentYearPcAssociates().ToDictionary(k => k.AssociateUserId);
+            List<PCAssociateUserViewModel> pcAssociateUsers = new List<PCAssociateUserViewModel>();
+            _userList.ForEach(p => pcAssociateUsers.Add(new PCAssociateUserViewModel()
+            {
+                PCUserId = allPcAssociates.ContainsKey(p.id) ? allPcAssociates[p.id].PCUserId : Guid.Empty,
+                Selected = allPcAssociates.ContainsKey(p.id),
+                AssociateUserId = p.id,
+                AssociateDisplayName = p.displayName
+            }));
+
+            var pcAssociateUserViewModels = pcAssociateUsers
+                .Where(p => (p.PCUserId == pcId || p.PCUserId == Guid.Empty) && (p.AssociateUserId != pcId)).ToList();
+            pcAssociateUserViewModels.ForEach(p=>p.PCUserId=(Guid) pcId);
+            AssociateSelectionViewModel associateSelectionViewModel=new AssociateSelectionViewModel();
+            associateSelectionViewModel.PcAssociateUserViewModels = pcAssociateUserViewModels;
+            return View(associateSelectionViewModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AssignAssociates(AssociateSelectionViewModel associateSelectionViewModel)
+        {
+            //            var selectedAssociates = id.getSelectedAssociates();
+            //todo approach to assign associates only one time activity or ---
+            var pcUserId = associateSelectionViewModel.PcAssociateUserViewModels.FirstOrDefault(p=>p.Selected).PCUserId;
+            var allCurrentYearPcAssociatesForGivenPcId = _pcAssociatesDa.GetAllCurrentYearPcAssociatesForGivenPCId(pcUserId);
+            _pcAssociatesDa.RemoveAsociates(allCurrentYearPcAssociatesForGivenPcId);
+            var pcAssociates = associateSelectionViewModel.PcAssociateUserViewModels.Where(p => p.Selected).ToList()
+                .Select(p => AutoMapper.Mapper.Map<PCAssociate>(p))
+                .ToList();
+            var addAsociates = _pcAssociatesDa.AddAsociates(pcAssociates);
+
+            if (addAsociates)
+            {
+                var allAdUsers =await _activeDirectory.GetAllAdUsers();
+                var allAdUsersDictionary  = allAdUsers.ToList().ToDictionary(p => p.id);
+                foreach (var pcAssociate in pcAssociates)
+                {
+                    var associate = allAdUsersDictionary[pcAssociate.AssociateUserId];
+                    var pc = allAdUsersDictionary[pcAssociate.PCUserId];
+                    _notificationService.SendMessageToAssociateOnPcAssignment(associate, pc);
+                }
+               
+            }
+            
+
+            return RedirectToAction("AssignAssociates",new {pcId=pcUserId});
+        }
+
+        #endregion
+
+
 
 
     }

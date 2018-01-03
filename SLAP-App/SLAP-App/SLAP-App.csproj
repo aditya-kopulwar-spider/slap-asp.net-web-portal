@@ -204,6 +204,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppraisalProcessesController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PCController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\AppraisalProcessViewModel.cs" />
     <Compile Include="Models\AppraisalSeasonModel.cs" />
+    <Compile Include="Models\AssociateSelectionViewModel.cs" />
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\PCAssociateUserViewModel.cs" />
     <Compile Include="Models\PCAssociateViewModel.cs" />
@@ -279,11 +281,12 @@
     <Content Include="Views\AppraisalProcesses\Edit.cshtml" />
     <Content Include="Views\AppraisalProcesses\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\AssignAssociates.cshtml" />
     <Content Include="Views\PC\Index.cshtml" />
     <Content Include="Views\PC\Associate.cshtml" />
     <Content Include="Views\PC\AddNewPeer.cshtml" />
     <Content Include="Views\PC\EditAssociate.cshtml" />
+    <Content Include="Views\Admin\AssignAssociates.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -10,7 +10,7 @@ namespace SLAP_App.Services
 {
     public class NotificationService
     {
-        public void SendMessageToAssociateOnPcAssignment(User associate,User pc)
+        public void SendMessageToAssociateOnPcAssignment(User associate, User pc)
         {
             Email email=new Email();
             email.ToEmail = associate.mail;
