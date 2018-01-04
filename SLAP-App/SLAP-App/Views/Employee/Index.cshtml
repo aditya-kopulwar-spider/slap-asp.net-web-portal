@@ -1,1 +1,8 @@
-﻿
+﻿@model  SLAP_App.Models.EmployeeViewModels
+@{
+    ViewBag.Title = "Employee";
+}
+@for (var i = 0; i < Model.EmployeeModels.Count; i++)
+{
+    @Html.Partial("EmployeeFeedback",Model.EmployeeModels[i]);
+}

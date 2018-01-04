@@ -1,0 +1,98 @@
+﻿@model SLAP_App.Models.EmployeeViewModel
+@{
+    ViewBag.Title = "Peer";
+}
+
+
+@using (Html.BeginForm("UpdateFeedback", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @*    @Html.AntiForgeryToken()*@
+
+    <div class="form-horizontal">
+        <h4>EmployeeViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.PeerAssociateId, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.AssociateUserId, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.PeerUserId, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.FeedbackDocumentUrl, new { htmlAttributes = new { @class = "form-control" } })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssociateName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AssociateName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.AssociateName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PeerName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PeerName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.PeerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AppraisalProcessId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AppraisalProcessId, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.AppraisalProcessId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastNotificationDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastNotificationDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.LastNotificationDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShareFeedbackWithAssociate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.ShareFeedbackWithAssociate)
+                    @Html.ValidationMessageFor(model => model.ShareFeedbackWithAssociate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.FeedbackDocumentUrl, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FeedbackDocumentUrl, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FeedbackDocumentUrl, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <fieldset class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="File">File</label>
+                <div class="col-md-10">
+                    <input type="file" name="FeedbackDocument" />
+                </div>
+            </div>
+            @*<div class="form-group">
+
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Submit" class="btn" />
+                </div>
+
+            </div>*@
+        </fieldset>  
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

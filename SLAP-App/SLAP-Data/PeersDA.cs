@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,13 @@ namespace SLAP_Data
         {
             var peer = _dbEntities.Peers.FirstOrDefault(p => p.AssociateUserId == associateId && p.PeerUserId == peerId);
             if (peer != null) _dbEntities.Peers.Remove(peer);
+            _dbEntities.SaveChanges();
+            return true;
+        }
+
+        public bool UpdatePeer(Peer peer)
+        {
+            _dbEntities.Entry(peer).State = EntityState.Modified;
             _dbEntities.SaveChanges();
             return true;
         }
