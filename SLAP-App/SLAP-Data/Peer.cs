@@ -17,11 +17,11 @@ namespace SLAP_Data
         public int PeerAssociateId { get; set; }
         public System.Guid AssociateUserId { get; set; }
         public System.Guid PeerUserId { get; set; }
-        public int AppraisalProcessId { get; set; }
         public Nullable<System.DateTime> LastNotificationDate { get; set; }
         public bool ShareFeedbackWithAssociate { get; set; }
         public string FeedbackDocumentUrl { get; set; }
+        public int PCAssociateId { get; set; }
     
-        public virtual AppraisalProcess AppraisalProcess { get; set; }
+        public virtual PCAssociate PCAssociate { get; set; }
     }
 }

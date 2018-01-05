@@ -3,6 +3,80 @@
 @{
     ViewBag.Title = "Employee";
 }
+@{List<EmployeeViewModel> _employeeViewModelForSelf = Model.EmployeeModels.Where(p => p.AssociateUserId == ViewBag.UserId).ToList();}
+@{List<EmployeeViewModel> _employeeViewModelForPeer = Model.EmployeeModels.Where(p => p.AssociateUserId != ViewBag.UserId).ToList();}
+
+<div style="width: 100%;">
+    <div style="float: left; width: 50%">
+        
+        
+        <h4>Peer Form to upload</h4>
+        <table style="width:100%">
+            <tr>
+                <th>
+                    PeerName
+                </th>
+                <th>
+                    Share Feedback Status with Associate
+                </th>
+                <th>
+                    Download/Upload
+                </th>
+       
+   
+            </tr>
+            @for (var i = 0; i < _employeeViewModelForSelf.Count; i++)
+            {
+                @Html.Partial("EmployeeFeedbackTable", _employeeViewModelForSelf[i]);
+        
+            }
+        </table>
+
+    </div>
+    <div style="float: right; width: 50%">
+        
+
+        <h4>View feedback those shared with you</h4>
+        <table class="table">
+            <tr>
+                <th>
+                    AssociateName
+                </th>
+                <th>
+                    Share Feedback Status with Associate
+                </th>
+                <th>
+                    Download
+                </th>
+       
+   
+            </tr>
+            @for (var i = 0; i < _employeeViewModelForPeer.Count; i++)
+            {
+                @Html.Partial("EmployeeFeedbackTable", _employeeViewModelForPeer[i]);
+        
+            }
+        </table>
+    </div>
+</div>
+<div style="clear:both"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
 @{List<EmployeeViewModel> _employeeViewModelForSelf= Model.EmployeeModels.Where(p=>p.AssociateUserId==ViewBag.UserId).ToList();}
 @{List<EmployeeViewModel> _employeeViewModelForPeer= Model.EmployeeModels.Where(p=>p.AssociateUserId!=ViewBag.UserId).ToList();}
 <div style="width:100%;"> 
@@ -24,7 +98,7 @@
         }
     </div>
 
-</div>
+</div>*@
 
 <br/><br/>
 

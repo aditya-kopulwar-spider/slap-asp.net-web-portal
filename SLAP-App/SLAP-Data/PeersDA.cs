@@ -31,8 +31,8 @@ namespace SLAP_Data
         }
         public bool AddPeer(Peer peer)
         {
-            var appraisalProcesses = _dbEntities.AppraisalProcesses.First(p => p.IsActive == true);
-            peer.AppraisalProcessId = appraisalProcesses.AppraisalProcessId;
+            var appraisalProcesses = _dbEntities.AppraisalSeasons.First(p => p.IsActive == true);
+//            peer.AppraisalSeasonId = appraisalProcesses.AppraisalSeasonId;
 //            peer.FeedbackStatus = false;
             _dbEntities.Peers.Add(peer);
             _dbEntities.SaveChanges();

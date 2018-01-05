@@ -15,6 +15,7 @@ namespace SLAP_App.Controllers
     {
         private readonly ActiveDirectory _activeDirectory=new ActiveDirectory();
         private PCAssociatesDA _pcAssociatesDa = new PCAssociatesDA();
+        private AppraisalSeasonDA _appraisalProcessDa=new AppraisalSeasonDA();
         private FileService _fileService = new FileService();
         private PeersDA _peersDa=new PeersDA();
         // GET: Employee
@@ -36,8 +37,10 @@ namespace SLAP_App.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateFeedback(EmployeeViewModel employeeViewModel)
         {
-            var name = string.Concat(employeeViewModel.AssociateName + "-" + employeeViewModel.PeerName + "-" + employeeViewModel.AppraisalProcessId);
-           var path=  await _fileService.UploadFile(employeeViewModel.FeedbackDocument,name);
+            var activeAppraisalProces = _appraisalProcessDa.GetActiveAppraisalProces();
+            var name = string.Concat(employeeViewModel.AssociateName + "-" + employeeViewModel.PeerName + "-" + activeAppraisalProces.Name);
+            
+            var path=  await _fileService.UploadFile(employeeViewModel.FeedbackDocument, name,activeAppraisalProces.Name);
             employeeViewModel.FeedbackDocumentUrl = path;
             var peer = AutoMapper.Mapper.Map<Peer>(employeeViewModel);
             _peersDa.UpdatePeer(peer);

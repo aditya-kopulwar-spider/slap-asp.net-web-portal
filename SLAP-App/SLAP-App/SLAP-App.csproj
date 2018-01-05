@@ -218,7 +218,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Mapper\AppraisalProcessMapper.cs" />
+    <Compile Include="Mapper\AppraisalSeasonMapper.cs" />
     <Compile Include="Mapper\AutoMapperConfig.cs" />
     <Compile Include="Mapper\EmployeeMapper.cs" />
     <Compile Include="Mapper\PCAssociateUserViewModelMapper.cs" />
@@ -299,6 +299,7 @@
     <Content Include="Views\Admin\AssignAssociates.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Employee\EmployeeFeedback.cshtml" />
+    <Content Include="Views\Employee\EmployeeFeedbackTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

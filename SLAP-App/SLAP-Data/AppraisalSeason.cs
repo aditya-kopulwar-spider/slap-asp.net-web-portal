@@ -12,17 +12,16 @@ namespace SLAP_Data
     using System;
     using System.Collections.Generic;
     
-    public partial class AppraisalProcess
+    public partial class AppraisalSeason
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AppraisalProcess()
+        public AppraisalSeason()
         {
             this.PCAssociates = new HashSet<PCAssociate>();
-            this.Peers = new HashSet<Peer>();
         }
     
-        public int AppraisalProcessId { get; set; }
-        public short AppraisalProcessYear { get; set; }
+        public int AppraisalSeasonId { get; set; }
+        public string Name { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<System.DateTime> PeerListFinalizationByDate { get; set; }
         public Nullable<System.DateTime> SendPeerFeedbackRequestByDate { get; set; }
@@ -33,7 +32,5 @@ namespace SLAP_Data
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PCAssociate> PCAssociates { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Peer> Peers { get; set; }
     }
 }

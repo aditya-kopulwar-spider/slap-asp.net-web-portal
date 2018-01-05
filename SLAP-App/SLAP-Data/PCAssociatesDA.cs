@@ -11,12 +11,12 @@ namespace SLAP_Data
  public  class PCAssociatesDA
     {
         private slap_dbEntities _dbEntities;
-        AppraisalProcessDA _appraisalProcessDa ;
+        AppraisalSeasonDA _appraisalProcessDa ;
 
         public PCAssociatesDA()
         {
             _dbEntities = new slap_dbEntities();
-            _appraisalProcessDa = new AppraisalProcessDA();
+            _appraisalProcessDa = new AppraisalSeasonDA();
         }
 
         public List<PCAssociate> GetAllPcAssociates()
@@ -27,8 +27,8 @@ namespace SLAP_Data
         public bool AddAsociate(PCAssociate pcAssociate)
         {
             //todo appraisal season selection from ui(multiple seasons are active) or in code(if one is active only)
-            var appraisalProcesses = _dbEntities.AppraisalProcesses.First(p => p.IsActive == true);
-            pcAssociate.AppraisalProcessId = appraisalProcesses.AppraisalProcessId;
+            var appraisalProcesses = _dbEntities.AppraisalSeasons.First(p => p.IsActive == true);
+            pcAssociate.AppraisalSeasonId = appraisalProcesses.AppraisalSeasonId;
 //            pcAssociate.SelfAppraisalStatus = false;
             _dbEntities.PCAssociates.Add(pcAssociate);
             _dbEntities.SaveChanges();
@@ -69,13 +69,13 @@ namespace SLAP_Data
 
         public List<PCAssociate> GetAllCurrentYearPcAssociates()
         {
-            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalProces().AppraisalProcessId;
-            return _dbEntities.PCAssociates.Where(p=>p.AppraisalProcessId== appraisalProcessId).ToList();
+            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalProces().AppraisalSeasonId;
+            return _dbEntities.PCAssociates.Where(p=>p.AppraisalSeasonId== appraisalProcessId).ToList();
         }
         public bool AddAsociates(List<PCAssociate> pcAssociates)
         {
-            var appraisalProcesses = _dbEntities.AppraisalProcesses.First(p => p.IsActive == true);
-            pcAssociates.ForEach(p=>p.AppraisalProcessId=appraisalProcesses.AppraisalProcessId);
+            var appraisalProcesses = _dbEntities.AppraisalSeasons.First(p => p.IsActive == true);
+            pcAssociates.ForEach(p=>p.AppraisalSeasonId=appraisalProcesses.AppraisalSeasonId);
             _dbEntities.PCAssociates.AddRange(pcAssociates);
             _dbEntities.SaveChanges();
             return true;
@@ -90,8 +90,8 @@ namespace SLAP_Data
         }
         public List<PCAssociate> GetAllCurrentYearPcAssociatesForGivenPCId(Guid pcId)
         {
-            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalProces().AppraisalProcessId;
-            return _dbEntities.PCAssociates.Where(p => p.AppraisalProcessId == appraisalProcessId && p.PCUserId==pcId).ToList();
+            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalProces().AppraisalSeasonId;
+            return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId && p.PCUserId==pcId).ToList();
         }
     }
 }

@@ -25,10 +25,10 @@ namespace SLAP_Data
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AppraisalProcess> AppraisalProcesses { get; set; }
         public virtual DbSet<PCAssociate> PCAssociates { get; set; }
         public virtual DbSet<Peer> Peers { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<AppraisalSeason> AppraisalSeasons { get; set; }
     }
 }

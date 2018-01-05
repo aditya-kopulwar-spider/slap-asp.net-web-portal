@@ -10,7 +10,7 @@ namespace SLAP_App.Mapper
         {
             AutoMapper.Mapper.Initialize(config =>
             {
-                AppraisalProcessMapper.Initialize(config);
+                AppraisalSeasonMapper.Initialize(config);
                 PCAssociateUserViewModelMapper.Initialize(config);
                 PeerMapper.Initialize(config);
                 EmployeeMapper.Initialize(config);

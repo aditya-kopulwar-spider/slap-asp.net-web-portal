@@ -12,7 +12,7 @@ namespace SLAP_App.Services
 {
     public class FileService
     {
-        public async Task<string> UploadFile(HttpPostedFileBase fileToUpload,string formattedFileName)
+        public async Task<string> UploadFile(HttpPostedFileBase fileToUpload,string formattedFileName,string appraisalSeason)
         {
          var ext=   Path.GetExtension(fileToUpload.FileName);
             string filePath = null;
@@ -32,8 +32,9 @@ namespace SLAP_App.Services
                     }
                     );
             }
-            string fileName =/* Guid.NewGuid()+ */formattedFileName;
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
+            var fileName =/* Guid.NewGuid()+ */formattedFileName;
+            var cloudBlobDirectory = cloudBlobContainer.GetDirectoryReference(appraisalSeason);
+            CloudBlockBlob cloudBlockBlob=  cloudBlobDirectory.GetBlockBlobReference(fileName);
             cloudBlockBlob.Properties.ContentType = fileToUpload.ContentType;
             await cloudBlockBlob.UploadFromStreamAsync(fileToUpload.InputStream);
             filePath = cloudBlockBlob.Uri.ToString();

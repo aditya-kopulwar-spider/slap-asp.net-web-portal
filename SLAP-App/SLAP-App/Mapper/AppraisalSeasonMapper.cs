@@ -8,12 +8,12 @@ using SLAP_Data;
 
 namespace SLAP_App.Mapper
 {
-    public static class AppraisalProcessMapper
+    public static class AppraisalSeasonMapper
     {
         public static void Initialize(IMapperConfigurationExpression cfg)
         {
-            cfg.CreateMap<AppraisalProcessViewModel, AppraisalProcess>();
-            cfg.CreateMap<AppraisalProcess, AppraisalProcessViewModel>();
+            cfg.CreateMap<AppraisalProcessViewModel, AppraisalSeason>();
+            cfg.CreateMap<AppraisalSeason, AppraisalProcessViewModel>();
         }
     }
 }

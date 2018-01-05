@@ -14,14 +14,22 @@ namespace SLAP_Data
     
     public partial class PCAssociate
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PCAssociate()
+        {
+            this.Peers = new HashSet<Peer>();
+        }
+    
         public int PCAssociatesId { get; set; }
         public System.Guid PCUserId { get; set; }
         public System.Guid AssociateUserId { get; set; }
-        public int AppraisalProcessId { get; set; }
         public Nullable<System.DateTime> AppraisalDate { get; set; }
         public Nullable<System.DateTime> LastNotificationDate { get; set; }
         public string SelfAppraisalDocumentUrl { get; set; }
+        public int AppraisalSeasonId { get; set; }
     
-        public virtual AppraisalProcess AppraisalProcess { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Peer> Peers { get; set; }
+        public virtual AppraisalSeason AppraisalSeason { get; set; }
     }
 }

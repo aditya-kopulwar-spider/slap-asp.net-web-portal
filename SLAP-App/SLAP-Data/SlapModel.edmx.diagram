@@ -5,14 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="79681eae9af2403d8a78cb4eef3c8688" Name="Diagram1">
-        <EntityTypeShape EntityType="SlapDbModel.AppraisalProcess" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SlapDbModel.PCAssociate" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SlapDbModel.Peer" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SlapDbModel.PCAssociate" Width="2" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SlapDbModel.Peer" Width="2.875" PointX="1.625" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SlapDbModel.Role" Width="1.5" PointX="5.75" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SlapDbModel.UserRole" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="SlapDbModel.FK__PCAssocia__Appra__5DCAEF64" ManuallyRouted="false" />
-        <AssociationConnector Association="SlapDbModel.FK__Peers__Appraisal__59FA5E80" ManuallyRouted="false" />
         <AssociationConnector Association="SlapDbModel.FK__UserRole__RoleId__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="SlapDbModel.FK_Peers_PCAssociates" />
+        <EntityTypeShape EntityType="SlapDbModel.AppraisalSeason" Width="2.625" PointX="7.25" PointY="4.125" />
+        <AssociationConnector Association="SlapDbModel.FK_PCAssociates_AppraisalSeason" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

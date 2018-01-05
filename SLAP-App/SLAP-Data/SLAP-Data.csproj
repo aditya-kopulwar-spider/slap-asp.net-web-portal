@@ -71,10 +71,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppraisalProcess.cs">
+    <Compile Include="AppraisalSeasonDA.cs" />
+    <Compile Include="AppraisalSeason.cs">
       <DependentUpon>SlapModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="AppraisalProcessDA.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="PCAssociate.cs">
       <DependentUpon>SlapModel.tt</DependentUpon>
