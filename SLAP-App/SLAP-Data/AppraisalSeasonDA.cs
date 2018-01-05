@@ -16,40 +16,62 @@ namespace SLAP_Data
             _dbEntities = new slap_dbEntities();
         }
 
-        public List<AppraisalSeason> GetAppraisalProcesses()
+        public List<AppraisalSeason> GetAppraisalSeasons()
         {
             return _dbEntities.AppraisalSeasons.ToList();
         }
 
-        public bool CreateAppraisalProcess(AppraisalSeason appraisalProcess)
+        public bool CreateAppraisalSeason(AppraisalSeason appraisalSeason)
         {
-            _dbEntities.AppraisalSeasons.Add(appraisalProcess);
+            _dbEntities.AppraisalSeasons.Add(appraisalSeason);
             return _dbEntities.SaveChanges() > 0;
         }
 
-        public AppraisalSeason EditAppraisalProcess(AppraisalSeason appraisalProcess)
+        public AppraisalSeason EditAppraisalSeason(AppraisalSeason appraisalSeason)
         {
-            _dbEntities.Entry(appraisalProcess).State = EntityState.Modified;
+            _dbEntities.Entry(appraisalSeason).State = EntityState.Modified;
             _dbEntities.SaveChanges();
-            return appraisalProcess;
+            return appraisalSeason;
         }
 
-        public bool DeleteAppraisalProcess(int appraisalProcessId)
+        public bool DeleteAppraisalSeason(int appraisalSeasonId)
         {
-            AppraisalSeason appraisalSeason = _dbEntities.AppraisalSeasons.Find(appraisalProcessId);
+            AppraisalSeason appraisalSeason = _dbEntities.AppraisalSeasons.Find(appraisalSeasonId);
             _dbEntities.AppraisalSeasons.Remove(appraisalSeason);
             _dbEntities.SaveChanges();
             return true;
         }
 
-        public AppraisalSeason GetAppraisalProcess(int? id)
+        public AppraisalSeason GetAppraisalSeason(int? id)
         {
             return _dbEntities.AppraisalSeasons.Find(id);
         }
 
-        public AppraisalSeason GetActiveAppraisalProces()
-        {
-            return _dbEntities.AppraisalSeasons.FirstOrDefault(p => p.IsActive == true);
-        }
-    }
+		public AppraisalSeason GetActiveAppraisalSeason()
+		{
+			return _dbEntities.AppraisalSeasons.FirstOrDefault(p => p.IsActive == true);
+		}
+
+		public AppraisalSeason GetInProgressAppraisalSeason()
+		{
+			return _dbEntities.AppraisalSeasons.FirstOrDefault(p => p.IsCompleted == false);
+		}
+
+		public void StartAppraisalSeason(int? id)
+		{
+			AppraisalSeason appraisalSeason = GetAppraisalSeason(id);
+			appraisalSeason.IsActive = true;
+			_dbEntities.Entry(appraisalSeason).State = EntityState.Modified;
+			_dbEntities.SaveChanges();
+		}
+
+		public void CompleteAppraisalSeason(int? id)
+		{
+			AppraisalSeason appraisalSeason = GetAppraisalSeason(id);
+			appraisalSeason.IsActive = false;
+			appraisalSeason.IsCompleted = true;
+			_dbEntities.Entry(appraisalSeason).State = EntityState.Modified;
+			_dbEntities.SaveChanges();
+		}
+	}
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SLAP_App.Models;
+using SLAP_Data;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -12,8 +14,17 @@ namespace SLAP_App.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        public ActionResult Index()
+		private AppraisalSeasonDA _appraisalSeasonDa;
+
+		public HomeController()
+		{
+			_appraisalSeasonDa = new AppraisalSeasonDA();
+		}
+
+		public ActionResult Index()
         {
+			AppraisalSeason activeAppraisalSeason = _appraisalSeasonDa.GetInProgressAppraisalSeason();
+			ViewBag.ActiveAppraisalSeason = AutoMapper.Mapper.Map<AppraisalSeasonViewModel>(activeAppraisalSeason);
             return View();
         }
 

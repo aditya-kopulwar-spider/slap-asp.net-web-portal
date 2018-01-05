@@ -12,8 +12,8 @@ namespace SLAP_App.Mapper
     {
         public static void Initialize(IMapperConfigurationExpression cfg)
         {
-            cfg.CreateMap<AppraisalProcessViewModel, AppraisalSeason>();
-            cfg.CreateMap<AppraisalSeason, AppraisalProcessViewModel>();
+            cfg.CreateMap<AppraisalSeasonViewModel, AppraisalSeason>();
+            cfg.CreateMap<AppraisalSeason, AppraisalSeasonViewModel>();
         }
     }
 }

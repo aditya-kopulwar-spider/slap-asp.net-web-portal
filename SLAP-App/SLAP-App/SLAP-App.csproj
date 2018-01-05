@@ -210,7 +210,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AppraisalProcessesController.cs" />
+    <Compile Include="Controllers\AppraisalSeasonController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PCController.cs" />
@@ -226,8 +226,8 @@
     <Compile Include="Models\AdalTokenCache.cs" />
     <Compile Include="Models\ADUser.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
-    <Compile Include="Models\AppraisalProcessViewModel.cs" />
     <Compile Include="Models\AppraisalSeasonModel.cs" />
+    <Compile Include="Models\AppraisalSeasonViewModel.cs" />
     <Compile Include="Models\AssociateSelectionViewModel.cs" />
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
@@ -286,11 +286,6 @@
     <Content Include="Views\Account\SignOutCallback.cshtml" />
     <Content Include="Views\UserProfile\Index.cshtml" />
     <Content Include="Views\UserProfile\Relogin.cshtml" />
-    <Content Include="Views\AppraisalProcesses\Create.cshtml" />
-    <Content Include="Views\AppraisalProcesses\Delete.cshtml" />
-    <Content Include="Views\AppraisalProcesses\Details.cshtml" />
-    <Content Include="Views\AppraisalProcesses\Edit.cshtml" />
-    <Content Include="Views\AppraisalProcesses\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\PC\Index.cshtml" />
     <Content Include="Views\PC\Associate.cshtml" />
@@ -300,6 +295,11 @@
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Employee\EmployeeFeedback.cshtml" />
     <Content Include="Views\Employee\EmployeeFeedbackTable.cshtml" />
+    <Content Include="Views\AppraisalSeason\Create.cshtml" />
+    <Content Include="Views\AppraisalSeason\Delete.cshtml" />
+    <Content Include="Views\AppraisalSeason\Details.cshtml" />
+    <Content Include="Views\AppraisalSeason\Edit.cshtml" />
+    <Content Include="Views\AppraisalSeason\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -18,6 +18,7 @@
           <Property Name="SelfAppraisalSubmissionByDate" Type="date" />
           <Property Name="AppraisalMeetingByDate" Type="date" />
           <Property Name="GoalSettingByDate" Type="date" />
+          <Property Name="IsCompleted" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PCAssociates">
           <Key>
@@ -218,6 +219,7 @@
           <Property Name="AppraisalMeetingByDate" Type="DateTime" Precision="0" />
           <Property Name="GoalSettingByDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="PCAssociates" Relationship="SlapDbModel.FK_PCAssociates_AppraisalSeason" FromRole="AppraisalSeason" ToRole="PCAssociate" />
+          <Property Name="IsCompleted" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_PCAssociates_AppraisalSeason">
           <End Type="SlapDbModel.AppraisalSeason" Role="AppraisalSeason" Multiplicity="1" />
@@ -282,6 +284,7 @@
           <EntitySetMapping Name="AppraisalSeasons">
             <EntityTypeMapping TypeName="SlapDbModel.AppraisalSeason">
               <MappingFragment StoreEntitySet="AppraisalSeason">
+                <ScalarProperty Name="IsCompleted" ColumnName="IsCompleted" />
                 <ScalarProperty Name="GoalSettingByDate" ColumnName="GoalSettingByDate" />
                 <ScalarProperty Name="AppraisalMeetingByDate" ColumnName="AppraisalMeetingByDate" />
                 <ScalarProperty Name="SelfAppraisalSubmissionByDate" ColumnName="SelfAppraisalSubmissionByDate" />

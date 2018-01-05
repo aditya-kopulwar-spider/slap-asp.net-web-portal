@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SLAP_App.Models.AppraisalProcessViewModel>
+﻿@model IEnumerable<SLAP_App.Models.AppraisalSeasonViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -12,7 +12,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.AppraisalProcessYear)
+            @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.IsActive)
@@ -41,7 +41,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.AppraisalProcessYear)
+            @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsActive)
@@ -65,9 +65,9 @@
             @Html.DisplayFor(modelItem => item.GoalSettingByDate)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.AppraisalProcessId }) |
+            @Html.ActionLink("Edit", "Edit", new { id=item.AppraisalSeasonId }) |
 @*            @Html.ActionLink("Details", "Details", new { id=item.AppraisalProcessId }) |*@
-            @Html.ActionLink("Delete", "Delete", new { id=item.AppraisalProcessId })
+            @Html.ActionLink("Delete", "Delete", new { id=item.AppraisalSeasonId })
         </td>
     </tr>
 }

@@ -69,7 +69,7 @@ namespace SLAP_Data
 
         public List<PCAssociate> GetAllCurrentYearPcAssociates()
         {
-            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalProces().AppraisalSeasonId;
+            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalSeason().AppraisalSeasonId;
             return _dbEntities.PCAssociates.Where(p=>p.AppraisalSeasonId== appraisalProcessId).ToList();
         }
         public bool AddAsociates(List<PCAssociate> pcAssociates)
@@ -90,7 +90,7 @@ namespace SLAP_Data
         }
         public List<PCAssociate> GetAllCurrentYearPcAssociatesForGivenPCId(Guid pcId)
         {
-            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalProces().AppraisalSeasonId;
+            var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalSeason().AppraisalSeasonId;
             return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId && p.PCUserId==pcId).ToList();
         }
     }

@@ -37,7 +37,7 @@ namespace SLAP_App.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateFeedback(EmployeeViewModel employeeViewModel)
         {
-            var activeAppraisalProces = _appraisalProcessDa.GetActiveAppraisalProces();
+            var activeAppraisalProces = _appraisalProcessDa.GetActiveAppraisalSeason();
             var name = string.Concat(employeeViewModel.AssociateName + "-" + employeeViewModel.PeerName + "-" + activeAppraisalProces.Name);
             
             var path=  await _fileService.UploadFile(employeeViewModel.FeedbackDocument, name,activeAppraisalProces.Name);
