@@ -1,8 +1,32 @@
-﻿@model  SLAP_App.Models.EmployeeViewModels
+﻿@using SLAP_App.Models
+@model  SLAP_App.Models.EmployeeViewModels
 @{
     ViewBag.Title = "Employee";
 }
-@for (var i = 0; i < Model.EmployeeModels.Count; i++)
-{
-    @Html.Partial("EmployeeFeedback",Model.EmployeeModels[i]);
-}
+@{List<EmployeeViewModel> _employeeViewModelForSelf= Model.EmployeeModels.Where(p=>p.AssociateUserId==ViewBag.UserId).ToList();}
+@{List<EmployeeViewModel> _employeeViewModelForPeer= Model.EmployeeModels.Where(p=>p.AssociateUserId!=ViewBag.UserId).ToList();}
+<div style="width:100%;"> 
+    
+    <div style="float:left; width:50%; width :auto">
+        <h4>Provide feedback to</h4>
+        @for (var i = 0; i < _employeeViewModelForSelf.Count; i++)
+        {
+            @Html.Partial("EmployeeFeedback", _employeeViewModelForSelf[i]);
+            <br/>
+        }
+    </div>
+    <div style="float: right; width: auto;">
+        <h4>View feedback those shared with you</h4>
+        @for (var i = 0; i < _employeeViewModelForPeer.Count; i++)
+        {
+            @Html.Partial("EmployeeFeedback", _employeeViewModelForPeer[i]);
+            <br/>
+        }
+    </div>
+
+</div>
+
+<br/><br/>
+
+
+

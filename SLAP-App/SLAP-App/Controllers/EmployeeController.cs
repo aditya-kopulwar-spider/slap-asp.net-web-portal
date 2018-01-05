@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -23,8 +24,9 @@ namespace SLAP_App.Controllers
             var users = await _activeDirectory.GetAllAdUsers();
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
             var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
+            ViewBag.UserID = userID;
             ViewBag.AssociateId = userID;
-            var peersForGivenAssociate = _peersDa.GetPeersForGivenAssociate(userID);
+            var peersForGivenAssociate = _peersDa.GetAllPeersForGivenAssociate(userID);
             var employeeViewModels = peersForGivenAssociate.Select(p => AutoMapper.Mapper.Map<EmployeeViewModel>(p))
                 .ToList();
             employeeViewModels.ForEach(p=>p.PeerName=adUsersMap[p.PeerUserId]);
@@ -41,7 +43,6 @@ namespace SLAP_App.Controllers
             _peersDa.UpdatePeer(peer);
             return RedirectToAction("Index");
         }
-
 
     }
 }

@@ -8,6 +8,7 @@ namespace SLAP_App.Models
     public class EmployeeViewModels
     {
         public List<EmployeeViewModel> EmployeeModels { get; set; }
+        public PCAssociateViewModel PcAssociateViewModel { get; set; }
 
         public EmployeeViewModels()
         {

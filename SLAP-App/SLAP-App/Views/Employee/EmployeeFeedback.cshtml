@@ -9,7 +9,6 @@
     @*    @Html.AntiForgeryToken()*@
 
     <div class="form-horizontal">
-        <h4>EmployeeViewModel</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.PeerAssociateId, new { htmlAttributes = new { @class = "form-control" } })
@@ -50,7 +49,8 @@
                 @Html.ValidationMessageFor(model => model.LastNotificationDate, "", new { @class = "text-danger" })
             </div>
         </div>
-
+    @if (ViewBag.UserID == Model.AssociateUserId)
+    {
         <div class="form-group">
             @Html.LabelFor(model => model.ShareFeedbackWithAssociate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -60,6 +60,20 @@
                 </div>
             </div>
         </div>
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShareFeedbackWithAssociate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.DisplayFor(model => model.ShareFeedbackWithAssociate)
+                    @Html.ValidationMessageFor(model => model.ShareFeedbackWithAssociate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    }
+       
 
         @*<div class="form-group">
             @Html.LabelFor(model => model.FeedbackDocumentUrl, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -68,27 +82,37 @@
                 @Html.ValidationMessageFor(model => model.FeedbackDocumentUrl, "", new { @class = "text-danger" })
             </div>
         </div>*@
-
+      
         <fieldset class="form-horizontal">
             <div class="form-group">
                 <label class="control-label col-md-2" for="File">File</label>
                 <div class="col-md-10">
-                    <input type="file" name="FeedbackDocument" />
+                    
+                    @if (ViewBag.UserID==Model.AssociateUserId)
+                    {
+                        <input type="file" name="FeedbackDocument" />
+                       if ((!Model.FeedbackDocumentUrl.IsEmpty() && Model.FeedbackDocumentUrl != null))
+                         {
+                             <a href="@Model.FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
+                         }
+                    }
+                    else if ((!Model.FeedbackDocumentUrl.IsEmpty() && Model.FeedbackDocumentUrl != null) && Model.ShareFeedbackWithAssociate==true)
+                    {
+                    <a href="@Model.FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
+                    }
+                   
                 </div>
             </div>
-            @*<div class="form-group">
-
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Submit" class="btn" />
-                </div>
-
-            </div>*@
-        </fieldset>  
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
+        </fieldset>
+       @if (Model.AssociateUserId==ViewBag.UserID)
+       {
+           <div class="form-group">
+               <div class="col-md-offset-2 col-md-10">
+                   <input type="submit" value="Save" class="btn btn-default" />
+               </div>
+           </div>
+       }
+       
     </div>
 }
 

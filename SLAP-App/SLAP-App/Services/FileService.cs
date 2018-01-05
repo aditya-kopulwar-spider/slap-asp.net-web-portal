@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -13,6 +14,7 @@ namespace SLAP_App.Services
     {
         public async Task<string> UploadFile(HttpPostedFileBase fileToUpload,string formattedFileName)
         {
+         var ext=   Path.GetExtension(fileToUpload.FileName);
             string filePath = null;
             if (fileToUpload == null || fileToUpload.ContentLength == 0)
             {
@@ -30,13 +32,14 @@ namespace SLAP_App.Services
                     }
                     );
             }
-            string fileName = formattedFileName;///*Guid.NewGuid().ToString() + "-" + */ Path.GetExtension(formattedFileName);
-
+            string fileName =/* Guid.NewGuid()+ */formattedFileName;
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileName);
             cloudBlockBlob.Properties.ContentType = fileToUpload.ContentType;
             await cloudBlockBlob.UploadFromStreamAsync(fileToUpload.InputStream);
             filePath = cloudBlockBlob.Uri.ToString();
             return filePath;
         }
+
+        
     }
 }
