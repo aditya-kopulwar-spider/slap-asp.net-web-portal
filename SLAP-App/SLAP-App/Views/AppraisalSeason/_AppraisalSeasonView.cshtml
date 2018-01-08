@@ -75,16 +75,29 @@
 	</dl>
 
 	<div>
-		@foreach (var pcAssociatesByPC in pcAssociateViewModels.GroupBy(x => x.PCUserId))
+		@if (pcAssociateViewModels.Count > 0)
 		{
-			<div class="pc-associate-box">
-				<div class="bold">@pcAssociatesByPC.First().PCDisplayName</div>
-				<ul>
-					@foreach (var pcAssociate in pcAssociatesByPC)
-					{
-						<li>@pcAssociate.AssociateDisplayName</li>
-					}
-				</ul>
+			foreach (var pcAssociatesByPC in pcAssociateViewModels.GroupBy(x => x.PCUserId))
+			{
+				<div class="pc-associate-box">
+					<div class="bold">@pcAssociatesByPC.First().PCDisplayName</div>
+					<ul>
+						@foreach (var pcAssociate in pcAssociatesByPC)
+						{
+							<li>@pcAssociate.AssociateDisplayName</li>
+						}
+					</ul>
+				</div>
+			}
+		}
+		else
+		{
+			<div>
+				<font color="red">
+					<div>PC - Associate configuration not found. Season cannot be started without that configuration.</div>
+					<div>Show a list of PCs that don't have associates</div>
+					<div>Show a list of associates that don't have PC</div>
+				</font>
 			</div>
 		}
 	</div>

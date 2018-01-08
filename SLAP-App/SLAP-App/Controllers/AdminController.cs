@@ -113,11 +113,12 @@ namespace SLAP_App.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AssignAssociates(AssociateSelectionViewModel associateSelectionViewModel)
+        public async Task<ActionResult> AssignAssociates(AssociateSelectionViewModel associateSelectionViewModel, Guid pcId)
         {
             //            var selectedAssociates = id.getSelectedAssociates();
             //todo approach to assign associates only one time activity or ---
-            var pcUserId = associateSelectionViewModel.PcAssociateUserViewModels.FirstOrDefault(p=>p.Selected).PCUserId;
+            //var pcUserId = associateSelectionViewModel.PcAssociateUserViewModels.FirstOrDefault(p=>p.Selected).PCUserId;
+			var pcUserId = pcId;
             var allCurrentYearPcAssociatesForGivenPcId = _pcAssociatesDa.GetAllPcAssociatesForPcIdForInProgressAppraisalSeason(pcUserId);
             _pcAssociatesDa.RemoveAssociates(allCurrentYearPcAssociatesForGivenPcId);
             var pcAssociates = associateSelectionViewModel.PcAssociateUserViewModels.Where(p => p.Selected).ToList()

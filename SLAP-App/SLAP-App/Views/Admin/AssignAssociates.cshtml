@@ -5,9 +5,10 @@
 
 <h2>Add Associates for @ViewBag.pcName</h2>
 
-@using (Html.BeginForm("AssignAssociates", "Admin",FormMethod.Post, new { _pcId=@ViewBag.PCId }))
+@using (Html.BeginForm("AssignAssociates", "Admin",FormMethod.Post))
 {
-    <table class="table">
+    @Html.Hidden("pcId", (string)ViewBag.PCid.ToString())
+	<table class="table">
         <tr>
            
         <th>
