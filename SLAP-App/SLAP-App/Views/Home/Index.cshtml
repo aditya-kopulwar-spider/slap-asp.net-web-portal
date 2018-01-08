@@ -4,25 +4,25 @@
 }
 
 <div class="jumbotron">
-    <h1>Appraisal Season</h1>
-    <p class="lead">You can view list of all existing appraisal seasons by clicking on view.</p><br />
-	<p>	
-	@if (activeAppraisalSeason == null)
-	{
-		<font color="red">There is no active appraisal season.</font>
-	}
-	else
-	{
-		if (activeAppraisalSeason.IsActive)
+	<h1>Appraisal Season</h1>
+	<p class="lead">You can view list of all existing appraisal seasons by clicking on view.</p><br />
+	<p>
+		@if (activeAppraisalSeason == null)
 		{
-			<font color="green">Current active appraisal season: @activeAppraisalSeason.Name</font>
+			<font color="red">There is no active appraisal season.</font>
 		}
 		else
 		{
-			<font color="blue">Current under preparation appraisal season: @activeAppraisalSeason.Name</font>
-		}
+			if (activeAppraisalSeason.IsActive)
+			{
+				<font color="green">Current active appraisal season: @activeAppraisalSeason.Name</font>
+			}
+			else
+			{
+				<font color="blue">Current under preparation appraisal season: @activeAppraisalSeason.Name</font>
+			}
 
-	}
+		}
 	</p>
 	<p>
 		@if (activeAppraisalSeason == null)
@@ -34,38 +34,38 @@
 			if (!activeAppraisalSeason.IsActive)
 			{
 				<a href="@Url.Action("Start", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg float-right"
-				@if (!activeAppraisalSeason.AreAllDatesSet())
-				{
-					@:onClick="alert('One or more dates for appraisal season are not set. Please edit appraisal season to set the dates before starting the season.'); return false;"
-				}
-				>Start &raquo;</a>
+				   @if (!activeAppraisalSeason.AreAllDatesSet()) { @: onClick="alert('One or more dates for appraisal season are not set. Please edit appraisal season to set the dates before starting the season.'); return false;"
+				   }>Start &raquo;</a>
 				<a href="@Url.Action("Edit", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg">Edit &raquo;</a>
 				<a href="@Url.Action("Delete", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg">Delete &raquo;</a>
 			}
 			else
 			{
-				<a href="@Url.Action("Complete", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg">Complete &raquo;</a>
+				<a href="@Url.Action("View", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg">View &raquo;</a>
+				<a href="@Url.Action("Complete", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg float-right">Complete &raquo;</a>
 			}
 		}
 	</p>
 </div>
 
+@if (!activeAppraisalSeason.IsActive)
+{
 <div class="jumbotron">
-    <h1>Employee Hierarchy</h1>
-    <p class="lead">You can view list of user and change the hierarchy</p><br />
-    <p><a href="@Url.Action("Index", "Admin")" class="btn btn-primary btn-lg">View &raquo;</a></p>
+	<h1>Employee Hierarchy</h1>
+	<p class="lead">You can view list of user and change the hierarchy</p><br />
+	<p><a href="@Url.Action("Index", "Admin")" class="btn btn-primary btn-lg">View &raquo;</a></p>
 </div>
-
+}
 
 <div class="jumbotron">
-    <h1>Associates</h1>
-    <p class="lead">You can view list of associates</p><br />
-    <p><a href="@Url.Action("Index", "PC")" class="btn btn-primary btn-lg">View &raquo;</a></p>
+	<h1>Associates</h1>
+	<p class="lead">You can view list of associates</p><br />
+	<p><a href="@Url.Action("Index", "PC")" class="btn btn-primary btn-lg">View &raquo;</a></p>
 </div>
 <div class="jumbotron">
-    <h1>Employees</h1>
-    <p class="lead">You can view list of your peers</p><br />
-    <p><a href="@Url.Action("Index", "Employee")" class="btn btn-primary btn-lg">View &raquo;</a></p>
+	<h1>Employees</h1>
+	<p class="lead">You can view list of your peers</p><br />
+	<p><a href="@Url.Action("Index", "Employee")" class="btn btn-primary btn-lg">View &raquo;</a></p>
 </div>
 @*<div class="row">*@
 @*    <div class="col-md-4">*@

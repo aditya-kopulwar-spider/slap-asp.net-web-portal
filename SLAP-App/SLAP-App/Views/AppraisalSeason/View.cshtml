@@ -1,0 +1,15 @@
+﻿@model SLAP_App.Models.AppraisalSeasonViewModel
+
+@{
+    ViewBag.Title = "View";
+	IList<SLAP_App.Models.PCAssociateViewModel> pcAssociateViewModels = (IList<SLAP_App.Models.PCAssociateViewModel>)ViewBag.PcAssociateViewModels;
+}
+
+<h2>View</h2>
+
+<h3>Overview of current active appraisal season</h3>
+<div>
+	@Html.Partial("_AppraisalSeasonView", Model)
+	<hr />
+	@Html.ActionLink("Back", "Index", "Home")
+</div>

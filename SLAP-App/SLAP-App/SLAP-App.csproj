@@ -301,6 +301,8 @@
     <Content Include="Views\AppraisalSeason\Edit.cshtml" />
     <Content Include="Views\AppraisalSeason\Index.cshtml" />
     <Content Include="Views\AppraisalSeason\Start.cshtml" />
+    <Content Include="Views\AppraisalSeason\View.cshtml" />
+    <Content Include="Views\AppraisalSeason\_AppraisalSeasonView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
