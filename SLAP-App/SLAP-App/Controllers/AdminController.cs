@@ -94,7 +94,7 @@ namespace SLAP_App.Controllers
             var _userList = await _activeDirectory.GetAllAdUsers();
             ViewBag.PCId = pcId;
             ViewBag.pcName = _userList.First(p => p.id == pcId).displayName;
-            var allPcAssociates = _pcAssociatesDa.GetAllCurrentYearPcAssociates().ToDictionary(k => k.AssociateUserId);
+            var allPcAssociates = _pcAssociatesDa.GetAllPcAssociatesForInProgressAppraisalSeason().ToDictionary(k => k.AssociateUserId);
             List<PCAssociateUserViewModel> pcAssociateUsers = new List<PCAssociateUserViewModel>();
             _userList.ForEach(p => pcAssociateUsers.Add(new PCAssociateUserViewModel()
             {
@@ -118,28 +118,28 @@ namespace SLAP_App.Controllers
             //            var selectedAssociates = id.getSelectedAssociates();
             //todo approach to assign associates only one time activity or ---
             var pcUserId = associateSelectionViewModel.PcAssociateUserViewModels.FirstOrDefault(p=>p.Selected).PCUserId;
-            var allCurrentYearPcAssociatesForGivenPcId = _pcAssociatesDa.GetAllCurrentYearPcAssociatesForGivenPCId(pcUserId);
+            var allCurrentYearPcAssociatesForGivenPcId = _pcAssociatesDa.GetAllPcAssociatesForPcIdForInProgressAppraisalSeason(pcUserId);
             _pcAssociatesDa.RemoveAssociates(allCurrentYearPcAssociatesForGivenPcId);
             var pcAssociates = associateSelectionViewModel.PcAssociateUserViewModels.Where(p => p.Selected).ToList()
                 .Select(p => AutoMapper.Mapper.Map<PCAssociate>(p))
                 .ToList();
             var addAsociates = _pcAssociatesDa.AddAssociates(pcAssociates);
 
-            if (addAsociates)
-            {
-                var allAdUsers =await _activeDirectory.GetAllAdUsers();
-                var allAdUsersDictionary  = allAdUsers.ToList().ToDictionary(p => p.id);
-                foreach (var pcAssociate in pcAssociates)
-                {
-                    var associate = allAdUsersDictionary[pcAssociate.AssociateUserId];
-                    var pc = allAdUsersDictionary[pcAssociate.PCUserId];
-                    _notificationService.SendMessageToAssociateOnPcAssignment(associate, pc);
-                }
+            //if (addAsociates)
+            //{
+            //    var allAdUsers =await _activeDirectory.GetAllAdUsers();
+            //    var allAdUsersDictionary  = allAdUsers.ToList().ToDictionary(p => p.id);
+            //    foreach (var pcAssociate in pcAssociates)
+            //    {
+            //        var associate = allAdUsersDictionary[pcAssociate.AssociateUserId];
+            //        var pc = allAdUsersDictionary[pcAssociate.PCUserId];
+            //        _notificationService.SendMessageToAssociateOnPcAssignment(associate, pc);
+            //    }
                
-            }
+            //}
             
 
-            return RedirectToAction("AssignAssociates",new {pcId=pcUserId});
+            return RedirectToAction("Index");
         }
 
         #endregion
