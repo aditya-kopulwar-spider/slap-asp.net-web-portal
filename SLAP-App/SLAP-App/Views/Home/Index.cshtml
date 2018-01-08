@@ -33,7 +33,7 @@
 		{
 			if (!activeAppraisalSeason.IsActive)
 			{
-				<a href="@Url.Action("Start", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg"
+				<a href="@Url.Action("Start", "AppraisalSeason", new { id = activeAppraisalSeason.AppraisalSeasonId } )" class="btn btn-primary btn-lg float-right"
 				@if (!activeAppraisalSeason.AreAllDatesSet())
 				{
 					@:onClick="alert('One or more dates for appraisal season are not set. Please edit appraisal season to set the dates before starting the season.'); return false;"

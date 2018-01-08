@@ -7,8 +7,9 @@ namespace SLAP_App.Models
 {
     public class PCAssociateViewModel
     {
+        public string PCDisplayName { get; set; }
         public string AssociateDisplayName { get; set; }
-        public int PCAssociatesId { get; set; }
+		public int PCAssociatesId { get; set; }
         public Guid PCUserId { get; set; }
         public Guid AssociateUserId { get; set; }
         public int AppraisalProcessId { get; set; }

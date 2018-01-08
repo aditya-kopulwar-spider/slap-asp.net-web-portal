@@ -7,6 +7,9 @@ using SLAP_App.Models;
 using SLAP_Data;
 using SLAP_App.Mapper;
 using System;
+using System.Collections.Generic;
+using SLAP_App.Services;
+using System.Threading.Tasks;
 
 namespace SLAP_App.Controllers
 {
@@ -14,14 +17,18 @@ namespace SLAP_App.Controllers
     public class AppraisalSeasonController : Controller
     {
         private AppraisalSeasonDA _appraisalSeasonDa;
+        private PCAssociatesDA _pcAssociateDa;
+		private ActiveDirectory _activeDirectory;
 
-        public AppraisalSeasonController()
+		public AppraisalSeasonController()
         {
             _appraisalSeasonDa = new AppraisalSeasonDA();
-        }
+			_pcAssociateDa = new PCAssociatesDA();
+            _activeDirectory=new ActiveDirectory();
+		}
 
-        // GET: AppraisalProcesses
-        public ActionResult Index()
+		// GET: AppraisalProcesses
+		public ActionResult Index()
         {
             var appraisalProcessViewModels = _appraisalSeasonDa.GetAppraisalSeasons()
                 .Select(x => AutoMapper.Mapper.Map<AppraisalSeasonViewModel>(x));
@@ -135,12 +142,34 @@ namespace SLAP_App.Controllers
         }
 
 		// GET: AppraisalProcesses/Start/5
-		public ActionResult Start(int? id)
+		public async Task<ActionResult> Start(int? id)
 		{
 			if (id == null)
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
+			AppraisalSeason appraisalProcess = _appraisalSeasonDa.GetAppraisalSeason(id);
+			if (appraisalProcess == null)
+			{
+				return HttpNotFound();
+			}
+
+			List<PCAssociateViewModel> pcAssociateViewModels = _pcAssociateDa.GetAllPcAssociatesForInProgressAppraisalSeason().Select(x => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(x)).ToList();
+			var users = await _activeDirectory.GetAllAdUsers();
+			pcAssociateViewModels.ForEach(x => {
+				x.AssociateDisplayName = users.First(p => p.id == x.AssociateUserId).displayName;
+				x.PCDisplayName = users.First(p => p.id == x.PCUserId).displayName;
+			});
+			ViewBag.PcAssociateViewModels = pcAssociateViewModels;
+
+			return View(AutoMapper.Mapper.Map<AppraisalSeason, AppraisalSeasonViewModel>(appraisalProcess));
+		}
+
+		// POST: AppraisalProcesses/Delete/5
+		[HttpPost, ActionName("Start")]
+		//        [ValidateAntiForgeryToken]
+		public ActionResult StartConfirmed(int id)
+		{
 			_appraisalSeasonDa.StartAppraisalSeason(id);
 			return RedirectToAction("Index", "Home");
 		}
