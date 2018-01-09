@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SLAP_App.Models.PCAssociateUserViewModel>
+﻿@model IEnumerable<SLAP_App.Models.PCAssociateViewModel>
 
 <table class="table">
     <tr>
@@ -7,28 +7,12 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var pcAssociateViewModel in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Selected)
+            @Html.ActionLink(pcAssociateViewModel.AssociateDisplayName, "AssignPeersToAssociates", "PC", pcAssociateViewModel, new {title="Assign Peers to Associates"})
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AssociateDisplayName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PCUserId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AssociateUserId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PCAssociateId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
+        
     </tr>
 }
 

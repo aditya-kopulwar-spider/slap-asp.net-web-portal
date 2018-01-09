@@ -10,7 +10,9 @@ namespace SLAP_App.Models
         public bool IsSelected { get; set; }
         public string PeerDisplayName { get; set; }
         public Guid PeerId { get; set; }
-        public bool IsPeer { get; set; }
         public Guid AssociateUserId { get; set; }
+
+
+
     }
 }

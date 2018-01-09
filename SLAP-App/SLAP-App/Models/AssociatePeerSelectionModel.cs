@@ -7,11 +7,12 @@ namespace SLAP_App.Models
 {
     public class AssociatePeerSelectionModel
     {
-        public List<PeerAssociateViewModel> PeerAssociateViewModels { get; set; }
+        public List<PeerViewModel> PeerViewModels { get; set; }
+        public bool PeerListFinalized { get; set; }
 
         public AssociatePeerSelectionModel()
         {
-            this.PeerAssociateViewModels = new List<PeerAssociateViewModel>();
+            this.PeerViewModels = new List<PeerViewModel>();
         }
     }
 }

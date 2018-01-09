@@ -13,6 +13,13 @@ namespace SLAP_App.Mapper
         {
             cfg.CreateMap<Peer, PeerViewModel>();
             cfg.CreateMap<PeerViewModel, Peer>();
+
+            var mappingExpression = cfg.CreateMap<User,PeerViewModel>();
+            mappingExpression.ForMember(destinationMember => destinationMember.PeerName,
+                source => source.MapFrom(p => p.displayName));
+            mappingExpression.ForMember(destinationMember => destinationMember.PeerUserId,
+                source => source.MapFrom(p => p.id));
+
         }
     }
 }

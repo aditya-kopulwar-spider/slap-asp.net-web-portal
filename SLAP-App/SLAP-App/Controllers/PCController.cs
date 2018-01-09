@@ -32,7 +32,7 @@ namespace SLAP_App.Controllers
             var activeAppraisalSeason = _appraisalSeasonDa.GetActiveAppraisalSeason();
             if (activeAppraisalSeason==null)
             {
-                await AssignPeer();
+                return RedirectToAction("Associates");
             }
             var identityName = User.Identity.Name;
             var users = await _activeDirectory.GetAllAdUsers();
@@ -42,13 +42,62 @@ namespace SLAP_App.Controllers
             var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPC(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
             pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId]);
             pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId]));
-
             return View(new PCAssociateViewModels() { PcAssociateViewModels = pcAssociateUserViewModels });
         }
 
-        public async Task<ActionResult> AssignPeersToAssociates()
+        public async Task<ActionResult> Associates()
         {
+            var identityName = User.Identity.Name;
+            var users = await _activeDirectory.GetAllAdUsers();
+            var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
+            var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
+            ViewBag.AssociateId = userID;
+            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPC(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
+            pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId]);
+            pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId]));
+            return View(pcAssociateUserViewModels);
+        }
 
+        public async Task<ActionResult> AssignPeersToAssociates(PCAssociateViewModel pcAssociateViewModel)
+        {
+            var peersForGivenAssociateByPcAssociateId = _peersDa.GetPeersForGivenAssociateByPcAssociateId(pcAssociateViewModel.PCAssociatesId);
+
+            var users = await _activeDirectory.GetAllAdUsers();
+            var peerViewModels = users.Where(p=>p.id!=pcAssociateViewModel.PCUserId && p.id!=pcAssociateViewModel.AssociateUserId).ToList()
+                .Select(p => AutoMapper.Mapper.Map<PeerViewModel>(p)).ToList();
+            foreach (var peerViewModel in peerViewModels)
+            {
+                peerViewModel.AssociateUserId = pcAssociateViewModel.AssociateUserId;
+                peerViewModel.IsSelected = false || peersForGivenAssociateByPcAssociateId.Any(p=>p.PeerUserId==peerViewModel.PeerUserId);
+                peerViewModel.PCAssociateId = pcAssociateViewModel.PCAssociatesId;
+            }
+            var associatePeerSelectionModel=new AssociatePeerSelectionModel();
+            associatePeerSelectionModel.PeerViewModels.AddRange(peerViewModels);
+            associatePeerSelectionModel.PeerListFinalized = pcAssociateViewModel.PeerListFinalized;
+            return View(associatePeerSelectionModel);
+        }
+
+        public ActionResult AddPeers(AssociatePeerSelectionModel peerSelectionModel,string addPeersButton)
+        {
+           
+            var peers = peerSelectionModel.PeerViewModels.Where(p=>p.IsSelected==true)
+                .Select(p=>AutoMapper.Mapper.Map<Peer>(p)).ToList();
+            if (peers.Any())
+            {
+                var pcAssociateId = peers.FirstOrDefault().PCAssociateId;
+                var peersForGivenAssociateByPcAssociateId = _peersDa.GetPeersForGivenAssociateByPcAssociateId(pcAssociateId);
+             _peersDa.RemovePeers(peersForGivenAssociateByPcAssociateId);
+                if (addPeersButton == "Finalize Peers")
+                {
+                    var pcAssociate = _pcAssociatesDa.GetPCAssociate(pcAssociateId);
+                    pcAssociate.PeerListFinalized = true;
+                    _pcAssociatesDa.EditPCAssociate(pcAssociate);
+                }
+            }
+
+           
+            _peersDa.AddPeers(peers);
+            return RedirectToAction("Index");
         }
 
         public async Task<ActionResult> Associate(Guid associateId)
@@ -74,7 +123,7 @@ namespace SLAP_App.Controllers
             List<PeerAssociateViewModel> pcAssociateUsers = new List<PeerAssociateViewModel>();
             _userList.Where(p=>p.id!=associateId).ForEach(p => pcAssociateUsers.Add(new PeerAssociateViewModel()
             {
-                IsPeer = allPeers.ContainsKey(p.id),
+//                IsPeer = allPeers.ContainsKey(p.id),
                 PeerId = p.id,
                 AssociateUserId = associateId,
                 PeerDisplayName = p.displayName

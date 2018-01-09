@@ -53,5 +53,23 @@ namespace SLAP_Data
             _dbEntities.SaveChanges();
             return true;
         }
+        public List<Peer> GetPeersForGivenAssociateByPcAssociateId(int pcAssociateId)
+        {
+            return _dbEntities.Peers.Where(p => p.PCAssociateId==pcAssociateId).ToList();
+        }
+
+        public bool AddPeers(IEnumerable<Peer> peers)
+        {
+            _dbEntities.Peers.AddRange(peers);
+            _dbEntities.SaveChanges();
+            return true;
+        }
+
+        public bool RemovePeers(List<Peer> peersForGivenAssociateByPcAssociateId)
+        {
+            _dbEntities.Peers.RemoveRange(peersForGivenAssociateByPcAssociateId);
+            _dbEntities.SaveChanges();
+            return true;    
+        }
     }
 }

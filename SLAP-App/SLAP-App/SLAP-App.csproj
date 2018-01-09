@@ -307,6 +307,7 @@
     <Content Include="Views\AppraisalSeason\_AppraisalSeasonView.cshtml" />
     <Content Include="Views\PC\_pcAssociateView.cshtml" />
     <Content Include="Views\PC\Associates.cshtml" />
+    <Content Include="Views\PC\AssignPeersToAssociates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

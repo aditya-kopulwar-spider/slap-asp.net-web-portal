@@ -1,0 +1,58 @@
+﻿@model SLAP_App.Models.AssociatePeerSelectionModel
+
+
+@using (Html.BeginForm("AddPeers", "PC", FormMethod.Post))
+{
+@*    @Html.AntiForgeryToken()*@
+    
+    <table class="table">
+        <tr>
+           
+            <th>
+                Select
+            </th>
+            <th>
+                Name
+            </th>
+            <th></th>
+        </tr>
+        @for (var i=0;i<Model.PeerViewModels.Count;i++)
+        {
+          
+            <tr>
+                <td style="text-align:center">
+                    @Html.CheckBoxFor(itemModel=>itemModel.PeerViewModels[i].IsSelected)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemModel => itemModel.PeerViewModels[i].PeerName)
+                </td>
+                <td>
+                    @Html.HiddenFor(itemModel => itemModel.PeerViewModels[i].AssociateUserId)
+                    @Html.HiddenFor(itemModel => itemModel.PeerViewModels[i].PCAssociateId)
+                    @Html.HiddenFor(itemModel => itemModel.PeerViewModels[i].PeerUserId)
+                    @Html.HiddenFor(itemModel => itemModel.PeerViewModels[i].FeedbackDocumentUrl)
+                    @Html.HiddenFor(itemModel => itemModel.PeerViewModels[i].LastNotificationDate)
+                </td>
+               
+            </tr>
+        }
+        @*        @Html.EditorFor(model => model.PCAssociateUserEditorViewModel)*@
+    </table>
+    <hr />
+    <br />
+    if (Model.PeerListFinalized==false)
+    {
+        <input type="submit" name="addPeersButton" value="Save Peers" />
+        <input type="submit" name="addPeersButton" value="Finalize Peers" />
+    }
+    
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
