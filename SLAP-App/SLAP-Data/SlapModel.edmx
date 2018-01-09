@@ -31,6 +31,7 @@
           <Property Name="AppraisalDate" Type="date" />
           <Property Name="LastNotificationDate" Type="datetime" />
           <Property Name="SelfAppraisalDocumentUrl" Type="varchar" MaxLength="1000" />
+          <Property Name="PeerListFinalized" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Peers">
           <Key>
@@ -131,6 +132,7 @@
           <Property Name="AppraisalSeasonId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Peers" Relationship="SlapDbModel.FK_Peers_PCAssociates" FromRole="PCAssociate" ToRole="Peer" />
           <NavigationProperty Name="AppraisalSeason" Relationship="SlapDbModel.FK_PCAssociates_AppraisalSeason" FromRole="PCAssociate" ToRole="AppraisalSeason" />
+          <Property Name="PeerListFinalized" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Peer">
           <Key>
@@ -242,6 +244,7 @@
           <EntitySetMapping Name="PCAssociates">
             <EntityTypeMapping TypeName="SlapDbModel.PCAssociate">
               <MappingFragment StoreEntitySet="PCAssociates">
+                <ScalarProperty Name="PeerListFinalized" ColumnName="PeerListFinalized" />
                 <ScalarProperty Name="AppraisalSeasonId" ColumnName="AppraisalSeasonId" />
                 <ScalarProperty Name="SelfAppraisalDocumentUrl" ColumnName="SelfAppraisalDocumentUrl" />
                 <ScalarProperty Name="PCAssociatesId" ColumnName="PCAssociatesId" />

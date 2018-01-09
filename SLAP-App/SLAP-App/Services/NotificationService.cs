@@ -23,8 +23,8 @@ namespace SLAP_App.Services
         private void AddMessageToQueue(Email email)
         {
             email.FromEmail = "donotreply@spiderlogic.com";
-            const string connectionString = "Endpoint=sb://slap-app.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=/eF64fvC1DN6eZ+z+H9yOXQMNhqW5xB3MhPbAxPl5PQ=";
-            const string queueName = "slapmailnotificationqueue";
+            const string connectionString = "Endpoint=sb://slapnotification.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=FewxjX3N2uxck16NOjoa5Xoz/vkNmjWrggUjP9ylfjM=";
+            const string queueName = "slapnotificationqueue";
             var client = QueueClient.CreateFromConnectionString(connectionString, queueName);
             string serializeObject = JsonConvert.SerializeObject(email);
             var message = new BrokeredMessage(serializeObject);

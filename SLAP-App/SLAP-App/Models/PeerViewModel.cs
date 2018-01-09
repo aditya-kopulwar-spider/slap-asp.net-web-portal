@@ -12,7 +12,8 @@ namespace SLAP_App.Models
         public System.Guid PeerUserId { get; set; }
         public string PeerName { get; set; }
         public int AppraisalProcessId { get; set; }
-        public bool FeedbackStatus { get; set; }
+        public string FeedbackDocumentUrl { get; set; }
         public Nullable<System.DateTime> LastNotificationDate { get; set; }
+        public int PCAssociateId { get; set; }
     }
 }

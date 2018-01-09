@@ -16,5 +16,12 @@ namespace SLAP_App.Models
         public bool SelfAppraisalStatus { get; set; }
         public Nullable<System.DateTime> AppraisalDate { get; set; }
         public Nullable<System.DateTime> LastNotificationDate { get; set; }
+        public bool PeerListFinalized { get; set; }
+        public List<PeerViewModel> Peers { get; set; }
+
+        public PCAssociateViewModel()
+        {
+            Peers = new List<PeerViewModel>();
+        }
     }
 }

@@ -53,7 +53,8 @@ namespace SLAP_Data
 
         public List<PCAssociate> GetAllAssociateForGivenPC(Guid PcID)
         {
-            return _dbEntities.PCAssociates.Where(pcAssociate => pcAssociate.PCUserId == PcID).ToList(); ;
+            var appraisalSeasonId = _appraisalProcessDa.GetActiveAppraisalSeason().AppraisalSeasonId;
+            return _dbEntities.PCAssociates.Where(pcAssociate => pcAssociate.PCUserId == PcID && pcAssociate.AppraisalSeasonId==appraisalSeasonId).ToList(); ;
         }
 
         public PCAssociate GetPCAssociate(int? pcAssociateId)

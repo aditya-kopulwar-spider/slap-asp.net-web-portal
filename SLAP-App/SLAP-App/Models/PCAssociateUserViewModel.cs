@@ -11,5 +11,6 @@ namespace SLAP_App.Models
         public String AssociateDisplayName { get; set; }
         public System.Guid PCUserId { get; set; }
         public System.Guid AssociateUserId { get; set; }
+        public int PCAssociateId { get; set; }
     }
 }

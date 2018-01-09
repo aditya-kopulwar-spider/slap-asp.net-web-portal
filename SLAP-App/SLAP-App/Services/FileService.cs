@@ -22,7 +22,7 @@ namespace SLAP_App.Services
             }
             CloudStorageAccount cloudStorageAccount =CloudStorageAccount.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["cloudConnectionString"].ConnectionString);
             CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("slapstorage");
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("slapfilescontainer");
             if (await cloudBlobContainer.CreateIfNotExistsAsync())
             {
                 await cloudBlobContainer.SetPermissionsAsync(

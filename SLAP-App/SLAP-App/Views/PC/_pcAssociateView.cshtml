@@ -1,0 +1,32 @@
+﻿@model SLAP_App.Models.PCAssociateViewModel
+
+<div class="pc-associate-box">
+    @Html.DisplayFor(model => model.AssociateDisplayName)
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Peers[0].PeerName)
+            </th>
+            <th>
+                Download Feedback Form
+            </th>
+        </tr>
+        @for (var i = 0; i < Model.Peers.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => Model.Peers[i].PeerName)
+                </td>
+                <td>
+                    @if (string.IsNullOrEmpty(Model.Peers[i].FeedbackDocumentUrl))
+                    {
+
+                        <a href="@Model.Peers[i].FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
+                    }
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+

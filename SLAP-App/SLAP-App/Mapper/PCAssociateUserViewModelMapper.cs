@@ -16,7 +16,9 @@ namespace SLAP_App.Mapper
             mappingExpression.ForMember(destinationMember=>destinationMember.AssociateDisplayName, source=>source.Ignore());
             cfg.CreateMap<PCAssociateUserViewModel,PCAssociate>();
             //todo seprate mapper for below mapping
-            cfg.CreateMap<PCAssociate, PCAssociateViewModel>().ForMember(destinationMember => destinationMember.AssociateDisplayName, source => source.Ignore());
+            var expression = cfg.CreateMap<PCAssociate, PCAssociateViewModel>();
+            expression.ForMember(destinationMember => destinationMember.AssociateDisplayName, source => source.Ignore());
+            expression.ForMember(destinationMember => destinationMember.Peers, opt => opt.MapFrom(src => src.Peers));
             cfg.CreateMap<PCAssociateViewModel, PCAssociate>();
             
         }

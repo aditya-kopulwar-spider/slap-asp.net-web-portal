@@ -18,23 +18,37 @@ namespace SLAP_App.Controllers
         private PCAssociatesDA _pcAssociatesDa;
         private PeersDA _peersDa;
         private ActiveDirectory _activeDirectory;
+        private AppraisalSeasonDA _appraisalSeasonDa;
         public PCController()
         {
             _pcAssociatesDa=new PCAssociatesDA();
             _activeDirectory=new ActiveDirectory();
             _peersDa=new PeersDA();
+            _appraisalSeasonDa = new AppraisalSeasonDA();
         }
         // GET: Associates For pc
         public async Task<ActionResult> Index()
         {
+            var activeAppraisalSeason = _appraisalSeasonDa.GetActiveAppraisalSeason();
+            if (activeAppraisalSeason==null)
+            {
+                await AssignPeer();
+            }
             var identityName = User.Identity.Name;
             var users = await _activeDirectory.GetAllAdUsers();
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
             var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
             ViewBag.AssociateId = userID;
-            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPC(userID).Select(pcAssociate=>AutoMapper.Mapper.Map<PCAssociate,PCAssociateViewModel>(pcAssociate)).ToList();
+            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPC(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
             pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId]);
-            return View(pcAssociateUserViewModels);
+            pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId]));
+
+            return View(new PCAssociateViewModels() { PcAssociateViewModels = pcAssociateUserViewModels });
+        }
+
+        public async Task<ActionResult> AssignPeersToAssociates()
+        {
+
         }
 
         public async Task<ActionResult> Associate(Guid associateId)
