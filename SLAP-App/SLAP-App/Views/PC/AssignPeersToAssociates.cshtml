@@ -42,15 +42,16 @@
     <br />
     if (Model.PeerListFinalized==false)
     {
-        <input type="submit" name="addPeersButton" value="Save Peers" />
-        <input type="submit" name="addPeersButton" value="Finalize Peers" />
+        <input type="submit" name="addPeersButton" value="Save Peers"class= "btn btn-default" />
+        <input type="submit" name="addPeersButton" value="Finalize Peers" class= "btn btn-default" />
+       @Html.ActionLink("Cancle", "Index", "Home",null, new { @class = "btn btn-default" })
     }
-    
+
 
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index","Home")
 </div>
 
 @section Scripts {

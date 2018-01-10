@@ -29,11 +29,6 @@ namespace SLAP_App.Controllers
         // GET: Associates For pc
         public async Task<ActionResult> Index()
         {
-            var activeAppraisalSeason = _appraisalSeasonDa.GetActiveAppraisalSeason();
-            if (activeAppraisalSeason==null)
-            {
-                return RedirectToAction("Associates");
-            }
             var identityName = User.Identity.Name;
             var users = await _activeDirectory.GetAllAdUsers();
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
@@ -45,18 +40,20 @@ namespace SLAP_App.Controllers
             return View(new PCAssociateViewModels() { PcAssociateViewModels = pcAssociateUserViewModels });
         }
 
-        public async Task<ActionResult> Associates()
+        /*public async Task<ActionResult> Associates(int pcAssociateId)
         {
             var identityName = User.Identity.Name;
             var users = await _activeDirectory.GetAllAdUsers();
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
             var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
             ViewBag.AssociateId = userID;
-            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPCForInProgressAppraisalSeason(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
-            pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId]);
-            pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId]));
+            var pcAssociateUserViewModels =
+                AutoMapper.Mapper.Map<PCAssociateViewModel>(_pcAssociatesDa.GetPCAssociate(pcAssociateId));
+            pcAssociateUserViewModels.PCDisplayName = adUsersMap[pcAssociateUserViewModels.PCUserId];
+            pcAssociateUserViewModels.AssociateDisplayName = adUsersMap[pcAssociateUserViewModels.AssociateUserId];
+            pcAssociateUserViewModels.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId]);
             return View(pcAssociateUserViewModels);
-        }
+        }*/
 
         public async Task<ActionResult> AssignPeersToAssociates(PCAssociateViewModel pcAssociateViewModel)
         {
@@ -96,7 +93,7 @@ namespace SLAP_App.Controllers
 
            
             _peersDa.AddPeers(peers);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Home");
         }
 
         public async Task<ActionResult> Associate(Guid associateId)

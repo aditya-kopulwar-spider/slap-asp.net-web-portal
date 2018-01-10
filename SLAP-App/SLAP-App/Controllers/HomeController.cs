@@ -22,7 +22,6 @@ namespace SLAP_App.Controllers
 		private UserRolesDA _userRolesDA = new UserRolesDA();
 		private PCAssociatesDA _pcAssocaiteDa = new PCAssociatesDA();
 		private PeersDA _peersDa = new PeersDA();
-
 		public HomeController()
 		{
 			_appraisalSeasonDa = new AppraisalSeasonDA();
@@ -35,7 +34,6 @@ namespace SLAP_App.Controllers
 			if (Session[SK_CURRENT_USER] == null)
 			{
 				var identityName = User.Identity.Name;
-				//var users = await _activeDirectory.GetAllAdUsers();
 				loggedInUser = await _activeDirectory.GetActiveDirectoryUserByName(identityName);
 				if (loggedInUser != null)
 				{
@@ -51,12 +49,15 @@ namespace SLAP_App.Controllers
 			ViewBag.LoggedInUser = loggedInUser;
 			AppraisalSeason inProgressAppraisalSeason = _appraisalSeasonDa.GetInProgressAppraisalSeason();
 			ViewBag.InProgressAppraisalSeason = AutoMapper.Mapper.Map<AppraisalSeasonViewModel>(inProgressAppraisalSeason);
-
 			if (inProgressAppraisalSeason.IsActive.GetValueOrDefault())
 			{
 				var users = await _activeDirectory.GetAllAdUsers();
 				var adUsersMap = users.ToDictionary(key => key.id, value => value);
-				loggedInUser.PCAssociateModel = AutoMapper.Mapper.Map<PCAssociateViewModel>(_pcAssocaiteDa.GetPCAssociateForGivenAssociateId(loggedInUser.id));
+			    var pcAssociateUserViewModels = _pcAssocaiteDa.GetAllAssociateForGivenPCForActiveAppraisalSeason(loggedInUser.id).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
+			    pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId].displayName);
+			    pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId].displayName));
+			    ViewBag.PcAssociateUserViewModels = pcAssociateUserViewModels;
+                loggedInUser.PCAssociateModel = AutoMapper.Mapper.Map<PCAssociateViewModel>(_pcAssocaiteDa.GetPCAssociateForGivenAssociateId(loggedInUser.id));
 				if (loggedInUser.PCAssociateModel != null) loggedInUser.PC = adUsersMap[loggedInUser.PCAssociateModel.PCUserId];
 				var seekingFeedbackFrom = _peersDa.GetPeersForGivenAssociate(loggedInUser.id);
 				loggedInUser.SeekingFeedbackFrom = seekingFeedbackFrom.Count > 0 ? seekingFeedbackFrom.Select(x => AutoMapper.Mapper.Map<PeerViewModel>(x)).ToList() : null;
@@ -65,7 +66,6 @@ namespace SLAP_App.Controllers
 				loggedInUser.SendingFeedbackTo = SendingFeedbackTo.Count > 0 ? SendingFeedbackTo.Select(x => AutoMapper.Mapper.Map<PeerViewModel>(x)).ToList() : null;
 				InitUserData(loggedInUser.SendingFeedbackTo, adUsersMap);
 			}
-
 			return View();
         }
 

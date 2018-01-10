@@ -1,6 +1,7 @@
 ﻿@{
 	ViewBag.Title = "Home Page";
 	SLAP_App.Models.AppraisalSeasonViewModel inProgressAppraisalSeason = (SLAP_App.Models.AppraisalSeasonViewModel)ViewBag.InProgressAppraisalSeason;
+	List<SLAP_App.Models.PCAssociateViewModel> pcAssociateViewModels = ViewBag.PcAssociateUserViewModels;
 	SLAP_App.Models.User loggedInUser = (SLAP_App.Models.User)ViewBag.LoggedInUser;
 }
 
@@ -67,11 +68,19 @@
 	{
 		if (loggedInUser.IsPC)
 		{
-			<div class="jumbotron">
-				<h1>My Associates</h1>
-				<p class="lead">You can view list of associates</p><br />
-				<p><a href="@Url.Action("Index", "PC")" class="btn btn-primary btn-lg">View &raquo;</a></p>
-			</div>
+
+		    <div class="jumbotron">
+		        <h1>My Associates</h1>
+		        <p class="lead">You can view list of associates</p><br />
+		        @*		        <p><a href="@Url.Action("Index", "PC")" class="btn btn-primary btn-lg">View &raquo;</a></p>*@
+		        
+		    </div>
+		    <div>
+		        @for (var i = 0; i < pcAssociateViewModels.Count; i++)
+		        {
+		        @Html.Partial("../PC/_pcAssociateView",pcAssociateViewModels[i]);
+		        }
+		    </div>
 		}
 		<div class="jumbotron">
 			<div>

@@ -1,32 +1,45 @@
-﻿@model SLAP_App.Models.PCAssociateViewModel
-
+﻿@using System.Drawing
+@model SLAP_App.Models.PCAssociateViewModel
+@{
+    var pcAssociateViewModel=Model;
+}
+ 
 <div class="pc-associate-box">
-    @Html.DisplayFor(model => model.AssociateDisplayName)
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Peers[0].PeerName)
-            </th>
-            <th>
-                Download Feedback Form
-            </th>
-        </tr>
-        @for (var i = 0; i < Model.Peers.Count; i++)
-        {
+    <b>@Html.DisplayFor(model => model.AssociateDisplayName)  </b> @if (!pcAssociateViewModel.PeerListFinalized)
+                                                                   {
+                                                                       <div  style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel,new {@class= "btn btn-primary btn-sm" })</div>
+    }
+    else
+    {<div  style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel,new {@class= "btn btn-primary btn-sm disabled"})</div>
+    }
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(model => Model.Peers[i].PeerName)
-                </td>
-                <td>
-                    @if (string.IsNullOrEmpty(Model.Peers[i].FeedbackDocumentUrl))
-                    {
-
-                        <a href="@Model.Peers[i].FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
-                    }
-                </td>
-
+                <th>
+                    @Html.DisplayNameFor(model => model.Peers[0].PeerName)
+                </th>
+                @if (pcAssociateViewModel.PeerListFinalized)
+                {
+                    <th>
+                        Download Feedback Form
+                    </th>
+                }
+               
             </tr>
-        }
-    </table>
+            @for (var i = 0; i < Model.Peers.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => Model.Peers[i].PeerName)
+                    </td>
+                    <td>
+                        @if ( pcAssociateViewModel.PeerListFinalized && (!string.IsNullOrEmpty(Model.Peers[i].FeedbackDocumentUrl)))
+                        {
+                            <a href="@Model.Peers[i].FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
+                        }
+                    </td>
+
+                </tr>
+            }
+        </table>
 </div>
 

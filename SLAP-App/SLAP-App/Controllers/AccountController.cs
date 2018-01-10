@@ -23,6 +23,7 @@ namespace SLAP_App.Controllers
 
         public void SignOut()
         {
+            Session.Abandon();
             string callbackUrl = Url.Action("SignOutCallback", "Account", routeValues: null, protocol: Request.Url.Scheme);
 
             HttpContext.GetOwinContext().Authentication.SignOut(
