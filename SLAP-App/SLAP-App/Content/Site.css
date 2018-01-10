@@ -37,3 +37,8 @@ textarea {
 	border: 1px solid black;
 	float: left;
 }
+.employee-box {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid black;
+}

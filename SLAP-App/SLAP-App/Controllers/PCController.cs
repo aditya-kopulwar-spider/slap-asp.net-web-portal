@@ -39,7 +39,7 @@ namespace SLAP_App.Controllers
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
             var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
             ViewBag.AssociateId = userID;
-            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPC(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
+            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPCForActiveAppraisalSeason(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
             pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId]);
             pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId]));
             return View(new PCAssociateViewModels() { PcAssociateViewModels = pcAssociateUserViewModels });
@@ -52,7 +52,7 @@ namespace SLAP_App.Controllers
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
             var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
             ViewBag.AssociateId = userID;
-            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPC(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
+            var pcAssociateUserViewModels = _pcAssociatesDa.GetAllAssociateForGivenPCForInProgressAppraisalSeason(userID).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
             pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId]);
             pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId]));
             return View(pcAssociateUserViewModels);
@@ -61,7 +61,6 @@ namespace SLAP_App.Controllers
         public async Task<ActionResult> AssignPeersToAssociates(PCAssociateViewModel pcAssociateViewModel)
         {
             var peersForGivenAssociateByPcAssociateId = _peersDa.GetPeersForGivenAssociateByPcAssociateId(pcAssociateViewModel.PCAssociatesId);
-
             var users = await _activeDirectory.GetAllAdUsers();
             var peerViewModels = users.Where(p=>p.id!=pcAssociateViewModel.PCUserId && p.id!=pcAssociateViewModel.AssociateUserId).ToList()
                 .Select(p => AutoMapper.Mapper.Map<PeerViewModel>(p)).ToList();

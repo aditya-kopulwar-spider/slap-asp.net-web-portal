@@ -17,14 +17,14 @@
 
         if (ViewBag.UserID == Model.AssociateUserId)
         {
-            <td  style="width:50%">
+            <td>
                 @Html.EditorFor(model => model.PeerName, new {htmlAttributes = new {@class = "form-control", @readonly = "readonly"}})
             </td>
-            <td style="width:5%">
+            <td >
                 @Html.EditorFor(model => model.ShareFeedbackWithAssociate)
             </td>
 
-            <td style="width:30%">
+            <td >
                 <input type="file" name="FeedbackDocument"/>
                 @if ((!Model.FeedbackDocumentUrl.IsEmpty() && Model.FeedbackDocumentUrl != null))
                 {
@@ -32,7 +32,7 @@
                 }
 
             </td>
-            <td style="width:15%">
+            <td>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Save" class="btn btn-default"/>
@@ -42,20 +42,20 @@
         }
         else
         {
-            <td width="50%">
+            <td >
                 @Html.EditorFor(model => model.AssociateName, new {htmlAttributes = new {@class = "form-control", @readonly = "readonly"}})
             </td>
-            <td width="5%">
+            <td >
                 @Html.EditorFor(model => model.ShareFeedbackWithAssociate, new {htmlAttributes = new {@class = "form-control", @disabled = "disabled" } })
             </td>
 
-            <td width="30%">
+            <td>
                 @if ((!Model.FeedbackDocumentUrl.IsEmpty() && Model.FeedbackDocumentUrl != null) && Model.ShareFeedbackWithAssociate == true)
                 {
                     <a href="@Model.FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
                 }
             </td>
-            <td width="15%">
+            <td>
 
             </td>
         }

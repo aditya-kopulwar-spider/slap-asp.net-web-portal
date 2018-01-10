@@ -14,8 +14,8 @@ namespace SLAP_App.Controllers
     public class EmployeeController : Controller
     {
         private readonly ActiveDirectory _activeDirectory=new ActiveDirectory();
-        private PCAssociatesDA _pcAssociatesDa = new PCAssociatesDA();
         private AppraisalSeasonDA _appraisalProcessDa=new AppraisalSeasonDA();
+        private PCAssociatesDA _pcAssocaiteDa = new PCAssociatesDA();
         private FileService _fileService = new FileService();
         private PeersDA _peersDa=new PeersDA();
         // GET: Employee
@@ -28,11 +28,19 @@ namespace SLAP_App.Controllers
             ViewBag.UserID = userID;
             ViewBag.AssociateId = userID;
             var peersForGivenAssociate = _peersDa.GetAllPeersForGivenAssociate(userID);
-            var employeeViewModels = peersForGivenAssociate.Select(p => AutoMapper.Mapper.Map<EmployeeViewModel>(p))
+            var employeeViewModels = peersForGivenAssociate
+                .Select(AutoMapper.Mapper.Map<EmployeeViewModel>)
                 .ToList();
+            var pcAssociateForGivenAssociateId =
+                AutoMapper.Mapper.Map<PCAssociateViewModel>(_pcAssocaiteDa.GetPCAssociateForGivenAssociateId(userID));
             employeeViewModels.ForEach(p=>p.PeerName=adUsersMap[p.PeerUserId]);
             employeeViewModels.ForEach(p=>p.AssociateName=adUsersMap[p.AssociateUserId]);
-            return View(new EmployeeViewModels(){EmployeeModels = employeeViewModels});
+            var viewModels = new EmployeeViewModels()
+            {
+                EmployeeModels = employeeViewModels,
+                PcAssociateViewModel = pcAssociateForGivenAssociateId
+            };
+            return View(viewModels);
         }
         [HttpPost]
         public async Task<ActionResult> UpdateFeedback(EmployeeViewModel employeeViewModel)
@@ -46,6 +54,10 @@ namespace SLAP_App.Controllers
             _peersDa.UpdatePeer(peer);
             return RedirectToAction("Index");
         }
-
+        [HttpPost]
+        public  ActionResult UpdateSelfAppraisal(PCAssociateViewModel pcAssociateViewModel)
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

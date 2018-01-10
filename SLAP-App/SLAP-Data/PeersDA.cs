@@ -10,16 +10,25 @@ namespace SLAP_Data
    public class PeersDA
     {
         private slap_dbEntities _dbEntities;
-
+        private AppraisalSeasonDA _appraisalSeasonDa;
+        private PCAssociatesDA _pcAssociatesDa;
         public PeersDA()
         {
             _dbEntities=new slap_dbEntities();
+            _appraisalSeasonDa=new AppraisalSeasonDA();
+            _pcAssociatesDa=new PCAssociatesDA();
         }
 
         //todo method name change it returns  1) peers for given associateId 2)associates to whome given id is a peer
         public List<Peer> GetAllPeersForGivenAssociate(Guid associateId)
         {
-           return _dbEntities.Peers.Where(p => p.AssociateUserId == associateId || p.PeerUserId == associateId).ToList();
+            //todo take active appraisal yaear instead of inprogess 
+           var activeAppraisalSeason = _appraisalSeasonDa.GetInProgressAppraisalSeason();
+           var pcAssociates=    _pcAssociatesDa.GetAllPcAssociatesForGivenAppraisalSeason(activeAppraisalSeason.AppraisalSeasonId);
+           var peers=new List<Peer>();
+            pcAssociates.ForEach(p=>peers.AddRange(p.Peers));
+           return peers.Where(p => p.PeerUserId == associateId || p.AssociateUserId == associateId).ToList();
+//            return _dbEntities.Peers.Where(p => p.AssociateUserId == associateId || p.PeerUserId == associateId).ToList();
         }
         public List<Peer> GetPeersForGivenAssociate(Guid associateId)
         {
@@ -57,7 +66,7 @@ namespace SLAP_Data
         {
             return _dbEntities.Peers.Where(p => p.PCAssociateId==pcAssociateId).ToList();
         }
-
+       
         public bool AddPeers(IEnumerable<Peer> peers)
         {
             _dbEntities.Peers.AddRange(peers);

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace SLAP_Data
 {
- public  class PCAssociatesDA
+    public class PCAssociatesDA
     {
         private slap_dbEntities _dbEntities;
-        AppraisalSeasonDA _appraisalProcessDa ;
+        AppraisalSeasonDA _appraisalProcessDa;
 
         public PCAssociatesDA()
         {
@@ -51,16 +51,26 @@ namespace SLAP_Data
             return true;
         }
 
-        public List<PCAssociate> GetAllAssociateForGivenPC(Guid PcID)
+        public List<PCAssociate> GetAllAssociateForGivenPCForInProgressAppraisalSeason(Guid PcID)
         {
             var appraisalSeasonId = _appraisalProcessDa.GetInProgressAppraisalSeason().AppraisalSeasonId;
-            return _dbEntities.PCAssociates.Where(pcAssociate => pcAssociate.PCUserId == PcID && pcAssociate.AppraisalSeasonId==appraisalSeasonId).ToList(); ;
+            return _dbEntities.PCAssociates.Where(pcAssociate =>
+                pcAssociate.PCUserId == PcID && pcAssociate.AppraisalSeasonId == appraisalSeasonId).ToList();
+        }
+
+        public List<PCAssociate> GetAllAssociateForGivenPCForActiveAppraisalSeason(Guid PcID)
+        {
+            var appraisalSeasonId = _appraisalProcessDa.GetActiveAppraisalSeason().AppraisalSeasonId;
+            return _dbEntities.PCAssociates.Where(pcAssociate =>
+                pcAssociate.PCUserId == PcID && pcAssociate.AppraisalSeasonId == appraisalSeasonId).ToList();
+            ;
         }
 
         public PCAssociate GetPCAssociate(int? pcAssociateId)
         {
             return _dbEntities.PCAssociates.Find(pcAssociateId);
         }
+
         public PCAssociate EditPCAssociate(PCAssociate pcAssociate)
         {
             _dbEntities.Entry(pcAssociate).State = EntityState.Modified;
@@ -71,19 +81,20 @@ namespace SLAP_Data
         public List<PCAssociate> GetAllCurrentYearPcAssociates()
         {
             var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalSeason().AppraisalSeasonId;
-            return _dbEntities.PCAssociates.Where(p=>p.AppraisalSeasonId== appraisalProcessId).ToList();
+            return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId).ToList();
         }
 
-		public List<PCAssociate> GetAllPcAssociatesForInProgressAppraisalSeason()
-		{
-			var appraisalProcessId = _appraisalProcessDa.GetInProgressAppraisalSeason().AppraisalSeasonId;
-			return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId).ToList();
-		}
-
-		public bool AddAssociates(List<PCAssociate> pcAssociates)
+        public List<PCAssociate> GetAllPcAssociatesForInProgressAppraisalSeason()
         {
-            var appraisalProcesses = _dbEntities.AppraisalSeasons.First(p => p.IsActive == false && p.IsCompleted == false);
-            pcAssociates.ForEach(p=>p.AppraisalSeasonId=appraisalProcesses.AppraisalSeasonId);
+            var appraisalProcessId = _appraisalProcessDa.GetInProgressAppraisalSeason().AppraisalSeasonId;
+            return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId).ToList();
+        }
+
+        public bool AddAssociates(List<PCAssociate> pcAssociates)
+        {
+            var appraisalProcesses =
+                _dbEntities.AppraisalSeasons.First(p => p.IsActive == false && p.IsCompleted == false);
+            pcAssociates.ForEach(p => p.AppraisalSeasonId = appraisalProcesses.AppraisalSeasonId);
             _dbEntities.PCAssociates.AddRange(pcAssociates);
             _dbEntities.SaveChanges();
             return true;
@@ -101,13 +112,27 @@ namespace SLAP_Data
         public List<PCAssociate> GetAllCurrentYearPcAssociatesForGivenPCId(Guid pcId)
         {
             var appraisalProcessId = _appraisalProcessDa.GetActiveAppraisalSeason().AppraisalSeasonId;
-            return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId && p.PCUserId==pcId).ToList();
+            return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId && p.PCUserId == pcId)
+                .ToList();
         }
 
-		public List<PCAssociate> GetAllPcAssociatesForPcIdForInProgressAppraisalSeason(Guid pcId)
-		{
-			var appraisalProcessId = _appraisalProcessDa.GetInProgressAppraisalSeason().AppraisalSeasonId;
-			return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId && p.PCUserId == pcId).ToList();
-		}
-	}
+        public List<PCAssociate> GetAllPcAssociatesForPcIdForInProgressAppraisalSeason(Guid pcId)
+        {
+            var appraisalProcessId = _appraisalProcessDa.GetInProgressAppraisalSeason().AppraisalSeasonId;
+            return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalProcessId && p.PCUserId == pcId)
+                .ToList();
+        }
+
+        public List<PCAssociate> GetAllPcAssociatesForGivenAppraisalSeason(int appraisalSeasonId)
+        {
+            return _dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == appraisalSeasonId).ToList();
+        }
+
+        public PCAssociate GetPCAssociateForGivenAssociateId(Guid asociateId)
+        {
+            var appraisalSeasonId = _appraisalProcessDa.GetInProgressAppraisalSeason().AppraisalSeasonId;
+            return _dbEntities.PCAssociates.FirstOrDefault(p =>
+                p.AppraisalSeasonId == appraisalSeasonId && p.AssociateUserId == asociateId);
+        }
+    }
 }
