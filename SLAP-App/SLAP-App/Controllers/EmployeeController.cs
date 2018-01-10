@@ -31,14 +31,16 @@ namespace SLAP_App.Controllers
             var employeeViewModels = peersForGivenAssociate
                 .Select(AutoMapper.Mapper.Map<EmployeeViewModel>)
                 .ToList();
-            var pcAssociateForGivenAssociateId =
+            var pcAssociateViewModel =
                 AutoMapper.Mapper.Map<PCAssociateViewModel>(_pcAssocaiteDa.GetPCAssociateForGivenAssociateId(userID));
+            pcAssociateViewModel.PCDisplayName = adUsersMap[pcAssociateViewModel.PCUserId];
+            pcAssociateViewModel.AssociateDisplayName = adUsersMap[pcAssociateViewModel.PCUserId];
             employeeViewModels.ForEach(p=>p.PeerName=adUsersMap[p.PeerUserId]);
             employeeViewModels.ForEach(p=>p.AssociateName=adUsersMap[p.AssociateUserId]);
             var viewModels = new EmployeeViewModels()
             {
                 EmployeeModels = employeeViewModels,
-                PcAssociateViewModel = pcAssociateForGivenAssociateId
+                PcAssociateViewModel = pcAssociateViewModel
             };
             return View(viewModels);
         }
@@ -55,8 +57,14 @@ namespace SLAP_App.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public  ActionResult UpdateSelfAppraisal(PCAssociateViewModel pcAssociateViewModel)
+        public async Task<ActionResult> UpdateSelfAppraisal(EmployeeViewModels employeeViewModels)
         {
+            var pcAssociate = _pcAssocaiteDa.GetPCAssociate(employeeViewModels.PcAssociateViewModel.PCAssociatesId);
+            var appraisalSeason = _appraisalProcessDa.GetAppraisalSeason(employeeViewModels.PcAssociateViewModel.AppraisalSeasonId);
+            var name = employeeViewModels.PcAssociateViewModel.AssociateDisplayName + " - SelfAppraisalForm - "+appraisalSeason.Name;
+            var path = await _fileService.UploadFile(employeeViewModels.SelfAppraisalDocument, name, appraisalSeason.Name);
+            pcAssociate.SelfAppraisalDocumentUrl = path;
+            _pcAssocaiteDa.EditPCAssociate(pcAssociate);
             return RedirectToAction("Index");
         }
     }

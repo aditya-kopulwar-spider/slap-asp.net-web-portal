@@ -12,6 +12,7 @@ namespace SLAP_App.Models
 		public int PCAssociatesId { get; set; }
         public Guid PCUserId { get; set; }
         public Guid AssociateUserId { get; set; }
+        public int AppraisalSeasonId { get; set; }
         public string SelfAppraisalDocumentUrl { get; set; }
         public Nullable<System.DateTime> AppraisalDate { get; set; }
         public Nullable<System.DateTime> LastNotificationDate { get; set; }

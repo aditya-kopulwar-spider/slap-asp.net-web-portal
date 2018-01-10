@@ -16,45 +16,52 @@
         @Html.HiddenFor(model => model.PcAssociateViewModel.PCAssociatesId, new {htmlAttributes = new {@class = "form-control"}})
         @Html.HiddenFor(model => model.PcAssociateViewModel.PeerListFinalized, new {htmlAttributes = new {@class = "form-control"}})
         @Html.HiddenFor(model => model.PcAssociateViewModel.Peers, new {htmlAttributes = new {@class = "form-control"}})
+        @Html.HiddenFor(model => model.PcAssociateViewModel.AssociateDisplayName, new {htmlAttributes = new {@class = "form-control"}})
+        @Html.HiddenFor(model => model.PcAssociateViewModel.PCDisplayName, new {htmlAttributes = new {@class = "form-control"}})
+        @Html.HiddenFor(model => model.PcAssociateViewModel.AppraisalSeasonId, new {htmlAttributes = new {@class = "form-control"}})
         <table>
             <tr>
                 <th>
                     PC Name
                 </th>
-                <th>
-                    Download/Upload
-                </th>
+               
                 <th>
                     Appraisal Date
                 </th>
                 <th>
                     Last Notification Date
                 </th>
+                <th>
+                    Download/Upload
+                </th>
             </tr>
             <tr>
                 <td>
                     @Html.EditorFor(model => model.PcAssociateViewModel.PCDisplayName, new {htmlAttributes = new {@class = "form-control", @readonly = "readonly"}})
                 </td>
-                <td >
-                    <input type="file" name="SelfAppraisalDocument"/>
-                    @if (!string.IsNullOrEmpty(@Model.PcAssociateViewModel.SelfAppraisalDocumentUrl))
-                    {
-                        <a href="@Model.PcAssociateViewModel.SelfAppraisalDocumentUrl" target="_blank" title="Download Self Appraisal form">Download</a>
-                    }
-                </td>
+                
                 <td>
                     @Html.EditorFor(model => model.PcAssociateViewModel.AppraisalDate, new {htmlAttributes = new {@class = "form-control", @readonly = "readonly"}})
                 </td>
                 <td>
                     @Html.EditorFor(model => model.PcAssociateViewModel.LastNotificationDate, new {htmlAttributes = new {@class = "form-control", @readonly = "readonly"}})
                 </td>
+                <td>
+                    <input type="file" name="SelfAppraisalDocument" />
+                    @if (!string.IsNullOrEmpty(@Model.PcAssociateViewModel.SelfAppraisalDocumentUrl))
+                    {
+                        <a href="@Model.PcAssociateViewModel.SelfAppraisalDocumentUrl" target="_blank" title="Download Self Appraisal form">Download</a>
+                    }
+                </td>
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default"/>
+                        </div>
+                    </div>
+                </td>
             </tr>
         </table>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
     }
         <h4>Peer Form to upload</h4>
         <table style="width:100%">
