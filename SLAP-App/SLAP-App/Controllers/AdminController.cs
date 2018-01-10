@@ -23,25 +23,27 @@ namespace SLAP_App.Controllers
         private PCAssociatesDA _pcAssociatesDa = new PCAssociatesDA();
         private NotificationService _notificationService = new NotificationService();
         ActiveDirectory _activeDirectory = new ActiveDirectory();
+		private AppraisalSeasonDA _appraisalSeasonDa = new AppraisalSeasonDA();
 
-        // GET: Admin
-        public async Task<ActionResult> Index()
+		// GET: Admin
+		public async Task<ActionResult> Index()
         {
+			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
             List<User> userList = await _activeDirectory.GetAllAdUsers();
             userList.ForEach(p => p.IsPC = _userRolesDa.IsUserPC(p.id));
             return View(userList);
         }
-
-
-
+		
         public ActionResult MakePC(System.Guid Id)
         {
+			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
             _userRolesDa.MakeUserPC(Id);
-            return RedirectToAction("Index");
+			return RedirectToAction("Index");
         }
 
         public ActionResult RemovePC(System.Guid Id)
         {
+			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
             _userRolesDa.RemoveUserFromPCRole(Id);
             return RedirectToAction("Index");
         }
@@ -91,6 +93,7 @@ namespace SLAP_App.Controllers
 
         public async Task<ActionResult> AssignAssociates(Guid? pcId)
         {
+			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
             var _userList = await _activeDirectory.GetAllAdUsers();
             ViewBag.PCId = pcId;
             ViewBag.pcName = _userList.First(p => p.id == pcId).displayName;
@@ -115,9 +118,10 @@ namespace SLAP_App.Controllers
         [HttpPost]
         public async Task<ActionResult> AssignAssociates(AssociateSelectionViewModel associateSelectionViewModel, Guid pcId)
         {
-            //            var selectedAssociates = id.getSelectedAssociates();
-            //todo approach to assign associates only one time activity or ---
-            //var pcUserId = associateSelectionViewModel.PcAssociateUserViewModels.FirstOrDefault(p=>p.Selected).PCUserId;
+			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
+			//            var selectedAssociates = id.getSelectedAssociates();
+			//todo approach to assign associates only one time activity or ---
+			//var pcUserId = associateSelectionViewModel.PcAssociateUserViewModels.FirstOrDefault(p=>p.Selected).PCUserId;
 			var pcUserId = pcId;
             var allCurrentYearPcAssociatesForGivenPcId = _pcAssociatesDa.GetAllPcAssociatesForPcIdForInProgressAppraisalSeason(pcUserId);
             _pcAssociatesDa.RemoveAssociates(allCurrentYearPcAssociatesForGivenPcId);
