@@ -90,10 +90,10 @@
 			</div>
 			<div style="clear: both" />
 			<div>
-				<div class="float-left width-50">
+				<div class="float-left width-48 small-margin">
 					@if (loggedInUser.PCAssociateModel != null && loggedInUser.PCAssociateModel.PeerListFinalized)
 					{
-						<table border="1">
+						<table border="1" class="width-100" cellpadding="5">
 							<thead>
 								<tr>
 									<th>Seeking feedback from</th>
@@ -127,10 +127,10 @@
 						@Html.Raw("<font color='red'>Peer list not finalized yet</font>");
 					}
 				</div>
-				<div class="float-left width-50">
+				<div class="float-left width-48 small-margin">
 					@if (loggedInUser.SendingFeedbackTo.Count > 0)
 					{
-						<table border="1">
+						<table border="1" class="width-100" cellpadding="5">
 							<thead>
 								<tr>
 									<th>Sending feedback to</th>

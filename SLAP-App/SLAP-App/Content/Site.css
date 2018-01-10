@@ -27,6 +27,10 @@ textarea {
 	font-weight: bold;
 }
 
+.small-margin {
+	margin: 5px;
+}
+
 .float-right {
 	float: right;
 }
@@ -37,6 +41,14 @@ textarea {
 
 .width-50 {
 	width: 50%;
+}
+
+.width-48 {
+	width: 48%;
+}
+
+.width-100 {
+	width: 100%;
 }
 
 .pc-associate-box {
