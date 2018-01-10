@@ -21,7 +21,8 @@ namespace SLAP_App.Models
         public string surname { get; set; }
         public string userPrincipalName { get; set; }
         public bool IsPC { get; set; }
-    }
+        public bool IsAdmin { get; set; }
+	}
 
     public class RootObject
     {

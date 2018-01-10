@@ -14,7 +14,7 @@ namespace SLAP_App.Services
 {
     public class ActiveDirectory
     {
-        public  async Task<List<User>> GetAllAdUsers()
+        public async Task<List<User>> GetAllAdUsers()
         {
             var token = await AppAuthenticationAsync();
             //var token = await HttpAppAuthenticationAsync();
@@ -28,7 +28,23 @@ namespace SLAP_App.Services
                 return result.Users;
             }
         }
-        private static async Task<string> AppAuthenticationAsync()
+
+		public async Task<User> GetActiveDirectoryUserByName(string name)
+		{
+			var token = await AppAuthenticationAsync();
+			//var token = await HttpAppAuthenticationAsync();
+
+			using (var client = new HttpClient())
+			{
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+				var user = await client.GetStringAsync($"https://graph.microsoft.com/v1.0/users/{name}");
+				var result = JsonConvert.DeserializeObject<User>(user);
+				return result;
+			}
+		}
+
+		private static async Task<string> AppAuthenticationAsync()
         {
 
             string clientID = ConfigurationManager.AppSettings["ida:ClientId"];

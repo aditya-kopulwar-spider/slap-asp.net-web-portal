@@ -8,8 +8,9 @@ namespace SLAP_Data
 {
     public class UserRolesDA
     {
-        private const string PC = "PC";
-        private slap_dbEntities _dbEntities;
+        private const string ROLE_NAME_PC = "PC";
+        private const string ROLE_NAME_ADMIN = "Admin";
+		private slap_dbEntities _dbEntities;
         private List<UserRole> _userRoleMapping = null;
         private List<Role> _roles;
 
@@ -19,30 +20,30 @@ namespace SLAP_Data
             _roles = _dbEntities.Roles.ToList();
         }
 
-        public bool IsAdmin()
+		public bool IsAdmin(Guid userId)
         {
-            return true;
-        }
+			List<UserRole> userRoles = GetAllUserRoles();
+			return userRoles.Any(x => x.UserId == userId && x.Role.RoleName == ROLE_NAME_PC);
+		}
 
-        public bool IsUserPC(Guid userId)
+		public bool IsUserPC(Guid userId)
         {
             List<UserRole> userRoles = GetAllUserRoles();
-            return userRoles.Any(x => x.UserId == userId && x.Role.RoleName == PC);
+            return userRoles.Any(x => x.UserId == userId && x.Role.RoleName == ROLE_NAME_ADMIN);
         }
 
         public List<UserRole> GetAllUserRoles(bool refresh = false)
         {
             if (_userRoleMapping == null || refresh)
             {
-                return _dbEntities.UserRoles.ToList();
+				_userRoleMapping = _dbEntities.UserRoles.ToList();
             }
-            else
-                return _userRoleMapping;
+            return _userRoleMapping;
         }
 
         public bool MakeUserPC(Guid userId)
         {
-            int pcRoleId = _roles.First(x => x.RoleName == PC).RoleId;
+            int pcRoleId = _roles.First(x => x.RoleName == ROLE_NAME_PC).RoleId;
 
             UserRole newPC = new UserRole
                 { UserId = userId, RoleId = pcRoleId };
@@ -55,7 +56,7 @@ namespace SLAP_Data
 
         public bool RemoveUserFromPCRole(Guid userId)
         {
-            int pcRoleId = _roles.First(x => x.RoleName == PC).RoleId;
+            int pcRoleId = _roles.First(x => x.RoleName == ROLE_NAME_PC).RoleId;
             UserRole pcUser = _dbEntities.UserRoles.Find(pcRoleId, userId);
             _dbEntities.UserRoles.Remove(pcUser);
             _dbEntities.SaveChanges();
