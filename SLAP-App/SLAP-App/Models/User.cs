@@ -22,6 +22,11 @@ namespace SLAP_App.Models
         public string userPrincipalName { get; set; }
         public bool IsPC { get; set; }
         public bool IsAdmin { get; set; }
+
+		public User PC { get; set; }
+		public PCAssociateViewModel PCAssociateModel { get; set; }
+		public IList<PeerViewModel> SeekingFeedbackFrom { get; set; }
+		public IList<PeerViewModel> SendingFeedbackTo { get; set; }
 	}
 
     public class RootObject

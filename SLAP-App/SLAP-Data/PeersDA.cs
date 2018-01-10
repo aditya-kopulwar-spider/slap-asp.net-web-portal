@@ -36,7 +36,7 @@ namespace SLAP_Data
         }
         public List<Peer> GetUsersWhomeGivenAssociateIsPeer(Guid associateId)
         {
-            return _dbEntities.Peers.Where(p => p.PeerUserId == associateId).ToList();
+            return _dbEntities.Peers.Where(p => p.PeerUserId == associateId && p.PCAssociate.PeerListFinalized).ToList();
         }
         public bool AddPeer(Peer peer)
         {

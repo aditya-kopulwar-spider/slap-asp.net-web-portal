@@ -74,9 +74,95 @@
 			</div>
 		}
 		<div class="jumbotron">
-			<h1>My Peers</h1>
-			<p class="lead">You can view list of your peers</p><br />
-			<p><a href="@Url.Action("Index", "Employee")" class="btn btn-primary btn-lg">View &raquo;</a></p>
+			<div>
+				<div class="float-left">
+					<h2>@loggedInUser.displayName</h2>
+					<h3>PC: @if (loggedInUser.PCAssociateModel != null) { @Html.Raw(loggedInUser.PC.displayName); } else { @Html.Raw("<font color='red'>PC assignment not done yet</font>"); }</h3>
+				</div>
+				<div class="float-right">
+					Self appraisal form <br />
+					@if (loggedInUser.PCAssociateModel != null && !string.IsNullOrEmpty(loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl))
+					{
+						<a href="@loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl">Download</a>@:&nbsp;&nbsp;&nbsp;
+					}
+					<a href="">Upload</a>
+				</div>
+			</div>
+			<div style="clear: both" />
+			<div>
+				<div class="float-left width-50">
+					@if (loggedInUser.PCAssociateModel != null && loggedInUser.PCAssociateModel.PeerListFinalized)
+					{
+						<table border="1">
+							<thead>
+								<tr>
+									<th>Seeking feedback from</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							@foreach(var peer in loggedInUser.SeekingFeedbackFrom)
+							{
+								<tr>
+									<td>@peer.PeerName</td>
+									<td>
+										@if (string.IsNullOrEmpty(peer.FeedbackDocumentUrl))
+										{
+											<font color="red">not provided</font>
+										}
+										else if (peer.ShareFeedbackWithAssociate)
+										{
+											<a href="@peer.FeedbackDocumentUrl">Download</a>
+										}
+										else
+										{
+											<font color="green">provided, but not shared</font>
+										}
+									</td>
+								</tr>
+							}
+						</table>
+					}
+					else
+					{
+						@Html.Raw("<font color='red'>Peer list not finalized yet</font>");
+					}
+				</div>
+				<div class="float-left width-50">
+					@if (loggedInUser.SendingFeedbackTo.Count > 0)
+					{
+						<table border="1">
+							<thead>
+								<tr>
+									<th>Sending feedback to</th>
+									<th>Current version</th>
+									<th>Upload new</th>
+								</tr>
+							</thead>
+							@foreach(var peer in loggedInUser.SendingFeedbackTo)
+							{
+								<tr>
+									<td>@peer.AssociateName</td>
+									<td>
+										@if (string.IsNullOrEmpty(peer.FeedbackDocumentUrl))
+										{
+											@:NA
+										}
+										else
+										{
+											<a href="@peer.FeedbackDocumentUrl">Download</a>
+										}
+									</td>
+									<td><a href="">Upload</a></td>
+								</tr>
+							}
+						</table>
+					}
+					else
+					{
+						@Html.Raw("<font color='red'>No one seeking feedback from you yet</font>");
+					}
+				</div>
+			</div>
 		</div>
 	}
 	@*<div class="row">*@

@@ -31,6 +31,14 @@ textarea {
 	float: right;
 }
 
+.float-left {
+	float: left;
+}
+
+.width-50 {
+	width: 50%;
+}
+
 .pc-associate-box {
 	margin: 5px;
 	padding: 5px;

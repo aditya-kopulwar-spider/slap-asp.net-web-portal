@@ -20,6 +20,8 @@ namespace SLAP_App.Controllers
 		private AppraisalSeasonDA _appraisalSeasonDa;
 		private ActiveDirectory _activeDirectory;
 		private UserRolesDA _userRolesDA = new UserRolesDA();
+		private PCAssociatesDA _pcAssocaiteDa = new PCAssociatesDA();
+		private PeersDA _peersDa = new PeersDA();
 
 		public HomeController()
 		{
@@ -49,10 +51,35 @@ namespace SLAP_App.Controllers
 			ViewBag.LoggedInUser = loggedInUser;
 			AppraisalSeason inProgressAppraisalSeason = _appraisalSeasonDa.GetInProgressAppraisalSeason();
 			ViewBag.InProgressAppraisalSeason = AutoMapper.Mapper.Map<AppraisalSeasonViewModel>(inProgressAppraisalSeason);
+
+			if (inProgressAppraisalSeason.IsActive.GetValueOrDefault())
+			{
+				var users = await _activeDirectory.GetAllAdUsers();
+				var adUsersMap = users.ToDictionary(key => key.id, value => value);
+				loggedInUser.PCAssociateModel = AutoMapper.Mapper.Map<PCAssociateViewModel>(_pcAssocaiteDa.GetPCAssociateForGivenAssociateId(loggedInUser.id));
+				if (loggedInUser.PCAssociateModel != null) loggedInUser.PC = adUsersMap[loggedInUser.PCAssociateModel.PCUserId];
+				var seekingFeedbackFrom = _peersDa.GetPeersForGivenAssociate(loggedInUser.id);
+				loggedInUser.SeekingFeedbackFrom = seekingFeedbackFrom.Count > 0 ? seekingFeedbackFrom.Select(x => AutoMapper.Mapper.Map<PeerViewModel>(x)).ToList() : null;
+				InitUserData(loggedInUser.SeekingFeedbackFrom, adUsersMap);
+				var SendingFeedbackTo = _peersDa.GetUsersWhomeGivenAssociateIsPeer(loggedInUser.id);
+				loggedInUser.SendingFeedbackTo = SendingFeedbackTo.Count > 0 ? SendingFeedbackTo.Select(x => AutoMapper.Mapper.Map<PeerViewModel>(x)).ToList() : null;
+				InitUserData(loggedInUser.SendingFeedbackTo, adUsersMap);
+			}
+
 			return View();
         }
 
-        public ActionResult About()
+		private void InitUserData(IList<PeerViewModel> dataToUpdate, Dictionary<Guid, Models.User> userMap)
+		{
+			if (dataToUpdate == null) return;
+
+			dataToUpdate.ToList().ForEach(x => {
+				x.PeerName = userMap[x.PeerUserId]?.displayName;
+				x.AssociateName = userMap[x.AssociateUserId]?.displayName;
+			});
+		}
+
+		public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
