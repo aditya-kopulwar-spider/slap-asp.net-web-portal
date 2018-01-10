@@ -23,13 +23,13 @@ namespace SLAP_Data
 		public bool IsAdmin(Guid userId)
         {
 			List<UserRole> userRoles = GetAllUserRoles();
-			return userRoles.Any(x => x.UserId == userId && x.Role.RoleName == ROLE_NAME_PC);
+			return userRoles.Any(x => x.UserId == userId && x.Role.RoleName == ROLE_NAME_ADMIN);
 		}
 
 		public bool IsUserPC(Guid userId)
         {
             List<UserRole> userRoles = GetAllUserRoles();
-            return userRoles.Any(x => x.UserId == userId && x.Role.RoleName == ROLE_NAME_ADMIN);
+            return userRoles.Any(x => x.UserId == userId && x.Role.RoleName == ROLE_NAME_PC);
         }
 
         public List<UserRole> GetAllUserRoles(bool refresh = false)
