@@ -142,7 +142,7 @@
 					}
 				</div>
 				<div class="float-left width-48 small-margin">
-					@if (loggedInUser.SendingFeedbackTo.Count > 0)
+					@if (loggedInUser.SendingFeedbackTo != null && loggedInUser.SendingFeedbackTo.Count > 0)
 					{
 						<table border="1" class="width-100" cellpadding="5">
 							<thead>
