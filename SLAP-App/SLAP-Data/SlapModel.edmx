@@ -62,16 +62,6 @@
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="UserTokenCaches">
-          <Key>
-            <PropertyRef Name="UserTokenCacheId" />
-            <PropertyRef Name="LastWrite" />
-          </Key>
-          <Property Name="UserTokenCacheId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="webUserUniqueId" Type="nvarchar(max)" />
-          <Property Name="cacheBits" Type="varbinary(max)" />
-          <Property Name="LastWrite" Type="datetime" Nullable="false" />
-        </EntityType>
         <Association Name="FK__UserRole__RoleId__52593CB8">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
@@ -114,14 +104,6 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
           <EntitySet Name="Peers" EntityType="Self.Peers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserTokenCaches" EntityType="Self.UserTokenCaches" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [UserTokenCaches].[UserTokenCacheId] AS [UserTokenCacheId], 
-    [UserTokenCaches].[webUserUniqueId] AS [webUserUniqueId], 
-    [UserTokenCaches].[cacheBits] AS [cacheBits], 
-    [UserTokenCaches].[LastWrite] AS [LastWrite]
-    FROM [dbo].[UserTokenCaches] AS [UserTokenCaches]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK__UserRole__RoleId__52593CB8" Association="Self.FK__UserRole__RoleId__52593CB8">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="UserRole" EntitySet="UserRole" />
@@ -214,7 +196,6 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
             <End Role="AppraisalSeason" EntitySet="AppraisalSeasons" />
             <End Role="PCAssociate" EntitySet="PCAssociates" />
           </AssociationSet>
-          <EntitySet Name="UserTokenCaches" EntityType="SlapDbModel.UserTokenCach" />
         </EntityContainer>
         <Association Name="FK_Peers_PCAssociates">
           <End Type="SlapDbModel.PCAssociate" Role="PCAssociate" Multiplicity="1" />
@@ -256,16 +237,6 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="UserTokenCach">
-          <Key>
-            <PropertyRef Name="UserTokenCacheId" />
-            <PropertyRef Name="LastWrite" />
-          </Key>
-          <Property Name="UserTokenCacheId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="webUserUniqueId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="cacheBits" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="LastWrite" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -328,16 +299,6 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="AppraisalSeasonId" ColumnName="AppraisalSeasonId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserTokenCaches">
-            <EntityTypeMapping TypeName="SlapDbModel.UserTokenCach">
-              <MappingFragment StoreEntitySet="UserTokenCaches">
-                <ScalarProperty Name="LastWrite" ColumnName="LastWrite" />
-                <ScalarProperty Name="cacheBits" ColumnName="cacheBits" />
-                <ScalarProperty Name="webUserUniqueId" ColumnName="webUserUniqueId" />
-                <ScalarProperty Name="UserTokenCacheId" ColumnName="UserTokenCacheId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

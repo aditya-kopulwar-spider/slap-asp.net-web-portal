@@ -15,10 +15,10 @@ namespace SLAP_App.Models
         private string userId;
         private UserTokenCache Cache;
 
-        public ADALTokenCache(string signedInUserId)
+        public ADALTokenCache(string signedInUserId, string url)
         {
             // associate the cache to the current user of the web app
-            userId = signedInUserId;
+            userId = signedInUserId + url;
             this.AfterAccess = AfterAccessNotification;
             this.BeforeAccess = BeforeAccessNotification;
             this.BeforeWrite = BeforeWriteNotification;

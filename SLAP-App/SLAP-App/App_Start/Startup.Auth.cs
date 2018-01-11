@@ -34,7 +34,8 @@ namespace SLAP_App
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions());
+			app.UseKentorOwinCookieSaver();
+			app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
             app.UseOpenIdConnectAuthentication(
                 new OpenIdConnectAuthenticationOptions
@@ -45,18 +46,27 @@ namespace SLAP_App
 
                     Notifications = new OpenIdConnectAuthenticationNotifications()
                     {
-                        // If there is a code in the OpenID Connect response, redeem it for an access token and refresh token, and store those away.
-                       AuthorizationCodeReceived = (context) => 
-                       {
+						RedirectToIdentityProvider = (context) =>
+						{
+							// This ensures that the address used for sign in and sign out is picked up dynamically from the request
+							// this allows you to deploy your app (to Azure Web Sites, for example)without having to change settings
+							// Remember that the base URL of the address used here must be provisioned in Azure AD beforehand.
+							string appBaseUrl = context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + "/";
+							context.ProtocolMessage.RedirectUri = appBaseUrl;
+							context.ProtocolMessage.PostLogoutRedirectUri = appBaseUrl;
+							return Task.FromResult(0);
+						}, // If there is a code in the OpenID Connect response, redeem it for an access token and refresh token, and store those away.
+						AuthorizationCodeReceived = (context) => 
+						{
                            var code = context.Code;
                            ClientCredential credential = new ClientCredential(clientId, appKey);
                            string signedInUserID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
-                           AuthenticationContext authContext = new AuthenticationContext(Authority, new ADALTokenCache(signedInUserID));
+                           AuthenticationContext authContext = new AuthenticationContext(Authority, new ADALTokenCache(signedInUserID, context.Request.Uri.AbsoluteUri));
                            AuthenticationResult result = authContext.AcquireTokenByAuthorizationCode(
                            code, new Uri(HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Path)), credential, graphResourceId);
 
                            return Task.FromResult(0);
-                       }
+						}
                     }
                 });
         }
