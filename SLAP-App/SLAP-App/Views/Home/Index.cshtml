@@ -68,25 +68,31 @@
 	{
 		if (loggedInUser.IsPC)
 		{
+			<div class="jumbotron overflow-auto">
+				<h1>My Associates</h1>
+				@*<p class="lead">You can view list of associates</p><br />
+					<p><a href="@Url.Action("Index", "PC")" class="btn btn-primary btn-lg">View &raquo;</a></p>*@
 
-		    <div class="jumbotron">
-		        <h1>My Associates</h1>
-		        <p class="lead">You can view list of associates</p><br />
-		        @*		        <p><a href="@Url.Action("Index", "PC")" class="btn btn-primary btn-lg">View &raquo;</a></p>*@
-		        
-		    </div>
-		    <div>
-		        @for (var i = 0; i < pcAssociateViewModels.Count; i++)
-		        {
-		        @Html.Partial("../PC/_pcAssociateView",pcAssociateViewModels[i]);
-		        }
-		    </div>
-		}
-		<div class="jumbotron">
-			<div>
 				<div class="float-left">
-					<h2>@loggedInUser.displayName</h2>
-					<h3>PC: @if (loggedInUser.PCAssociateModel != null) { @Html.Raw(loggedInUser.PC.displayName); } else { @Html.Raw("<font color='red'>PC assignment not done yet</font>"); }</h3>
+					@for (var i = 0; i < pcAssociateViewModels.Count; i++)
+					{
+						@Html.Partial("../PC/_pcAssociateView", pcAssociateViewModels[i]);
+					}
+				</div>
+			</div>
+		}
+		<div class="jumbotron overflow-auto">
+			<h1>Myself - @loggedInUser.displayName</h1>
+			<div class="overflow-auto">
+				<div class="float-left">
+					<h2>
+						PC: @if (loggedInUser.PCAssociateModel != null)
+						{@Html.Raw(loggedInUser.PC.displayName);
+					}
+					else
+					{ @Html.Raw("<font color='red'>PC assignment not done yet</font>");
+				}
+					</h2>
 				</div>
 				<div class="float-right">
 					Self appraisal form <br />
@@ -97,8 +103,7 @@
 					<a href="">Upload</a>
 				</div>
 			</div>
-			<div style="clear: both" />
-			<div>
+			<div class="overflow-auto">
 				<div class="float-left width-48 small-margin">
 					@if (loggedInUser.PCAssociateModel != null && loggedInUser.PCAssociateModel.PeerListFinalized)
 					{
@@ -109,7 +114,7 @@
 									<th>Status</th>
 								</tr>
 							</thead>
-							@foreach(var peer in loggedInUser.SeekingFeedbackFrom)
+							@foreach (var peer in loggedInUser.SeekingFeedbackFrom)
 							{
 								<tr>
 									<td>@peer.PeerName</td>
@@ -147,7 +152,7 @@
 									<th>Upload new</th>
 								</tr>
 							</thead>
-							@foreach(var peer in loggedInUser.SendingFeedbackTo)
+							@foreach (var peer in loggedInUser.SendingFeedbackTo)
 							{
 								<tr>
 									<td>@peer.AssociateName</td>

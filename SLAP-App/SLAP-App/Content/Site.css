@@ -39,6 +39,14 @@ textarea {
 	float: left;
 }
 
+.clear-both {
+	clear: both;
+}
+
+.overflow-auto {
+	overflow: auto;
+}
+
 .width-50 {
 	width: 50%;
 }
