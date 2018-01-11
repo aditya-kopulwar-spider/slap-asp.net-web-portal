@@ -1,16 +1,28 @@
-﻿@using System.Drawing
+﻿@*@using System.Drawing;*@
+
 @model SLAP_App.Models.PCAssociateViewModel
 @{
     var pcAssociateViewModel=Model;
 }
  
 <div class="pc-associate-box">
-    <b>@Html.DisplayFor(model => model.AssociateDisplayName)  </b> @if (!pcAssociateViewModel.PeerListFinalized)
-                                                                   {
-                                                                       <div  style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel,new {@class= "btn btn-primary btn-sm" })</div>
+    <b>@Html.DisplayFor(model => model.AssociateDisplayName)  </b>
+    @if (!pcAssociateViewModel.PeerListFinalized)
+    {
+        <div style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel, new {@class = "btn btn-primary btn-sm"})</div>
     }
     else
-    {<div  style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel,new {@class= "btn btn-primary btn-sm disabled"})</div>
+    {
+        if (!string.IsNullOrEmpty(pcAssociateViewModel.SelfAppraisalDocumentUrl))
+        {
+            <a href="@Model.SelfAppraisalDocumentUrl" class="btn btn-primary btn-sm" style="float: right" target="_blank" title="Download Self Appraisal Form">Download Self Appraisal</a>
+        }
+        else
+        {
+            <a href="" target="_blank" title="Self Appraisal Form Not Uploaded">Download Not Available</a>
+@*                                                                           <div style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel, new {@class = "btn btn-primary btn-sm disabled"})</div>    *@
+        }
+
     }
         <table class="table">
             <tr>
@@ -42,4 +54,6 @@
             }
         </table>
 </div>
+
+
 
