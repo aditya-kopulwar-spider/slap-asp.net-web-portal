@@ -16,11 +16,11 @@
         <div class="float-right">Self appraisal form:
         @if (!string.IsNullOrEmpty(pcAssociateViewModel.SelfAppraisalDocumentUrl))
         {
-            <a href="@Model.SelfAppraisalDocumentUrl" class="btn btn-primary btn-sm" target="_blank" title="Download Self Appraisal Form">Download</a>
+            <a href="@Model.SelfAppraisalDocumentUrl" class="btn btn-primary btn-sm" target="_blank" title="Download Self Appraisal Form For Associate"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
         }
         else
         {
-            @:NA
+			<span class="glyphicon glyphicon-remove-circle color-red" title="Not provided"></span>
          }
         </div>
 
@@ -49,11 +49,11 @@
                         <td>
                         @if ((!string.IsNullOrEmpty(Model.Peers[i].FeedbackDocumentUrl)))
                             {
-                                <a href="@Model.Peers[i].FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
+                                <a href="@Model.Peers[i].FeedbackDocumentUrl" target="_blank" title="Download Peer Feedback Form For Associate"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
                             }
                             else
                             {
-                                @:NA
+								<span class="glyphicon glyphicon-remove-circle color-red" title="Not provided"></span>
                             }
                         </td>
                     }

@@ -63,6 +63,14 @@ textarea {
 	width: 100%;
 }
 
+.color-red {
+	color: red;
+}
+
+.color-green {
+	color: green;
+}
+
 .pc-associate-box {
 	margin: 5px;
 	padding: 5px;

@@ -98,7 +98,7 @@
 					Self appraisal form <br />
 					@if (loggedInUser.PCAssociateModel != null && !string.IsNullOrEmpty(loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl))
 					{
-						<a href="@loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl">Download</a>@:&nbsp;&nbsp;&nbsp;
+						<a href="@loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl" title="Download Self Appraisal Form"><span class="glyphicon glyphicon-download color-green"></span></a>@:&nbsp;&nbsp;&nbsp;
 					}
 					<a href="">Upload</a>
 				</div>
@@ -121,15 +121,15 @@
 									<td>
 										@if (string.IsNullOrEmpty(peer.FeedbackDocumentUrl))
 										{
-											<font color="red">not provided</font>
+											<span class="glyphicon glyphicon-remove-circle color-red" title="Not provided"></span>
 										}
 										else if (peer.ShareFeedbackWithAssociate)
 										{
-											<a href="@peer.FeedbackDocumentUrl">Download</a>
+											<a href="@peer.FeedbackDocumentUrl" title="Download Appraisal Form From Peer"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
 										}
 										else
 										{
-											<font color="green">provided, but not shared</font>
+											<span class="glyphicon glyphicon-ok color-green" title="Provided, but not shared"></span>
 										}
 									</td>
 								</tr>
@@ -159,11 +159,11 @@
 									<td>
 										@if (string.IsNullOrEmpty(peer.FeedbackDocumentUrl))
 										{
-											@:NA
+											<span class="glyphicon glyphicon-remove-circle color-red" title="Not provided"></span>
 										}
 										else
 										{
-											<a href="@peer.FeedbackDocumentUrl">Download</a>
+											<a href="@peer.FeedbackDocumentUrl" title="Download Appraisal Form For Peer"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
 										}
 									</td>
 									<td><a href="">Upload</a></td>
