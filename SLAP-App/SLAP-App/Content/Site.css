@@ -31,6 +31,10 @@ textarea {
 	margin: 5px;
 }
 
+.large-margin-right {
+	margin-right: 20px;
+}
+
 .float-right {
 	float: right;
 }

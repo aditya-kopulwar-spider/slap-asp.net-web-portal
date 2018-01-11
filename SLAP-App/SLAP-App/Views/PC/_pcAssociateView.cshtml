@@ -6,33 +6,34 @@
 }
  
 <div class="pc-associate-box">
-    <b>@Html.DisplayFor(model => model.AssociateDisplayName)  </b>
+    <b class="large-margin-right">@Html.DisplayFor(model => model.AssociateDisplayName)  </b>
     @if (!pcAssociateViewModel.PeerListFinalized)
     {
         <div style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel, new {@class = "btn btn-primary btn-sm"})</div>
     }
     else
     {
-        if (!string.IsNullOrEmpty(pcAssociateViewModel.SelfAppraisalDocumentUrl))
+        <div class="float-right">Self appraisal form:
+        @if (!string.IsNullOrEmpty(pcAssociateViewModel.SelfAppraisalDocumentUrl))
         {
-            <a href="@Model.SelfAppraisalDocumentUrl" class="btn btn-primary btn-sm" style="float: right" target="_blank" title="Download Self Appraisal Form">Download Self Appraisal</a>
+            <a href="@Model.SelfAppraisalDocumentUrl" class="btn btn-primary btn-sm" target="_blank" title="Download Self Appraisal Form">Download</a>
         }
         else
         {
-            <a href="" target="_blank" title="Self Appraisal Form Not Uploaded">Download Not Available</a>
-@*                                                                           <div style="float: right;"> @Html.ActionLink("Peers", "AssignPeersToAssociates", "PC", pcAssociateViewModel, new {@class = "btn btn-primary btn-sm disabled"})</div>    *@
-        }
+            @:NA
+         }
+        </div>
 
     }
         <table class="table">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Peers[0].PeerName)
+                    Peer
                 </th>
                 @if (pcAssociateViewModel.PeerListFinalized)
                 {
                     <th>
-                        Download Feedback Form
+                        Feedback Form
                     </th>
                 }
                
@@ -43,13 +44,19 @@
                     <td>
                         @Html.DisplayFor(model => Model.Peers[i].PeerName)
                     </td>
-                    <td>
-                        @if ( pcAssociateViewModel.PeerListFinalized && (!string.IsNullOrEmpty(Model.Peers[i].FeedbackDocumentUrl)))
-                        {
-                            <a href="@Model.Peers[i].FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
-                        }
-                    </td>
-
+                    @if (pcAssociateViewModel.PeerListFinalized)
+                    {
+                        <td>
+                        @if ((!string.IsNullOrEmpty(Model.Peers[i].FeedbackDocumentUrl)))
+                            {
+                                <a href="@Model.Peers[i].FeedbackDocumentUrl" target="_blank" title="Download Feedback form">Download</a>
+                            }
+                            else
+                            {
+                                @:NA
+                            }
+                        </td>
+                    }
                 </tr>
             }
         </table>
