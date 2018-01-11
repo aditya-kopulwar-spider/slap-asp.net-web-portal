@@ -13,6 +13,7 @@
         <AssociationConnector Association="SlapDbModel.FK_Peers_PCAssociates" />
         <EntityTypeShape EntityType="SlapDbModel.AppraisalSeason" Width="2.625" PointX="7.25" PointY="4.125" />
         <AssociationConnector Association="SlapDbModel.FK_PCAssociates_AppraisalSeason" />
+        <EntityTypeShape EntityType="SlapDbModel.UserTokenCach" Width="1.5" PointX="0.75" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -10,7 +10,7 @@ namespace SLAP_App.Models
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext()
-            : base("DefaultConnection")
+            : base("ConnectionString")
         {
         }
 

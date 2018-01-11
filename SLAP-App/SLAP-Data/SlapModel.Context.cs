@@ -30,5 +30,6 @@ namespace SLAP_Data
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<AppraisalSeason> AppraisalSeasons { get; set; }
+        public virtual DbSet<UserTokenCach> UserTokenCaches { get; set; }
     }
 }

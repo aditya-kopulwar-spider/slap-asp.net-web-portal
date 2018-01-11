@@ -107,6 +107,9 @@
       <DependentUpon>SlapModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserRolesDA.cs" />
+    <Compile Include="UserTokenCach.cs">
+      <DependentUpon>SlapModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
