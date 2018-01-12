@@ -97,8 +97,12 @@ namespace SLAP_App.Controllers
             var _userList = await _activeDirectory.GetAllAdUsers();
             ViewBag.PCId = pcId;
             ViewBag.pcName = _userList.First(p => p.id == pcId).displayName;
-            var pcAsoociate = _pcAssociatesDa.GetPCAssociateForGivenAssociateId((Guid) pcId);
-            var pcAsoociatePcUserId = pcAsoociate.PCUserId;
+            var pcAssociate = _pcAssociatesDa.GetPCAssociateForGivenAssociateId((Guid) pcId);
+            var pcAsoociatePcUserId=Guid.Empty;
+            if (pcAssociate!=null)
+            {
+                 pcAsoociatePcUserId = pcAssociate.PCUserId;
+            }
             var allPcAssociates = _pcAssociatesDa.GetAllPcAssociatesForInProgressAppraisalSeason().ToDictionary(k => k.AssociateUserId);
             List<PCAssociateUserViewModel> pcAssociateUsers = new List<PCAssociateUserViewModel>();
             _userList.ForEach(p => pcAssociateUsers.Add(new PCAssociateUserViewModel()

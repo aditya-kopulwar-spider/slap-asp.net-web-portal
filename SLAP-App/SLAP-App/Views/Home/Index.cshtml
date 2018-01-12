@@ -55,8 +55,8 @@
 
 @if (inProgressAppraisalSeason != null)
 {
-	if (!inProgressAppraisalSeason.IsActive)
-	{
+    if (!inProgressAppraisalSeason.IsActive && loggedInUser.IsAdmin)
+    {
 		<div class="jumbotron">
 			<h1>Employee Hierarchy</h1>
 			<p class="lead">You can view list of user and change the hierarchy</p><br />
@@ -100,6 +100,7 @@
 					{
 						<a href="@loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl" title="Download Self Appraisal Form"><span class="glyphicon glyphicon-download color-green"></span></a>@:&nbsp;&nbsp;&nbsp;
 					}
+
 					<a href="javascript:return false;" title="Upload Self Appraisal Form" class="uploadSelfAppraisalForm"
 					   data-feedback-for="@loggedInUser.id"
 					   data-feedback-for-name="@loggedInUser.displayName"
