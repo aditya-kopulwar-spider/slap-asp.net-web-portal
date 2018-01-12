@@ -19,12 +19,14 @@ namespace SLAP_App.Controllers
         private PeersDA _peersDa;
         private ActiveDirectory _activeDirectory;
         private AppraisalSeasonDA _appraisalSeasonDa;
+        private NotificationService _notificationService;
         public PCController()
         {
             _pcAssociatesDa=new PCAssociatesDA();
             _activeDirectory=new ActiveDirectory();
             _peersDa=new PeersDA();
             _appraisalSeasonDa = new AppraisalSeasonDA();
+            _notificationService=new NotificationService();
         }
         // GET: Associates For pc
         public async Task<ActionResult> Index()
@@ -73,7 +75,7 @@ namespace SLAP_App.Controllers
             return View(associatePeerSelectionModel);
         }
 
-        public ActionResult AddPeers(AssociatePeerSelectionModel peerSelectionModel,string addPeersButton)
+        public async Task<ActionResult> AddPeers(AssociatePeerSelectionModel peerSelectionModel,string addPeersButton)
         {
            
             var peers = peerSelectionModel.PeerViewModels.Where(p=>p.IsSelected==true)
@@ -88,6 +90,21 @@ namespace SLAP_App.Controllers
                     var pcAssociate = _pcAssociatesDa.GetPCAssociate(pcAssociateId);
                     pcAssociate.PeerListFinalized = true;
                     _pcAssociatesDa.EditPCAssociate(pcAssociate);
+
+                    #region mail
+                    {
+                        var allAdUsers = await _activeDirectory.GetAllAdUsers();
+                        var allAdUsersDictionary = allAdUsers.ToList().ToDictionary(p => p.id);
+                        var pc = allAdUsersDictionary[_pcAssociatesDa.GetPCAssociate(pcAssociateId).PCUserId];
+                        var associate =
+                            allAdUsersDictionary[_pcAssociatesDa.GetPCAssociate(pcAssociateId).AssociateUserId];
+                        var peerUsers = new List<User>();
+                        peers.ForEach(p=>peerUsers.Add(allAdUsersDictionary[p.PeerUserId]));
+                        var activeAppraisalSeason = _appraisalSeasonDa.GetActiveAppraisalSeason();
+                        _notificationService.SendMessageToAssociateOnPeerListFinalization(pc,associate,peerUsers);
+                       _notificationService.SendMessageToPeersOnPeerListFinalization(pc,associate,peerUsers, activeAppraisalSeason.Name);
+                    }
+                    #endregion
                 }
             }
 
