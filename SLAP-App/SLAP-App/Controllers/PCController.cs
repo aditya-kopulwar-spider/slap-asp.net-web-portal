@@ -91,7 +91,7 @@ namespace SLAP_App.Controllers
                     pcAssociate.PeerListFinalized = true;
                     _pcAssociatesDa.EditPCAssociate(pcAssociate);
 
-                    #region mail
+                    #region mailNotification
                     {
                         var allAdUsers = await _activeDirectory.GetAllAdUsers();
                         var allAdUsersDictionary = allAdUsers.ToList().ToDictionary(p => p.id);

@@ -97,6 +97,8 @@ namespace SLAP_App.Controllers
             var _userList = await _activeDirectory.GetAllAdUsers();
             ViewBag.PCId = pcId;
             ViewBag.pcName = _userList.First(p => p.id == pcId).displayName;
+            var pcAsoociate = _pcAssociatesDa.GetPCAssociateForGivenAssociateId((Guid) pcId);
+            var pcAsoociatePcUserId = pcAsoociate.PCUserId;
             var allPcAssociates = _pcAssociatesDa.GetAllPcAssociatesForInProgressAppraisalSeason().ToDictionary(k => k.AssociateUserId);
             List<PCAssociateUserViewModel> pcAssociateUsers = new List<PCAssociateUserViewModel>();
             _userList.ForEach(p => pcAssociateUsers.Add(new PCAssociateUserViewModel()
@@ -108,7 +110,7 @@ namespace SLAP_App.Controllers
             }));
 
             var pcAssociateUserViewModels = pcAssociateUsers
-                .Where(p => (p.PCUserId == pcId || p.PCUserId == Guid.Empty) && (p.AssociateUserId != pcId)).ToList();
+                .Where(p => (p.PCUserId == pcId || p.PCUserId == Guid.Empty) && (p.AssociateUserId != pcId) &&(pcAsoociatePcUserId!=p.AssociateUserId)).ToList();
             pcAssociateUserViewModels.ForEach(p=>p.PCUserId=(Guid) pcId);
             AssociateSelectionViewModel associateSelectionViewModel=new AssociateSelectionViewModel();
             associateSelectionViewModel.PcAssociateUserViewModels = pcAssociateUserViewModels;

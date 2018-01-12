@@ -19,12 +19,14 @@ namespace SLAP_App.Controllers
         private AppraisalSeasonDA _appraisalSeasonDa;
         private PCAssociatesDA _pcAssociateDa;
 		private ActiveDirectory _activeDirectory;
+        private NotificationService _notificationService;
 
 		public AppraisalSeasonController()
         {
             _appraisalSeasonDa = new AppraisalSeasonDA();
 			_pcAssociateDa = new PCAssociatesDA();
             _activeDirectory=new ActiveDirectory();
+            _notificationService=new NotificationService();
 		}
 
 		// GET: AppraisalProcesses
@@ -192,10 +194,32 @@ namespace SLAP_App.Controllers
 		// POST: AppraisalProcesses/Delete/5
 		[HttpPost, ActionName("Start")]
 		//        [ValidateAntiForgeryToken]
-		public ActionResult StartConfirmed(int id)
+		public async Task<ActionResult> StartConfirmed(int id)
 		{
 			_appraisalSeasonDa.StartAppraisalSeason(id);
-			return RedirectToAction("Index", "Home");
+
+		    var allCurrentYearPcAssociates = _pcAssociateDa.GetAllCurrentYearPcAssociates().ToList();
+		    var allAdUsers = await _activeDirectory.GetAllAdUsers();
+		    var allAdUsersDictionary = allAdUsers.ToList().ToDictionary(p => p.id);
+
+            foreach (var pcAssociate in allCurrentYearPcAssociates)
+            {
+                var pc = allAdUsersDictionary[pcAssociate.PCUserId];
+                var associate = allAdUsersDictionary[pcAssociate.AssociateUserId];
+                var appraisalSeasonName = pcAssociate.AppraisalSeason.Name;
+                _notificationService.SendMesageToAssociateOnPcAssignment(pc,associate,appraisalSeasonName);
+            }
+
+		    var groupByPCId = allCurrentYearPcAssociates.GroupBy(p => p.PCUserId);
+		    foreach (var pc in groupByPCId)
+		    {
+                var associates=new List<User>();
+                pc.ToList().ForEach(p=>associates.Add(allAdUsersDictionary[p.AssociateUserId]));
+		        var pcUser = allAdUsersDictionary[pc.First().PCUserId];
+		        var appraisalSeasonName = pc.First().AppraisalSeason.Name;
+		        _notificationService.SendMesageToPcOnAssociateAssignment(pcUser,associates, appraisalSeasonName);
+		    }
+		    return RedirectToAction("Index", "Home");
 		}
 
 		// GET: AppraisalProcesses/Complete/5

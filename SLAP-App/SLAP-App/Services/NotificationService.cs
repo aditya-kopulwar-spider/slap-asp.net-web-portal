@@ -13,11 +13,13 @@ namespace SLAP_App.Services
     {
         public void SendMessageToAssociateOnPcAssignment(User associate, User pc)
         {
-            Email email=new Email();
-            email.ToEmail = associate.mail;
-            email.CcEmail = pc.mail;
-            email.Subject = "PC Assigned";
-            email.Message =$"Hi {associate.displayName},<br/> your new PC is {pc.displayName}" ;
+            var email = new Email
+            {
+                ToEmail = associate.mail,
+                CcEmail = pc.mail,
+                Subject = "PC Assigned",
+                Message = $"Hi {associate.displayName},<br/> your new PC is {pc.displayName}"
+            };
             AddMessageToQueue(email);
         }
 
@@ -35,10 +37,12 @@ namespace SLAP_App.Services
 
         public void SendMessageToAssociateOnPeerListFinalization(User pc, User associate, List<User> peerUsers)
         {
-            var email=new Email();
-            email.CcEmail = pc.userPrincipalName;
-            email.ToEmail = associate.userPrincipalName;
-            email.Subject = "PeerList Finalized";
+            var email = new Email
+            {
+                CcEmail = pc.userPrincipalName,
+                ToEmail = associate.userPrincipalName,
+                Subject = "PeerList Finalized"
+            };
             var peerList = "";
             var index = 0;
             foreach (var peerUser in peerUsers)
@@ -46,29 +50,65 @@ namespace SLAP_App.Services
                 index++;
                 peerList = peerList + "\n" + " " + index + ". " + peerUser.displayName;
             }
-            email.Message = $"Hi {associate.displayName}, your peer list is finalized. And your peers are: {peerList}";
+            email.Message = $"Hi {associate.displayName}, your peer list is finalized. And your peers are:" +
+                            $" {peerList}";
             AddMessageToQueue(email);
         }
 
-        public void SendMessageToPeersOnPeerListFinalization(User pc, User associate, List<User> peerUsers, string appraisalSeasonName)
+        public void SendMessageToPeersOnPeerListFinalization(User pc, User associate, List<User> peerUsers, 
+            string appraisalSeasonName)
         {
              foreach (var peerUser in peerUsers)
             {
-                var email = new Email();
-                email.CcEmail = pc.userPrincipalName + "; " + associate.userPrincipalName;
-                email.Subject = $"Performance Feedback request from {associate.displayName} for {appraisalSeasonName}";
+                var email = new Email
+                {
+                    CcEmail = pc.userPrincipalName + "; " + associate.userPrincipalName,
+                    Subject = $"Performance Feedback request from {associate.displayName} " +
+                              $"for {appraisalSeasonName}",
+                    ToEmail = peerUser.userPrincipalName,
+                    Message = $"Hi, {peerUser.displayName} \n \t \t We have started our aanual appraisal process for" +
+                              $" {appraisalSeasonName}, and {associate.displayName} " +
+                              $"requests your feedback on his work and contribution this season"
+                };
 
-                email.ToEmail = peerUser.userPrincipalName;
-                email.Message= $"Hi, {peerUser.displayName} \n \t \t We have started our aanual appraisal process for {appraisalSeasonName}, and {associate.displayName} requests your feedback on his work and contribution this season";
                 AddMessageToQueue(email);
             }
+        }
 
-           
+        public void SendMesageToAssociateOnPcAssignment(User pc, User associate, string appraisalSeasonName)
+        {
+            var email = new Email
+            {
+                ToEmail = associate.userPrincipalName,
+                CcEmail = pc.userPrincipalName,
+                Subject = $"PC Assignemnt for Appraisal Season {appraisalSeasonName}",
+                Message =
+                    $"Hi {associate.displayName}, \n\t Your PC for appraisal season {appraisalSeasonName} is {pc.displayName}. " +
+                    $"Please contact your PC({pc.displayName}) to finalize peer list."
+            };
+            AddMessageToQueue(email);
+        }
 
-            
-
-
-
+        public void SendMesageToPcOnAssociateAssignment(User pcUser, List<User> associates, string appraisalSeasonName)
+        {
+            var email=new Email();
+            email.ToEmail = pcUser.userPrincipalName;
+            email.Subject = $"Associate Assignment for Appraisal Season {appraisalSeasonName}";
+            var associateNames = "";
+            var index = 0;
+            foreach (var associate in associates)
+            {
+                index++;
+                if (associates.Count==1)
+                {
+                    associateNames ="\n" + associate.displayName;
+                }
+                associateNames = associateNames + "\n" + index + ". " + associate.displayName;
+            }
+            email.Message = $"Hi {pcUser.displayName}, \n\t\t" +
+                            $"You have been assigned as PC for appraisal season {appraisalSeasonName}" +
+                            $" for following associates: \n\t\t{associateNames}";
+            AddMessageToQueue(email);
         }
     }
 }
