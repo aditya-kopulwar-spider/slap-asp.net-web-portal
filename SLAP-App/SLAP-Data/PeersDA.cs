@@ -80,5 +80,10 @@ namespace SLAP_Data
             _dbEntities.SaveChanges();
             return true;    
         }
-    }
+
+		public Peer GetByPeerAssociateId(int peerAssociateId)
+		{
+			return _dbEntities.Peers.Where(p => p.PeerAssociateId == peerAssociateId).FirstOrDefault();
+		}
+	}
 }

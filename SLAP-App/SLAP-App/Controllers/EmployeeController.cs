@@ -44,6 +44,7 @@ namespace SLAP_App.Controllers
             };
             return View(viewModels);
         }
+
         [HttpPost]
         public async Task<ActionResult> UpdateFeedback(EmployeeViewModel employeeViewModel)
         {
@@ -56,7 +57,8 @@ namespace SLAP_App.Controllers
             _peersDa.UpdatePeer(peer);
             return RedirectToAction("Index");
         }
-        [HttpPost]
+
+		[HttpPost]
         public async Task<ActionResult> UpdateSelfAppraisal(EmployeeViewModels employeeViewModels)
         {
             var pcAssociate = _pcAssocaiteDa.GetPCAssociate(employeeViewModels.PcAssociateViewModel.PCAssociatesId);

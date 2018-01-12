@@ -11,7 +11,10 @@ namespace SLAP_App
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+			bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+						"~/Scripts/jquery-ui-{version}.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -26,6 +29,14 @@ namespace SLAP_App
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
-        }
-    }
+
+			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
+						"~/Content/themes/base/core.css",
+						"~/Content/themes/base/resizable.css",
+						"~/Content/themes/base/selectable.css",
+						"~/Content/themes/base/button.css",
+						"~/Content/themes/base/dialog.css",
+						"~/Content/themes/base/theme.css"));
+		}
+	}
 }

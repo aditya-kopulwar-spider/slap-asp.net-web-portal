@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -22,6 +23,8 @@ namespace SLAP_App.Controllers
 		private UserRolesDA _userRolesDA = new UserRolesDA();
 		private PCAssociatesDA _pcAssocaiteDa = new PCAssociatesDA();
 		private PeersDA _peersDa = new PeersDA();
+		private FileService _fileService = new FileService();
+
 		public HomeController()
 		{
 			_appraisalSeasonDa = new AppraisalSeasonDA();
@@ -92,5 +95,35 @@ namespace SLAP_App.Controllers
 
             return View();
         }
-    }
+
+
+		[HttpPost]
+		public async Task<ActionResult> UpdateFeedback(Guid feedbackFor, string feedbackForName, Guid feedbackFrom, string feedbackFromName, HttpPostedFileBase file, int peerAssociateId, bool shareWithPeer)
+		{
+			var activeAppraisalProces = _appraisalSeasonDa.GetActiveAppraisalSeason();
+			//var name = string.Concat(feedbackForName + "-" + feedbackFromName + "-" + activeAppraisalProces.Name);
+			var ext = Path.GetExtension(file.FileName);
+			var name = $"[{activeAppraisalProces.Name}]-for-[{feedbackForName}]-from-[{feedbackFromName}]{ext}";
+
+			var path = await _fileService.UploadFile(file, name, activeAppraisalProces.Name);
+			var peer = _peersDa.GetByPeerAssociateId(peerAssociateId);
+			peer.FeedbackDocumentUrl = path;
+			peer.ShareFeedbackWithAssociate = shareWithPeer;
+			_peersDa.UpdatePeer(peer);
+			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		public async Task<ActionResult> UpdateSelfAppraisal(Guid feedbackFor, string feedbackForName, HttpPostedFileBase file, int pcAssociateId)
+		{
+			var pcAssociate = _pcAssocaiteDa.GetPCAssociate(pcAssociateId);
+			var appraisalSeason = _appraisalSeasonDa.GetActiveAppraisalSeason();
+			var ext = Path.GetExtension(file.FileName);
+			var name = $"[{appraisalSeason.Name}]-self-appraisal-for-[{feedbackForName}]{ext}";
+			var path = await _fileService.UploadFile(file, name, appraisalSeason.Name);
+			pcAssociate.SelfAppraisalDocumentUrl = path;
+			_pcAssocaiteDa.EditPCAssociate(pcAssociate);
+			return RedirectToAction("Index");
+		}
+	}
 }

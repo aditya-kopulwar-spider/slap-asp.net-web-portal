@@ -95,12 +95,17 @@
 					</h2>
 				</div>
 				<div class="float-right">
-					Self appraisal form <br />
+					Self appraisal form:
 					@if (loggedInUser.PCAssociateModel != null && !string.IsNullOrEmpty(loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl))
 					{
 						<a href="@loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl" title="Download Self Appraisal Form"><span class="glyphicon glyphicon-download color-green"></span></a>@:&nbsp;&nbsp;&nbsp;
 					}
-					<a href="">Upload</a>
+					<a href="javascript:return false;" title="Upload Self Appraisal Form" class="uploadSelfAppraisalForm"
+					   data-feedback-for="@loggedInUser.id"
+					   data-feedback-for-name="@loggedInUser.displayName"
+					   data-record-id="@(loggedInUser.PCAssociateModel != null ? loggedInUser.PCAssociateModel.PCAssociatesId : 0)">
+						<span class="glyphicon glyphicon-upload color-blue"></span>
+					</a>
 				</div>
 			</div>
 			<div class="overflow-auto">
@@ -110,7 +115,7 @@
 						<table border="1" class="width-100" cellpadding="5">
 							<thead>
 								<tr>
-									<th>Seeking feedback from</th>
+									<th>Seeking Feedback From</th>
 									<th>Status</th>
 								</tr>
 							</thead>
@@ -125,7 +130,7 @@
 										}
 										else if (peer.ShareFeedbackWithAssociate)
 										{
-											<a href="@peer.FeedbackDocumentUrl" title="Download Appraisal Form From Peer"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
+											<a href="@peer.FeedbackDocumentUrl" title="Download Feedback From Peer"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
 										}
 										else
 										{
@@ -138,7 +143,7 @@
 					}
 					else
 					{
-						@Html.Raw("<font color='red'>Peer list not finalized yet</font>");
+						@Html.Raw("<font color='red'>Peer list is not finalized yet</font>");
 					}
 				</div>
 				<div class="float-left width-48 small-margin">
@@ -147,9 +152,9 @@
 						<table border="1" class="width-100" cellpadding="5">
 							<thead>
 								<tr>
-									<th>Sending feedback to</th>
-									<th>Current version</th>
-									<th>Upload new</th>
+									<th>Sending Feedback To</th>
+									<th>Current Version</th>
+									<th>Upload</th>
 								</tr>
 							</thead>
 							@foreach (var peer in loggedInUser.SendingFeedbackTo)
@@ -163,42 +168,60 @@
 										}
 										else
 										{
-											<a href="@peer.FeedbackDocumentUrl" title="Download Appraisal Form For Peer"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
+											<a href="@peer.FeedbackDocumentUrl" title="Download Feedback For Peer"><span class="glyphicon glyphicon-download color-green" title="Download"></span></a>
 										}
 									</td>
-									<td><a href="">Upload</a></td>
+									<td>
+										<a href="javascript:return false;" title="Upload Peer Feedback Form" class="uploadPeerFeedbackForm"
+										   data-record-id="@peer.PeerAssociateId"
+										   data-feedback-from="@peer.PeerUserId"
+										   data-feedback-from-name="@peer.PeerName"
+										   data-feedback-for="@peer.AssociateUserId"
+										   data-feedback-for-name="@peer.AssociateName">
+											<span class="glyphicon glyphicon-upload color-blue"></span>
+										</a>
+									</td>
 								</tr>
 							}
 						</table>
 					}
 					else
 					{
-						@Html.Raw("<font color='red'>No one seeking feedback from you yet</font>");
+						@Html.Raw("<font color='red'>No one is seeking feedback from you yet</font>");
 					}
 				</div>
 			</div>
 		</div>
+
+		<div id="uploadSelfAppraisalFormDialog" title="Upload Self Appraisal Form" style="display: none">
+			@using (Html.BeginForm("UpdateSelfAppraisal", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadSelfAppraisalForm" }))
+			{
+				<div class="width-100"><label class="width-20" for="selfAppraisalForName">For:</label><span id="selfAppraisalForName"></span></div>
+				<div class="width-100"><label class="width-20" for="selfAppraisalFileName">Document:</label><span id="selfAppraisalFileName" class="overflow-hidden"></span><label class="fileContainer float-right">...<input type="file" name="file" onchange="javascript: $('#selfAppraisalFileName').text(this.files.item(0).name);" /></label></div>
+				<input type="hidden" name="feedbackFor" value="" />
+				<input type="hidden" name="feedbackForName" value="" />
+				<input type="hidden" name="pcAssociateId" value="" />
+			}
+		</div>
+
+		<div id="uploadPeerFeedbackFormDialog" title="Upload Peer Feedback Form" style="display: none">
+			@using (Html.BeginForm("UpdateFeedback", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadPeerFeedbackForm" }))
+			{
+				<div class="width-100"><label class="width-20" for="peerFeedbackFromName">From:</label><span id="peerFeedbackFromName"></span></div>
+				<div class="width-100"><label class="width-20" for="peerFeedbackForName">To:</label><span id="peerFeedbackForName"></span></div>
+				<div class="width-100"><label class="width-20" for="peerFeedbackFileName">Document:</label><span id="peerFeedbackFileName" class="overflow-hidden"></span><label class="fileContainer float-right">...<input type="file" name="file" onchange="javascript: $('#peerFeedbackFileName').text(this.files.item(0).name);" /></label></div>
+				<input type="checkbox" name="shareWithPeer" id="shareWithPeer" value="true" /> <label for="shareWithPeer">Share with peer</label>
+				<input type="hidden" name="shareWithPeer" value="false" />
+				<input type="hidden" name="feedbackFor" value="" />
+				<input type="hidden" name="feedbackForName" value="" />
+				<input type="hidden" name="feedbackFrom" value="" />
+				<input type="hidden" name="feedbackFromName" value="" />
+				<input type="hidden" name="peerAssociateId" value="" />
+			}
+		</div>
+		@section scripts {
+			@Scripts.Render("~/Scripts/main.js")
+			@Styles.Render("~/Content/themes/base/css")
+		}
 	}
-	@*<div class="row">*@
-	@*    <div class="col-md-4">*@
-	@*        <h2>Getting started</h2>*@
-	@*        <p>*@
-	@*            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that*@
-	@*            enables a clean separation of concerns and gives you full control over markup*@
-	@*            for enjoyable, agile development.*@
-	@*        </p>*@
-	@*        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>*@
-	@*    </div>*@
-	@*    <div class="col-md-4">*@
-	@*        <h2>Get more libraries</h2>*@
-	@*        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>*@
-	@*        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>*@
-	@*    </div>*@
-	@*    <div class="col-md-4">*@
-	@*        <h2>Web Hosting</h2>*@
-	@*        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>*@
-	@*        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>*@
-	@*    </div>*@
-	@*    @Html.ActionLink("List of Appraisal Processes", "Index", "AppraisalProcesses")*@
-	@*</div>*@
 }
