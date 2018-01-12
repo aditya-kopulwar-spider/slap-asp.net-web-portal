@@ -52,7 +52,7 @@ namespace SLAP_App.Controllers
 			ViewBag.LoggedInUser = loggedInUser;
 			AppraisalSeason inProgressAppraisalSeason = _appraisalSeasonDa.GetInProgressAppraisalSeason();
 			ViewBag.InProgressAppraisalSeason = AutoMapper.Mapper.Map<AppraisalSeasonViewModel>(inProgressAppraisalSeason);
-			if (inProgressAppraisalSeason.IsActive.GetValueOrDefault())
+			if (inProgressAppraisalSeason != null && inProgressAppraisalSeason.IsActive.GetValueOrDefault())
 			{
 				var users = await _activeDirectory.GetAllAdUsers();
 				var adUsersMap = users.ToDictionary(key => key.id, value => value);
