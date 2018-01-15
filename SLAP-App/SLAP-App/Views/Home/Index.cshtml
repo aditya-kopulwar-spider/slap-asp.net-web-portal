@@ -74,9 +74,16 @@
 					<p><a href="@Url.Action("Index", "PC")" class="btn btn-primary btn-lg">View &raquo;</a></p>*@
 
 				<div class="float-left">
-					@for (var i = 0; i < pcAssociateViewModels.Count; i++)
+					@if (pcAssociateViewModels.Count == 0)
 					{
+						<font color='red'>You haven't been assigned any associates yet.</font>
+					}
+					else
+					{
+						for (var i = 0; i < pcAssociateViewModels.Count; i++)
+						{
 						@Html.Partial("../PC/_pcAssociateView", pcAssociateViewModels[i]);
+						}
 					}
 				</div>
 			</div>
