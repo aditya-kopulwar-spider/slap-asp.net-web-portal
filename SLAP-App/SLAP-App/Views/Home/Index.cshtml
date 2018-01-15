@@ -95,7 +95,7 @@
 					</h2>
 				</div>
 				
-@if (@loggedInUser.PCAssociateModel!=null)
+@if (@loggedInUser.PCAssociateModel!=null && loggedInUser.PCAssociateModel.PeerListFinalized)
 {<div class="float-right">
      Self appraisal form:
      @if (/*loggedInUser.PCAssociateModel != null && */!string.IsNullOrEmpty(loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl))
