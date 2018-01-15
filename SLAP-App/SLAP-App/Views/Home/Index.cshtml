@@ -94,20 +94,23 @@
 				}
 					</h2>
 				</div>
-				<div class="float-right">
-					Self appraisal form:
-					@if (loggedInUser.PCAssociateModel != null && !string.IsNullOrEmpty(loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl))
-					{
-						<a href="@loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl" title="Download Self Appraisal Form"><span class="glyphicon glyphicon-download color-green"></span></a>@:&nbsp;&nbsp;&nbsp;
-					}
-
-					<a href="javascript:return false;" title="Upload Self Appraisal Form" class="uploadSelfAppraisalForm"
-					   data-feedback-for="@loggedInUser.id"
-					   data-feedback-for-name="@loggedInUser.displayName"
-					   data-record-id="@(loggedInUser.PCAssociateModel != null ? loggedInUser.PCAssociateModel.PCAssociatesId : 0)">
-						<span class="glyphicon glyphicon-upload color-blue"></span>
-					</a>
-				</div>
+				
+@if (@loggedInUser.PCAssociateModel!=null)
+{<div class="float-right">
+     Self appraisal form:
+     @if (/*loggedInUser.PCAssociateModel != null && */!string.IsNullOrEmpty(loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl))
+     {
+         <a href="@loggedInUser.PCAssociateModel.SelfAppraisalDocumentUrl" title="Download Self Appraisal Form"><span class="glyphicon glyphicon-download color-green"></span></a>@:&nbsp;&nbsp;&nbsp;
+     }
+     <a href="javascript:return false;" title="Upload Self Appraisal Form" class="uploadSelfAppraisalForm"
+        data-feedback-for="@loggedInUser.id"
+        data-feedback-for-name="@loggedInUser.displayName"
+        data-record-id="@(loggedInUser.PCAssociateModel != null ? loggedInUser.PCAssociateModel.PCAssociatesId : 0)">
+         <span class="glyphicon glyphicon-upload color-blue"></span>
+     </a>
+ </div>
+}
+				 
 			</div>
 			<div class="overflow-auto">
 				<div class="float-left width-48 small-margin">
