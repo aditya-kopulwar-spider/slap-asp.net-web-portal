@@ -20,6 +20,7 @@ namespace SLAP_App.Models
         public string preferredLanguage { get; set; }
         public string surname { get; set; }
         public string userPrincipalName { get; set; }
+        public User Manager{ get; set; }
         public bool IsPC { get; set; }
         public bool IsAdmin { get; set; }
 
@@ -27,7 +28,12 @@ namespace SLAP_App.Models
 		public PCAssociateViewModel PCAssociateModel { get; set; }
 		public IList<PeerViewModel> SeekingFeedbackFrom { get; set; }
 		public IList<PeerViewModel> SendingFeedbackTo { get; set; }
-	}
+
+        public static implicit operator User(string v)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     public class RootObject
     {

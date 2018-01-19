@@ -24,6 +24,7 @@ namespace SLAP_App.Controllers
 		private PCAssociatesDA _pcAssocaiteDa = new PCAssociatesDA();
 		private PeersDA _peersDa = new PeersDA();
 		private FileService _fileService = new FileService();
+        private ActiveDirectoryUserDa _activeDirectoryUserDa=new ActiveDirectoryUserDa();
 
 		public HomeController()
 		{
@@ -37,7 +38,7 @@ namespace SLAP_App.Controllers
 			if (Session[SK_CURRENT_USER] == null)
 			{
 				var identityName = User.Identity.Name;
-				loggedInUser = await _activeDirectory.GetActiveDirectoryUserByName(identityName);
+			    loggedInUser = AutoMapper.Mapper.Map<User>(_activeDirectoryUserDa.GetActiveDirectoryUserByEmailId(identityName));
 				if (loggedInUser != null)
 				{
 					loggedInUser.IsAdmin = _userRolesDA.IsAdmin(loggedInUser.id);
@@ -54,8 +55,9 @@ namespace SLAP_App.Controllers
 			ViewBag.InProgressAppraisalSeason = AutoMapper.Mapper.Map<AppraisalSeasonViewModel>(inProgressAppraisalSeason);
 			if (inProgressAppraisalSeason != null && inProgressAppraisalSeason.IsActive.GetValueOrDefault())
 			{
-				var users = await _activeDirectory.GetAllAdUsers();
-				var adUsersMap = users.ToDictionary(key => key.id, value => value);
+				var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+				    .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
+                var adUsersMap = users.ToDictionary(key => key.id, value => value);
 			    var pcAssociateUserViewModels = _pcAssocaiteDa.GetAllAssociateForGivenPCForActiveAppraisalSeason(loggedInUser.id).Select(pcAssociate => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate)).ToList();
 			    pcAssociateUserViewModels.ForEach(p => p.AssociateDisplayName = adUsersMap[p.AssociateUserId].displayName);
 			    pcAssociateUserViewModels.ForEach(p => p.Peers.ForEach(q => q.PeerName = adUsersMap[q.PeerUserId].displayName));

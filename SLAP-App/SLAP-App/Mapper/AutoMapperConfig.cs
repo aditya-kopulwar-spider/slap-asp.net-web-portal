@@ -14,6 +14,7 @@ namespace SLAP_App.Mapper
                 PCAssociateUserViewModelMapper.Initialize(config);
                 PeerMapper.Initialize(config);
                 EmployeeMapper.Initialize(config);
+                ActiveDirectoryUserViewModelMapper.Initialize(config);
 //                config.CreateMap<AppraisalProcessViewModel, AppraisalProcess>();
 //                config.CreateMap<PCAssociateUserViewModel, PCAssociate>().ForMember(p=>p.);
             });

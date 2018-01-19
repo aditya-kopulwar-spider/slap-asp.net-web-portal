@@ -24,12 +24,13 @@ namespace SLAP_App.Controllers
         private NotificationService _notificationService = new NotificationService();
         ActiveDirectory _activeDirectory = new ActiveDirectory();
 		private AppraisalSeasonDA _appraisalSeasonDa = new AppraisalSeasonDA();
-
+        private ActiveDirectoryUserDa _activeDirectoryUserDa=new ActiveDirectoryUserDa();
 		// GET: Admin
-		public async Task<ActionResult> Index()
+		public  ActionResult Index()
         {
 			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
-            List<User> userList = await _activeDirectory.GetAllAdUsers();
+            List<User> userList = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             userList.ForEach(p => p.IsPC = _userRolesDa.IsUserPC(p.id));
             return View(userList);
         }
@@ -91,10 +92,11 @@ namespace SLAP_App.Controllers
 
         #region newAssociatesScreen
 
-        public async Task<ActionResult> AssignAssociates(Guid? pcId)
+        public ActionResult AssignAssociates(Guid? pcId)
         {
 			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
-            var _userList = await _activeDirectory.GetAllAdUsers();
+            var _userList = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             ViewBag.PCId = pcId;
             ViewBag.pcName = _userList.First(p => p.id == pcId).displayName;
             var pcAssociate = _pcAssociatesDa.GetPCAssociateForGivenAssociateId((Guid) pcId);
@@ -122,7 +124,7 @@ namespace SLAP_App.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AssignAssociates(AssociateSelectionViewModel associateSelectionViewModel, Guid pcId)
+        public ActionResult AssignAssociates(AssociateSelectionViewModel associateSelectionViewModel, Guid pcId)
         {
 			if (_appraisalSeasonDa.GetActiveAppraisalSeason() != null) return RedirectToAction("Index", "Home");
 			//            var selectedAssociates = id.getSelectedAssociates();
@@ -155,6 +157,36 @@ namespace SLAP_App.Controllers
 
         #endregion
 
+        #region add initial pc associate relation
+
+        public void CreateInitialPCAssociateRelation()
+        {
+            var activeDirectoryUserViewModels = _activeDirectoryUserDa.GetActiveDirectoryUsers()
+                .Select(p => AutoMapper.Mapper.Map<ActiveDirectoryUserViewModel>(p));
+            var pcAssociates = new List<PCAssociate>();
+            var _userRoles=new List<UserRole>();
+            foreach (var activeDirectoryUserViewModel in activeDirectoryUserViewModels
+                .Where(p=>p.Associates.Any()).ToList())
+            {
+                _userRoles.Add(new UserRole()
+                {
+                    UserId = activeDirectoryUserViewModel.Id
+                });
+                foreach (var associate  in activeDirectoryUserViewModel.Associates)
+                {
+                pcAssociates.Add(new PCAssociate()
+                {
+                    PCUserId = activeDirectoryUserViewModel.Id,
+                    AssociateUserId = associate.Id,
+                    PeerListFinalized = false
+                });    
+                }
+            }
+            _pcAssociatesDa.AddAssociates(pcAssociates);
+            _userRolesDa.MakeUsersPc(_userRoles);
+        }
+
+        #endregion
 
 
 

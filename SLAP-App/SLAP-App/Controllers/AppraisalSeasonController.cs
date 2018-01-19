@@ -20,13 +20,14 @@ namespace SLAP_App.Controllers
         private PCAssociatesDA _pcAssociateDa;
 		private ActiveDirectory _activeDirectory;
         private NotificationService _notificationService;
-
+        private ActiveDirectoryUserDa _activeDirectoryUserDa;
 		public AppraisalSeasonController()
         {
             _appraisalSeasonDa = new AppraisalSeasonDA();
 			_pcAssociateDa = new PCAssociatesDA();
             _activeDirectory=new ActiveDirectory();
             _notificationService=new NotificationService();
+            _activeDirectoryUserDa=new ActiveDirectoryUserDa();
 		}
 
 		// GET: AppraisalProcesses
@@ -63,14 +64,21 @@ namespace SLAP_App.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
 //        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AppraisalSeasonId,Name,IsActive,PeerListFinalizationByDate,SendPeerFeedbackRequestByDate,SendPeerFeedbackByDate,SelfAppraisalSubmissionByDate,AppraisalMeetingByDate,GoalSettingByDate")] AppraisalSeasonViewModel appraisalProcessViewModel)
+        public async Task<ActionResult> Create([Bind(Include = "AppraisalSeasonId,Name,IsActive,PeerListFinalizationByDate,SendPeerFeedbackRequestByDate,SendPeerFeedbackByDate,SelfAppraisalSubmissionByDate,AppraisalMeetingByDate,GoalSettingByDate")] AppraisalSeasonViewModel appraisalProcessViewModel)
         {
             if (ModelState.IsValid)
             {
 				try
 				{
 					_appraisalSeasonDa.CreateAppraisalSeason(AutoMapper.Mapper.Map<AppraisalSeason>(appraisalProcessViewModel));
-					return RedirectToAction("Index", "Home");
+
+				    #region set initail pc asociate relation from active directory and store ad users in active directory user table
+
+				    ActiveDirectory activeDirectory=new ActiveDirectory();
+                    await activeDirectory.StoreAdUSersInTable();
+                    new AdminController().CreateInitialPCAssociateRelation();
+				    #endregion
+                    return RedirectToAction("Index", "Home");
 				}
 				catch (Exception ex)
 				{
@@ -157,8 +165,9 @@ namespace SLAP_App.Controllers
 			}
 
 			List<PCAssociateViewModel> pcAssociateViewModels = _pcAssociateDa.GetAllPcAssociatesForInProgressAppraisalSeason().Select(x => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(x)).ToList();
-			var users = await _activeDirectory.GetAllAdUsers();
-			pcAssociateViewModels.ForEach(x => {
+			var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+			    .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
+            pcAssociateViewModels.ForEach(x => {
 				x.AssociateDisplayName = users.First(p => p.id == x.AssociateUserId).displayName;
 				x.PCDisplayName = users.First(p => p.id == x.PCUserId).displayName;
 			});
@@ -181,8 +190,9 @@ namespace SLAP_App.Controllers
 			}
 
 			List<PCAssociateViewModel> pcAssociateViewModels = _pcAssociateDa.GetAllPcAssociatesForInProgressAppraisalSeason().Select(x => AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(x)).ToList();
-			var users = await _activeDirectory.GetAllAdUsers();
-			pcAssociateViewModels.ForEach(x => {
+			var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+			    .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
+            pcAssociateViewModels.ForEach(x => {
 				x.AssociateDisplayName = users.First(p => p.id == x.AssociateUserId).displayName;
 				x.PCDisplayName = users.First(p => p.id == x.PCUserId).displayName;
 			});
@@ -199,8 +209,9 @@ namespace SLAP_App.Controllers
 			_appraisalSeasonDa.StartAppraisalSeason(id);
 
 		    var allCurrentYearPcAssociates = _pcAssociateDa.GetAllCurrentYearPcAssociates().ToList();
-		    var allAdUsers = await _activeDirectory.GetAllAdUsers();
-		    var allAdUsersDictionary = allAdUsers.ToList().ToDictionary(p => p.id);
+		    var allAdUsers = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+		        .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
+            var allAdUsersDictionary = allAdUsers.ToList().ToDictionary(p => p.id);
 
             foreach (var pcAssociate in allCurrentYearPcAssociates)
             {

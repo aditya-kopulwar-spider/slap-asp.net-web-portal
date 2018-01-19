@@ -18,11 +18,13 @@ namespace SLAP_App.Controllers
         private PCAssociatesDA _pcAssocaiteDa = new PCAssociatesDA();
         private FileService _fileService = new FileService();
         private PeersDA _peersDa=new PeersDA();
+        private ActiveDirectoryUserDa _activeDirectoryUserDa=new ActiveDirectoryUserDa();
         // GET: Employee
         public async Task<ActionResult> Index()
         {
             var identityName = User.Identity.Name;
-            var users = await _activeDirectory.GetAllAdUsers();
+            var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
             var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
             ViewBag.UserID = userID;

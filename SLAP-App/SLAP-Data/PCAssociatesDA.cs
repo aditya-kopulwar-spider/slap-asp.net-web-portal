@@ -46,7 +46,8 @@ namespace SLAP_Data
 
         public bool RemoveAllAssociatesForGivenPC(Guid pcID)
         {
-            _dbEntities.PCAssociates.RemoveRange(_dbEntities.PCAssociates.Where(p => p.PCUserId == pcID).ToList());
+            var inProgressAppraisalSeason = _appraisalProcessDa.GetInProgressAppraisalSeason();
+            _dbEntities.PCAssociates.RemoveRange(_dbEntities.PCAssociates.Where(p => p.AppraisalSeasonId == inProgressAppraisalSeason.AppraisalSeasonId && p.PCUserId == pcID).ToList());
             _dbEntities.SaveChanges();
             return true;
         }
@@ -93,7 +94,7 @@ namespace SLAP_Data
         public bool AddAssociates(List<PCAssociate> pcAssociates)
         {
             var appraisalProcesses =
-                _dbEntities.AppraisalSeasons.First(p => p.IsActive == false && p.IsCompleted == false);
+                _dbEntities.AppraisalSeasons.First(p =>p.IsCompleted == false);
             pcAssociates.ForEach(p => p.AppraisalSeasonId = appraisalProcesses.AppraisalSeasonId);
             _dbEntities.PCAssociates.AddRange(pcAssociates);
             _dbEntities.SaveChanges();

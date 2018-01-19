@@ -221,11 +221,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mapper\ActiveDirectoryUserViewModelMapper.cs" />
     <Compile Include="Mapper\AppraisalSeasonMapper.cs" />
     <Compile Include="Mapper\AutoMapperConfig.cs" />
     <Compile Include="Mapper\EmployeeMapper.cs" />
     <Compile Include="Mapper\PCAssociateUserViewModelMapper.cs" />
     <Compile Include="Mapper\PeerMapper.cs" />
+    <Compile Include="Models\ActiveDirectoryUserViewModel.cs" />
     <Compile Include="Models\AdalTokenCache.cs" />
     <Compile Include="Models\ADUser.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />

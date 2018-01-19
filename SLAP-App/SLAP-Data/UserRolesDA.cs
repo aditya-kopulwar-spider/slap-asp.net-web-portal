@@ -54,6 +54,16 @@ namespace SLAP_Data
             return true;
         }
 
+        public bool MakeUsersPc(List<UserRole> userRoles)
+        {
+            int pcRoleId = _roles.First(x => x.RoleName == ROLE_NAME_PC).RoleId;
+            userRoles.ForEach(p=>p.RoleId=pcRoleId);
+            _dbEntities.UserRoles.AddRange(userRoles);
+            _dbEntities.SaveChanges();
+            GetAllUserRoles(true);
+            return true;
+        }
+
         public bool RemoveUserFromPCRole(Guid userId)
         {
             int pcRoleId = _roles.First(x => x.RoleName == ROLE_NAME_PC).RoleId;

@@ -20,6 +20,7 @@ namespace SLAP_App.Controllers
         private ActiveDirectory _activeDirectory;
         private AppraisalSeasonDA _appraisalSeasonDa;
         private NotificationService _notificationService;
+        private ActiveDirectoryUserDa _activeDirectoryUserDa=new ActiveDirectoryUserDa();
         public PCController()
         {
             _pcAssociatesDa=new PCAssociatesDA();
@@ -32,7 +33,8 @@ namespace SLAP_App.Controllers
         public async Task<ActionResult> Index()
         {
             var identityName = User.Identity.Name;
-            var users = await _activeDirectory.GetAllAdUsers();
+            var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             var adUsersMap = users.ToDictionary(key => key.id, value => value.displayName);
             var userID = users.First(adUser => adUser.userPrincipalName == identityName).id;
             ViewBag.AssociateId = userID;
@@ -60,7 +62,8 @@ namespace SLAP_App.Controllers
         public async Task<ActionResult> AssignPeersToAssociates(PCAssociateViewModel pcAssociateViewModel)
         {
             var peersForGivenAssociateByPcAssociateId = _peersDa.GetPeersForGivenAssociateByPcAssociateId(pcAssociateViewModel.PCAssociatesId);
-            var users = await _activeDirectory.GetAllAdUsers();
+            var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             var peerViewModels = users.Where(p=>p.id!=pcAssociateViewModel.PCUserId && p.id!=pcAssociateViewModel.AssociateUserId).ToList()
                 .Select(p => AutoMapper.Mapper.Map<PeerViewModel>(p)).ToList();
             foreach (var peerViewModel in peerViewModels)
@@ -93,7 +96,8 @@ namespace SLAP_App.Controllers
 
                     #region mailNotification
                     {
-                        var allAdUsers = await _activeDirectory.GetAllAdUsers();
+                        var allAdUsers = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                            .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
                         var allAdUsersDictionary = allAdUsers.ToList().ToDictionary(p => p.id);
                         var pc = allAdUsersDictionary[_pcAssociatesDa.GetPCAssociate(pcAssociateId).PCUserId];
                         var associate =
@@ -116,7 +120,8 @@ namespace SLAP_App.Controllers
         public async Task<ActionResult> Associate(Guid associateId)
         {
             ViewBag.AssociateId = associateId;
-            var users = await _activeDirectory.GetAllAdUsers();
+            var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             var userDictionary = users.ToDictionary(p=>p.id);
             ViewBag.AssociateName = userDictionary[associateId].displayName;
             var peerViewModels = _peersDa.GetPeersForGivenAssociate(associateId).Select(p=>AutoMapper.Mapper.Map<Peer,PeerViewModel>(p)).ToList();
@@ -128,7 +133,8 @@ namespace SLAP_App.Controllers
         
         public async Task<ActionResult> AddNewPeer(Guid associateId)
         {
-            var _userList = await _activeDirectory.GetAllAdUsers();
+            var _userList = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             ViewBag.AssociateId = associateId;
             ViewBag.AssociateName = _userList.Find(p => p.id == associateId).displayName;
             //todo Peer table may contain multiple entries for Peers for multiple appraisal seasons
@@ -174,7 +180,8 @@ namespace SLAP_App.Controllers
                 return HttpNotFound();
             }
             var pcAssociateViewModel = AutoMapper.Mapper.Map<PCAssociate, PCAssociateViewModel>(pcAssociate);
-            var users = await _activeDirectory.GetAllAdUsers();
+            var users = _activeDirectoryUserDa.GetActiveDirectoryUsers().ToList()
+                .Select(p => AutoMapper.Mapper.Map<User>(p)).ToList();
             pcAssociateViewModel.AssociateDisplayName =
                 users.First(p => p.id == pcAssociateViewModel.AssociateUserId).displayName;
             return View(pcAssociateViewModel);

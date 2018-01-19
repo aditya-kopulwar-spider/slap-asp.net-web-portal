@@ -71,6 +71,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveDirectoryUser.cs">
+      <DependentUpon>SlapModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ActiveDirectoryUserDa.cs" />
     <Compile Include="AppraisalSeasonDA.cs" />
     <Compile Include="AppraisalSeason.cs">
       <DependentUpon>SlapModel.tt</DependentUpon>

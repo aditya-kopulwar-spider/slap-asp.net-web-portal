@@ -5,6 +5,17 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SlapDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ActiveDirectoryUser">
+          <Key>
+            <PropertyRef Name="ActiveDirectoryUserId" />
+          </Key>
+          <Property Name="ActiveDirectoryUserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="userPrincipalName" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="givenName" Type="varchar" MaxLength="1000" />
+          <Property Name="displayName" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ManagerId" Type="int" />
+        </EntityType>
         <EntityType Name="AppraisalSeason">
           <Key>
             <PropertyRef Name="AppraisalSeasonId" />
@@ -60,8 +71,6 @@
           <Property Name="RoleId" Type="int" Nullable="false" />
           <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <Association Name="FK__UserRole__RoleId__52593CB8">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="UserRole" Type="Self.UserRole" Multiplicity="*" />
@@ -71,6 +80,18 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
             </Principal>
             <Dependent Role="UserRole">
               <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActiveDirectoryUser_ActiveDirectoryUser1">
+          <End Role="ActiveDirectoryUser" Type="Self.ActiveDirectoryUser" Multiplicity="0..1" />
+          <End Role="ActiveDirectoryUser1" Type="Self.ActiveDirectoryUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActiveDirectoryUser">
+              <PropertyRef Name="ActiveDirectoryUserId" />
+            </Principal>
+            <Dependent Role="ActiveDirectoryUser1">
+              <PropertyRef Name="ManagerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -99,6 +120,7 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="SlapDbModelStoreContainer">
+          <EntitySet Name="ActiveDirectoryUser" EntityType="Self.ActiveDirectoryUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppraisalSeason" EntityType="Self.AppraisalSeason" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PCAssociates" EntityType="Self.PCAssociates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Peers" EntityType="Self.Peers" Schema="dbo" store:Type="Tables" />
@@ -107,6 +129,10 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
           <AssociationSet Name="FK__UserRole__RoleId__52593CB8" Association="Self.FK__UserRole__RoleId__52593CB8">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="UserRole" EntitySet="UserRole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActiveDirectoryUser_ActiveDirectoryUser1" Association="Self.FK_ActiveDirectoryUser_ActiveDirectoryUser1">
+            <End Role="ActiveDirectoryUser" EntitySet="ActiveDirectoryUser" />
+            <End Role="ActiveDirectoryUser1" EntitySet="ActiveDirectoryUser" />
           </AssociationSet>
           <AssociationSet Name="FK_PCAssociates_AppraisalSeason" Association="Self.FK_PCAssociates_AppraisalSeason">
             <End Role="AppraisalSeason" EntitySet="AppraisalSeason" />
@@ -196,6 +222,11 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
             <End Role="AppraisalSeason" EntitySet="AppraisalSeasons" />
             <End Role="PCAssociate" EntitySet="PCAssociates" />
           </AssociationSet>
+          <EntitySet Name="ActiveDirectoryUsers" EntityType="SlapDbModel.ActiveDirectoryUser" />
+          <AssociationSet Name="FK_ActiveDirectoryUser_ActiveDirectoryUser1" Association="SlapDbModel.FK_ActiveDirectoryUser_ActiveDirectoryUser1">
+            <End Role="ActiveDirectoryUser" EntitySet="ActiveDirectoryUsers" />
+            <End Role="ActiveDirectoryUser1" EntitySet="ActiveDirectoryUsers" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_Peers_PCAssociates">
           <End Type="SlapDbModel.PCAssociate" Role="PCAssociate" Multiplicity="1" />
@@ -234,6 +265,31 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
             </Principal>
             <Dependent Role="PCAssociate">
               <PropertyRef Name="AppraisalSeasonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ActiveDirectoryUser">
+          <Key>
+            <PropertyRef Name="ActiveDirectoryUserId" />
+          </Key>
+          <Property Name="ActiveDirectoryUserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="userPrincipalName" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="givenName" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="displayName" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="ManagerId" Type="Int32" />
+          <NavigationProperty Name="ActiveDirectoryUser1" Relationship="SlapDbModel.FK_ActiveDirectoryUser_ActiveDirectoryUser1" FromRole="ActiveDirectoryUser" ToRole="ActiveDirectoryUser1" />
+          <NavigationProperty Name="ActiveDirectoryUser2" Relationship="SlapDbModel.FK_ActiveDirectoryUser_ActiveDirectoryUser1" FromRole="ActiveDirectoryUser1" ToRole="ActiveDirectoryUser" />
+        </EntityType>
+        <Association Name="FK_ActiveDirectoryUser_ActiveDirectoryUser1">
+          <End Type="SlapDbModel.ActiveDirectoryUser" Role="ActiveDirectoryUser" Multiplicity="0..1" />
+          <End Type="SlapDbModel.ActiveDirectoryUser" Role="ActiveDirectoryUser1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActiveDirectoryUser">
+              <PropertyRef Name="ActiveDirectoryUserId" />
+            </Principal>
+            <Dependent Role="ActiveDirectoryUser1">
+              <PropertyRef Name="ManagerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -299,6 +355,18 @@ warning 6002: The table/view 'slap_db.dbo.UserTokenCaches' does not have a prima
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="AppraisalSeasonId" ColumnName="AppraisalSeasonId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActiveDirectoryUsers">
+            <EntityTypeMapping TypeName="SlapDbModel.ActiveDirectoryUser">
+              <MappingFragment StoreEntitySet="ActiveDirectoryUser">
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="displayName" ColumnName="displayName" />
+                <ScalarProperty Name="givenName" ColumnName="givenName" />
+                <ScalarProperty Name="userPrincipalName" ColumnName="userPrincipalName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ActiveDirectoryUserId" ColumnName="ActiveDirectoryUserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
